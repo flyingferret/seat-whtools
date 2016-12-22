@@ -1,0 +1,26 @@
+{
+    "name": "vendor/name",
+    "description": "Your package description",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Leon Jacobs",
+            "email": "leonja511@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Name\\": "src/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0",
+        "laravel/framework": "5.3.*",
+        "eveseat/web": "2.0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0"
+    }
+}
