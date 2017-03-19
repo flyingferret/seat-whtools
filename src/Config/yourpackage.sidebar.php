@@ -19,24 +19,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Author\Seat\YourPackage\Http\Controllers;
+return [
 
-use Seat\Web\Http\Controllers\Controller;
+    // Integrating with the SeAT menu is defined here.
+    // Refer to the web package for a structure reference.
+    'yourpackage' => [
+        'name' => 'Your Package',
+        'icon' => 'fa-cogs',
+        'route_segment' => 'yourpackage',
+        'entries' => [
+            [
+                'name' => 'Sub Level',
+                'icon' => 'fa-th-list',
+                'route' => 'home'
+            ]
+        ]
+    ]
 
-/**
- * Class HomeController
- * @package Author\Seat\YourPackage\Http\Controllers
- */
-class HomeController extends Controller
-{
-
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function getHome()
-    {
-
-        return view('yourpackage::myview');
-    }
-
-}
+];
