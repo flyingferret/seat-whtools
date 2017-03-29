@@ -2,7 +2,7 @@
 /*
 This file is part of SeAT
 
-Copyright (C) 2015, 2016  Leon Jacobs
+Copyright (C) 2015, 2017  Leon Jacobs
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,16 +19,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Seat\Web;
+namespace Author\Seat\YourPackage;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class EveapiServiceProvider
- * @package Seat\Eveapi
+ * @package Author\Seat\YourPackage
  */
-class WebServiceProvider extends ServiceProvider
+class YourPackageServiceProvider extends ServiceProvider
 {
 
     /**
@@ -104,17 +104,15 @@ class WebServiceProvider extends ServiceProvider
         // Merge the config with anything in the main app
         // Web package configurations
         $this->mergeConfigFrom(
-            __DIR__ . '/Config/web.config.php', 'web.config');
+            __DIR__ . '/Config/yourpackage.config.php', 'yourpackage.config');
         $this->mergeConfigFrom(
-            __DIR__ . '/Config/web.permissions.php', 'web.permissions');
+            __DIR__ . '/Config/yourpackage.permissions.php', 'web.permissions');
         $this->mergeConfigFrom(
-            __DIR__ . '/Config/web.locale.php', 'web.locale');
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/web.supervisor.php', 'web.supervisor');
+            __DIR__ . '/Config/yourpackage.locale.php', 'web.locale');
 
         // Menu Configurations
         $this->mergeConfigFrom(
-            __DIR__ . '/Config/package.sidebar.php', 'package.sidebar');
+            __DIR__ . '/Config/yourpackage.sidebar.php', 'package.sidebar');
 
     }
 
