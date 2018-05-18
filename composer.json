@@ -16,9 +16,16 @@
     "minimum-stability": "alpha",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.0",
-        "laravel/framework": "5.3.*",
-        "eveseat/web": "2.0.*"
+        "php": ">=7.1",
+        "laravel/framework": "5.5.*",
+        "eveseat/web": "3.0.*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Author\\Seat\\YourPackage\\YourPackageServiceProvider "
+            ]
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "~5.0"
