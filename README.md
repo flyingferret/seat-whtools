@@ -1,5 +1,5 @@
 ![SeAT](http://i.imgur.com/aPPOxSK.png)
-# package-example
+# WH-Tools
 
-## This repository contains an example SeAT package
-Please use the main SeAT repository [here](https://github.com/eveseat/seat) for issues.
+## This package is intended to for development of WH-Tools utilising SeAT
+Curently this is a WIP based on SeAT found [here](https://github.com/eveseat/seat).
