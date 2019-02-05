@@ -1,16 +1,16 @@
 {
-    "name": "vendor/name",
-    "description": "Your package description",
+    "name": "flyinfferret/whtools",
+    "description": "Package For Wh Corporation Tools",
     "license": "GPL-2.0",
     "authors": [
         {
-            "name": "Leon Jacobs",
-            "email": "leonja511@gmail.com"
+            "name": "Flyingferret",
+            "email": "flyingferret88@gmail.com"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Vendor\\Name\\": "src/"
+            "Vendor\\flyingferret\\": "src/"
         }
     },
     "minimum-stability": "alpha",
@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Author\\Seat\\YourPackage\\YourPackageServiceProvider "
+                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider "
             ]
         }
     },
