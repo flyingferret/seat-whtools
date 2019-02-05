@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Vendor\\flyingferret\\": "src/"
+            "Vendor\\flyingferret\\WH-Tools": "src/"
         }
     },
     "minimum-stability": "alpha",
@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider "
+                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
             ]
         }
     },
