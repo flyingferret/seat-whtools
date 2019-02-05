@@ -21,14 +21,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // Namespace all of the routes for this package.
 Route::group([
-    'namespace'  => 'Author\Seat\YourPackage\Http\Controllers',
+    'namespace'  => 'FlyingFerret\Seat\WHTools\Http\Controllers',
     'middleware' => 'web'
 ], function () {
 
     // Your route definitions go here.
     Route::get('/home', [
         'as'   => 'home',
-        'uses' => 'HomeController@getHome'
+        'uses' => 'WHtoolsController@getHome'
     ]);
 
 });

@@ -19,16 +19,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Author\Seat\YourPackage;
+namespace FlyingFerret\Seat\WHTools;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class EveapiServiceProvider
  * @package Author\Seat\YourPackage
  */
-class YourPackageServiceProvider extends ServiceProvider
+class WHToolsServiceProvider extends AbstractSeatPlugin
 {
 
     /**
@@ -36,23 +35,51 @@ class YourPackageServiceProvider extends ServiceProvider
      *
      * @param \Illuminate\Routing\Router $router
      */
-    public function boot(Router $router)
+    public function boot()
     {
 
         // Include the Routes
         $this->add_routes();
 
-        // Publish the JS & CSS, and Database migrations
-        $this->add_publications();
-
-        // Add the views for the 'web' namespace
+        // Add the views for WHTools
         $this->add_views();
-
+        
+        // Add the migrations for WHTools
+        $this->add_migrations();
+        
         // Include our translations
-        $this->add_translations();
+        //$this->add_translations();
 
     }
+    
+    public function register()
+    {
 
+        // Merge the config with anything in the main app
+        // Web package configurations
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/whtools.config.php', 'whtools.config');
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/whtools.permissions.php', 'web.permissions');
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/whtools.locale.php', 'web.locale');
+
+        // Menu Configurations
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/whtools.sidebar.php', 'package.sidebar');
+
+    }
+    
+    private function addCommands()
+    {
+        
+    }
+
+    private function add_migrations()
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
+    }
+    
     /**
      * Include the routes
      */
@@ -64,24 +91,12 @@ class YourPackageServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set the paths for migrations and assets that
-     * should be published to the main application
-     */
-    public function add_publications()
-    {
-
-        $this->publishes([
-            __DIR__ . '/database/migrations/' => database_path('migrations'),
-        ]);
-    }
-
-    /**
      * Set the path and namespace for the vies
      */
     public function add_views()
     {
 
-        $this->loadViewsFrom(__DIR__ . '/resources/views', 'yourpackage');
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'whtools');
     }
 
     /**
@@ -90,30 +105,28 @@ class YourPackageServiceProvider extends ServiceProvider
     public function add_translations()
     {
 
-        $this->loadTranslationsFrom(__DIR__ . '/lang', 'yourpackage');
+        $this->loadTranslationsFrom(__DIR__ . '/lang', 'whtools');
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
+   public function getName(): string
     {
-
-        // Merge the config with anything in the main app
-        // Web package configurations
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/yourpackage.config.php', 'yourpackage.config');
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/yourpackage.permissions.php', 'web.permissions');
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/yourpackage.locale.php', 'web.locale');
-
-        // Menu Configurations
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/yourpackage.sidebar.php', 'package.sidebar');
-
+        return 'seat-WHTools';
     }
-
+    public function getPackageRepositoryUrl(): string
+    {
+        return 'https://github.com/flyingferret/WH-Tools';
+    }
+    
+    public function getPackagistVendorName(): string
+    {
+        return 'flyingferret';
+    }
+    public function getVersion(): string
+    {
+        return config('whtools.config.version');
+    }
+    public function getChangelogUri(): ?string
+    {
+        return 'https://raw.githubusercontent.com/flyingferret/WH-Tools/master/CHANGELOG.md';
+    }
 }

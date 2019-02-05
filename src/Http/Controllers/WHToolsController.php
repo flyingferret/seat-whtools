@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Author\Seat\YourPackage\Http\Controllers;
+namespace FlyingFerret\Seat\WHTools\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
 
@@ -27,7 +27,7 @@ use Seat\Web\Http\Controllers\Controller;
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
  */
-class HomeController extends Controller
+class WHtoolsController extends Controller
 {
 
     /**
@@ -36,7 +36,7 @@ class HomeController extends Controller
     public function getHome()
     {
 
-        return view('yourpackage::myview');
+        return view('whtools::whtools');
     }
 
 }
