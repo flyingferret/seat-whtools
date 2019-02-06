@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 namespace FlyingFerret\Seat\WHTools;
 
-use Illuminate\Support\ServiceProvider;
+use Seat\Services\AbstractSeatPlugin;
 
 /**
  * Class EveapiServiceProvider
