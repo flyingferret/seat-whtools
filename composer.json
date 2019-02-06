@@ -1,33 +1,12 @@
 {
-    "name": "flyinfferret/whtools",
-    "description": "Package For Wh Corporation Tools",
-    "license": "GPL-2.0",
+    "name": "flyingferret/whtools",
+    "description": "wh corporation tools for SeAT",
+    "type": "package",
     "authors": [
         {
-            "name": "Flyingferret",
-            "email": "flyingferret88@gmail.com"
+            "name": "Craig",
+            "email": "craig.t.edwards@googlemail.com"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Vendor\\flyingferret\\WH-Tools": "src/"
-        }
-    },
-    "minimum-stability": "alpha",
-    "prefer-stable": true,
-    "require": {
-        "php": ">=7.1",
-        "laravel/framework": "5.5.*",
-        "eveseat/web": "3.0.*"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
-            ]
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~5.0"
-    }
+    "require": {}
 }
