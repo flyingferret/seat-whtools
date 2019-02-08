@@ -48,7 +48,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
         $this->add_migrations();
         
         // Include our translations
-        //$this->add_translations();
+        $this->add_translations();
 
     }
     
@@ -104,19 +104,21 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
      */
     public function add_translations()
     {
-
         $this->loadTranslationsFrom(__DIR__ . '/lang', 'whtools');
     }
 
    public function getName(): string
     {
-        return 'seat-WHTools';
+        return 'Seat-WHTools';
     }
     public function getPackageRepositoryUrl(): string
     {
         return 'https://github.com/flyingferret/WH-Tools';
     }
-    
+    public function getPackagistPackageName(): string
+    {
+        return 'whtools';
+    }
     public function getPackagistVendorName(): string
     {
         return 'flyingferret';

@@ -23,15 +23,23 @@ return [
 
     // Integrating with the SeAT menu is defined here.
     // Refer to the web package for a structure reference.
-    'yourpackage' => [
-        'name' => 'Your Package',
+    'whtools' => [
+        'name' => 'WHTools',
         'icon' => 'fa-cogs',
-        'route_segment' => 'yourpackage',
+        'route_segment' => 'WHTools',
+        'permission'=>['whtools.stockview','whtools.taxview'],        
         'entries' => [
             [
-                'name' => 'Sub Level',
+                'name' => 'Stocking',
                 'icon' => 'fa-th-list',
-                'route' => 'home'
+                'route' => 'stocking',
+                'permission'=>'whtools.stockview'
+            ],
+            [
+                'name' => 'WH Tax',
+                'icon' => 'fa-th-list',
+                'route' => 'WHTools',
+                'permission'=>'whtools.taxview'
             ]
         ]
     ]

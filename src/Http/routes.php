@@ -26,9 +26,14 @@ Route::group([
 ], function () {
 
     // Your route definitions go here.
-    Route::get('/home', [
-        'as'   => 'home',
+    Route::get('/WHTools', [
+        'as'   => 'WHTools',
         'uses' => 'WHtoolsController@getHome'
+    ]);
+    //Route for Doctine stocking
+    Route::get('/stocking', [
+        'as'   => 'stocking',
+        'uses' => 'WHtoolsController@getFittingView'
     ]);
 
 });

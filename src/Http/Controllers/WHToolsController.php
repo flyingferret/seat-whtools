@@ -22,12 +22,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 namespace FlyingFerret\Seat\WHTools\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
+use Denngarr\Seat\Fitting\Http\Controllers\FittingController;
+
+use Seat\Services\Repositories\Character\Info;
+use Seat\Services\Repositories\Character\Skills;
+use Seat\Services\Repositories\Configuration\UserRespository;
+
+
+use Seat\Eveapi\Models\Character\CharacterInfo;
+use Seat\Eveapi\Models\Corporation\CorporationInfo;
+use Denngarr\Seat\Fitting\Helpers\CalculateConstants;
+use Denngarr\Seat\Fitting\Helpers\CalculateEft;
+use Denngarr\Seat\Fitting\Models\Fitting;
+use Denngarr\Seat\Fitting\Models\Doctrine;
+use Denngarr\Seat\Fitting\Models\Sde\InvType;
+use Denngarr\Seat\Fitting\Models\Sde\DgmTypeAttributes;
+use Denngarr\Seat\Fitting\Validation\FittingValidation;
+use Denngarr\Seat\Fitting\Validation\DoctrineValidation;
 
 /**
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
  */
-class WHtoolsController extends Controller
+class WHtoolsController extends FittingController
 {
 
     /**
@@ -37,6 +54,21 @@ class WHtoolsController extends Controller
     {
 
         return view('whtools::whtools');
+    }
+    public function getFittingView()
+    {
+        $corps = [];
+        $fitlist = $this->getFittingList();
+        if (auth()->user()->hasSuperUser()) {
+            $corpnames = CorporationInfo::all();
+        } else {
+            $corpids = CharacterInfo::whereIn('character_id', auth()->user()->associatedCharacterIds())->select('corporation_id')->get()->toArray();
+            $corpnames = CorporationInfo::whereIn('corporation_id', $corpids)->get();
+        }
+        foreach ($corpnames as $corp) {
+          $corps[$corp->corporation_id] = $corp->name;
+        }
+        return view('whtools::stocking', compact('fitlist', 'corps'));
     }
 
 }

@@ -22,7 +22,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 return [
 
     // Language strings for your app go here
-    'name' => 'WHTools'
+    'name' => 'WHTools',
+    'stocking' => 'Stocking',
 
 ];
 
