@@ -26,19 +26,19 @@ return [
     'whtools' => [
         'name' => 'WHTools',
         'icon' => 'fa-cogs',
-        'route_segment' => 'WHTools',
+        'route_segment' => 'whtools',
         'permission'=>['whtools.stockview','whtools.taxview'],        
         'entries' => [
             [
                 'name' => 'Stocking',
                 'icon' => 'fa-th-list',
-                'route' => 'stocking',
+                'route' => 'whtools.stocking',
                 'permission'=>'whtools.stockview'
             ],
             [
                 'name' => 'WH Tax',
                 'icon' => 'fa-th-list',
-                'route' => 'WHTools',
+                'route' => 'whtools',
                 'permission'=>'whtools.taxview'
             ]
         ]

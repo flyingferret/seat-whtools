@@ -26,11 +26,12 @@ use Denngarr\Seat\Fitting\Http\Controllers\FittingController;
 
 use Seat\Services\Repositories\Character\Info;
 use Seat\Services\Repositories\Character\Skills;
-use Seat\Services\Repositories\Configuration\UserRespository;
+use Seat\Ser7vices\Repositories\Configuration\UserRespository;
 
 
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Corporation\CorporationInfo;
+
 use Denngarr\Seat\Fitting\Helpers\CalculateConstants;
 use Denngarr\Seat\Fitting\Helpers\CalculateEft;
 use Denngarr\Seat\Fitting\Models\Fitting;
@@ -39,6 +40,12 @@ use Denngarr\Seat\Fitting\Models\Sde\InvType;
 use Denngarr\Seat\Fitting\Models\Sde\DgmTypeAttributes;
 use Denngarr\Seat\Fitting\Validation\FittingValidation;
 use Denngarr\Seat\Fitting\Validation\DoctrineValidation;
+
+use Seat\Eveapi\Models\Contracts\CorporationContract;
+use Seat\Eveapi\Models\Contracts\ContractDetail;
+use FlyingFerret\Seat\WHTools\Models\Stocklvl;
+use FlyingFerret\Seat\WHTools\Validation\StocklvlValidation;
+                                     
 
 /**
  * Class HomeController
@@ -58,17 +65,66 @@ class WHtoolsController extends FittingController
     public function getFittingView()
     {
         $corps = [];
+        $stock = $this->getStockList();
+        
+        
+        
         $fitlist = $this->getFittingList();
-        if (auth()->user()->hasSuperUser()) {
-            $corpnames = CorporationInfo::all();
-        } else {
-            $corpids = CharacterInfo::whereIn('character_id', auth()->user()->associatedCharacterIds())->select('corporation_id')->get()->toArray();
-            $corpnames = CorporationInfo::whereIn('corporation_id', $corpids)->get();
+        
+        return view('whtools::stocking', compact('fitlist', 'stock','contracts'));
+    }
+    
+    public function getStockLvls(){
+        return Stocklvl::all();
+    }
+        
+    
+    public function getStockList(){
+        $stocklvllist = $this->getStockLvls();
+        $stock = [];
+        
+        if(count($stocklvllist)<= 0)
+            return $stock;
+        
+        
+        foreach($stocklvllist as $stocklvl){
+            $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
+
+            $stock_contracts = [];
+            $corporation_id = 98560621;
+            $stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
+                ->where('title', 'LIKE', '%'.$stocklvl->fitting->shiptype.' '.$stocklvl->fitting->fitname.'%')
+                ->where('for_corporation', '=', '1')
+                ->get();
+            
+            array_push($stock, [
+                'id' =>  $stocklvl ->id,
+                'minlvl' =>  $stocklvl ->minLvl,
+                'stock' =>  count($stock_contracts),
+                'fitting_id' =>  $stocklvl ->fitting_id,
+                'fitname' => $stocklvl->fitting->fitname,
+                'shiptype' =>$stocklvl->fitting->shiptype,
+                'typeID' => $ship->typeID
+            ]);
         }
-        foreach ($corpnames as $corp) {
-          $corps[$corp->corporation_id] = $corp->name;
+        return $stock;
+        
+        
+    }
+    /*Add validations */
+    public function saveStocking(StocklvlValidation $request){
+        $stocklvl = new Stocklvl();
+        
+        if($request->stockSelection > 1){
+            $stocklvl = Stocklvl::find($request->stockSelection);
         }
-        return view('whtools::stocking', compact('fitlist', 'corps'));
+        $stocklvl->minLvl = $request->minLvl;
+        $stocklvl->save();
+        
+        $stock = $this->getStockList();
+        $fitlist = $this->getFittingList();
+        
+        return view('whtools::stocking', compact('fitlist', 'stock'));
     }
 
 }

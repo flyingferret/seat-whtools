@@ -26,14 +26,20 @@ Route::group([
 ], function () {
 
     // Your route definitions go here.
-    Route::get('/WHTools', [
-        'as'   => 'WHTools',
+    Route::get('/whtools', [
+        'as'   => 'whtools',
         'uses' => 'WHtoolsController@getHome'
     ]);
     //Route for Doctine stocking
     Route::get('/stocking', [
-        'as'   => 'stocking',
+        'as'   => 'whtools.stocking',
         'uses' => 'WHtoolsController@getFittingView'
+    ]);
+    
+    Route::post('/saveStocking', [
+        'as'   => 'whtools.saveStocking',
+        'uses' => 'WHToolsController@saveStocking',
+        'middleware' => 'bouncer:whtools.stockedit'
     ]);
 
 });
