@@ -24,13 +24,13 @@ return [
     // Refer to the web package for a structure reference.
     'whtools' => [
         'name' => 'WHTools',
-        'icon' => 'fa-cogs',
+        'icon' => 'fa fa-sun-o',
         'route_segment' => 'whtool',
         'permission'=>['whtools.stockview','whtools.taxview'],        
         'entries' => [
             'whtools'=>[
                     'name' => 'Stocking',
-                    'icon' => 'fa-th-list',
+                    'icon' => 'fa fa-suitcase',
                     'route' => 'whtools.stocking',
                     'permission'=>'whtools.stockview'
                 ],

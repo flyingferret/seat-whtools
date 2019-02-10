@@ -73,7 +73,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 
                <input type="hidden" id="stockSelection" name="stockSelection">
                <div class="modal-body">
-                   <p>Select the fitting to add a stocking level for and enter the minimum stock level.</p>
+                   <p id="pedittext">Select the fitting to add a stocking level for and enter the minimum stock level.</p>
                    {{ csrf_field() }}
                     <select name="selectedfit" id="selectedfit">
                         @if (count($fitlist) > 0)
@@ -193,6 +193,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     
     $('#addStocklvl').on('click', function () {
             document.getElementById('selectedfit').style.visibility = 'visible';
+            document.getElementById('pedittext').innerHTML = "Select the fitting to add a stocking level for and enter the minimum stock level. ";
             $('#editStocklvlModal').modal('show');
             $('#stockSelection').val('0');
             
@@ -205,7 +206,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
         id = $(this).data('id');
         
         $('#stockSelection').val(id);
-        
+        document.getElementById('pedittext').innerHTML = "Enter the new minimum stock level. ";
         document.getElementById('selectedfit').style.visibility = 'hidden';
         $('#editStocklvlModal').modal('show');
         $.ajax({
