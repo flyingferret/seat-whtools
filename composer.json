@@ -12,7 +12,7 @@
     "minimum-stability": "alpha",
     "autoload": {
         "psr-4": {
-            "FlyingFerret\\Seat\\SeatWHTools\\": "src/"
+            "FlyingFerret\\Seat\\WHTools\\": "src/"
         }
     },    
     
@@ -20,6 +20,7 @@
         "laravel": {
             "providers": [
                 "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
+
             ]
         }
     },
