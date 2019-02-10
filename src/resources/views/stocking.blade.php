@@ -27,6 +27,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th>Fit Name</th>
                 <th>Min</th>
                 <th>Stock</th>
+                <th>Contract Title</th>
                 <th class="pull-right">Option</th>
              </tr>
              </thead>
@@ -43,6 +44,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                  </td>
                  <td>{{ $item['minlvl'] }}</td>
                  <td>{{ $item['stock'] }}</td>
+                 <th>{{ $item['shiptype'] }} {{ $item['fitname'] }}</th>
                  <td class="no-hover pull-right">
                      
                      @if (auth()->user()->has('whtools.stockedit', false)) 
