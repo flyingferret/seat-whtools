@@ -24,8 +24,8 @@ namespace FlyingFerret\Seat\WHTools;
 use Seat\Services\AbstractSeatPlugin;
 
 /**
- * Class EveapiServiceProvider
- * @package Author\Seat\YourPackage
+ * Class WHToolsServiceProvider
+ * @package FlyingFerret\Seat\WHTools
  */   
 class WHToolsServiceProvider extends AbstractSeatPlugin
 {
