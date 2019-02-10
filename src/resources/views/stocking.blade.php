@@ -12,7 +12,7 @@
 data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unknown') }}</span>
            @if (auth()->user()->has('whtools.stockedit', false)) 
            <div class="box-tools pull-right">
-               <button type="button" class="btn btn-xs btn-box-tool" id="addStocklvl" data-toggle="tooltip" data-placement="top" title="Add a new fitting">
+               <button type="button" class="btn btn-xs btn-box-tool" id="addStocklvl" data-toggle="tooltip" data-placement="top" title="Add a new stocking">
                    <span class="fa fa-plus-square"></span>
                </button>
            </div>
@@ -77,19 +77,19 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                <div class="modal-body">
                    <p id="pedittext">Select the fitting to add a stocking level for and enter the minimum stock level.</p>
                    {{ csrf_field() }}
-                    <select name="selectedfit" id="selectedfit">
+                    <select name="selectedfit" id="selectedfit" style="width: 60%">
                         @if (count($fitlist) > 0)
                         @foreach($fitlist as $fit)
                         <option id="selectfit{{$fit['id']}}" value="{{$fit['id']}}">{{$fit['fitname']}} {{$fit['shiptype']}}</option>
                         @endforeach
                         @endif
-                        <input type="number" name='minlvl' min='1' max='50' value="1">
+                        <input type="number" name='minlvl' min='1' max='50' value="1" style="width: 60%">
                     </select>
                </div>
                <div class="modal-footer">
                    <div class="btn-group pull-right" role="group">
                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                       <input type="submit" class="btn btn-primary" id="addstock" value="Submit Fitting" />
+                       <input type="submit" class="btn btn-primary" id="addstock" value="Submit Stock" />
                    </div>
               </div>
            </form>
@@ -109,7 +109,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="deleteConfirm" data-dismiss="modal">Delete Fitting</button>
+            <button type="button" class="btn btn-primary" id="deleteConfirm" data-dismiss="modal">Delete Stockiing</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -192,6 +192,10 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     $('#fitting-box').hide();
     $('#eftexport').hide();
     $('#showeft').val('');
+    $('#stocklist').DataTable();
+    
+    $("#selectedfit,"+"minlvl").select2({
+      placeholder: "{{ trans('web::seat.select_item_add') }}"});
     
     $('#addStocklvl').on('click', function () {
             document.getElementById('selectedfit').style.visibility = 'visible';
