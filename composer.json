@@ -14,7 +14,12 @@
         "psr-4": {
             "FlyingFerret\\Seat\\WHTools\\": "src/"
         }
-    },    
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FlyingFerret\\Seat\\WHTools\\": "src/"
+        }
+    },
     
     "extra": {
         "laravel": {
