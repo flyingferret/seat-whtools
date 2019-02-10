@@ -11,7 +11,8 @@ class StocklvlValidation extends FormRequest
     {
         return [
             'stockSelection' => 'nullable',
-            'minlvl' => 'required'
+            'minlvl' => 'required',
+            'selectedfit' => 'required'
         ];
     }
 }

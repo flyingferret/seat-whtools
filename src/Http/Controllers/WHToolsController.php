@@ -86,20 +86,21 @@ class WHtoolsController extends FittingController
         if(count($stocklvllist)<= 0)
             return $stock;
         
-        
         foreach($stocklvllist as $stocklvl){
             $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
 
+            $corporation_id = auth()->user()->character->corporation_id;
+            
             $stock_contracts = [];
-            $corporation_id = 98560621;
+           
             $stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
                 ->where('title', 'LIKE', '%'.$stocklvl->fitting->shiptype.' '.$stocklvl->fitting->fitname.'%')
                 ->where('for_corporation', '=', '1')
                 ->get();
             
             array_push($stock, [
-                'id' =>  $stocklvl ->id,
-                'minlvl' =>  $stocklvl ->minLvl,
+                'id' =>  $stocklvl->id,
+                'minlvl' =>  $stocklvl->minLvl,
                 'stock' =>  count($stock_contracts),
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
@@ -111,20 +112,25 @@ class WHtoolsController extends FittingController
         
         
     }
-    /*Add validations */
+    
     public function saveStocking(StocklvlValidation $request){
-        $stocklvl = new Stocklvl();
-        
-        if($request->stockSelection > 1){
-            $stocklvl = Stocklvl::find($request->stockSelection);
-        }
-        $stocklvl->minLvl = $request->minLvl;
+        $stocklvl = Stocklvl::firstOrNew(['fitting_id' =>$request->selectedfit]);
+
+        $stocklvl->minLvl = $request->minlvl;
+        $stocklvl->fitting_id = $request->selectedfit;
         $stocklvl->save();
         
         $stock = $this->getStockList();
         $fitlist = $this->getFittingList();
         
         return view('whtools::stocking', compact('fitlist', 'stock'));
+    }
+    
+        public function deleteStockingById($id)
+    {
+        Stocklvl::destroy($id);
+        
+        return "Success";
     }
 
 }

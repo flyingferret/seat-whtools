@@ -20,26 +20,36 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 // Namespace all of the routes for this package.
+
 Route::group([
-    'namespace'  => 'FlyingFerret\Seat\WHTools\Http\Controllers',
-    'middleware' => 'web'
+    'namespace' => 'FlyingFerret\Seat\WHTools\Http\Controllers',
+    'prefix' => 'whtools'
 ], function () {
+        Route::group([
+            'middleware' => ['web', 'auth'],
+        ], function () {
+        // Your route definitions go here.
+        Route::get('/', [
+            'as'   => 'view',
+            'uses' => 'WHtoolsController@getHome'
+        ]);
+        //Route for Doctine stocking
+        Route::get('/stocking', [
+            'as'   => 'whtools.stocking',
+            'uses' => 'WHtoolsController@getFittingView',
+            'middleware' => 'bouncer:whtools.stockview'
+        ]);
 
-    // Your route definitions go here.
-    Route::get('/whtools', [
-        'as'   => 'whtools',
-        'uses' => 'WHtoolsController@getHome'
-    ]);
-    //Route for Doctine stocking
-    Route::get('/stocking', [
-        'as'   => 'whtools.stocking',
-        'uses' => 'WHtoolsController@getFittingView'
-    ]);
-    
-    Route::post('/saveStocking', [
-        'as'   => 'whtools.saveStocking',
-        'uses' => 'WHToolsController@saveStocking',
-        'middleware' => 'bouncer:whtools.stockedit'
-    ]);
+        Route::post('/saveStocking', [
+            'as'   => 'whtools.saveStocking',
+            'uses' => 'WHToolsController@saveStocking',
+            'middleware' => 'bouncer:whtools.stockedit'
+        ]);
+        Route::get('/delstockingbyid/{id}', [
+            'uses' => 'WHToolsController@deleteStockingById',
+            'middleware' => 'bouncer:whtools.stockedit'
+        ]);
 
+
+    });
 });

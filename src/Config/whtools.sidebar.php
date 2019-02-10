@@ -20,28 +20,55 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 return [
-
     // Integrating with the SeAT menu is defined here.
     // Refer to the web package for a structure reference.
     'whtools' => [
         'name' => 'WHTools',
         'icon' => 'fa-cogs',
-        'route_segment' => 'whtools',
+        'route_segment' => 'whtool',
         'permission'=>['whtools.stockview','whtools.taxview'],        
         'entries' => [
-            [
-                'name' => 'Stocking',
-                'icon' => 'fa-th-list',
-                'route' => 'whtools.stocking',
-                'permission'=>'whtools.stockview'
-            ],
-            [
-                'name' => 'WH Tax',
-                'icon' => 'fa-th-list',
-                'route' => 'whtools',
-                'permission'=>'whtools.taxview'
+            'whtools'=>[
+                    'name' => 'Stocking',
+                    'icon' => 'fa-th-list',
+                    'route' => 'whtools.stocking',
+                    'permission'=>'whtools.stockview'
+                ],
+                
             ]
         ]
-    ]
 
-];
+    ];
+
+
+/*return [
+    'doctrine' => [
+        'name' => 'Doctrines & Fittings',
+        'permission' => 'fitting.doctrineview',
+        'route_segment' => 'fitting',
+        'icon' => 'fa-rocket',
+        'entries'       => [
+            'fitting' => [
+                'name' => 'Fittings',
+                'icon' => 'fa-rocket',
+                'route_segment' => 'fitting',
+                'route' => 'fitting.view',
+                'permission' => 'fitting.view'
+            ],
+            'doctrine' => [
+                'name' => 'Doctrine',
+                'icon' => 'fa-list',
+                'route_segment' => 'fitting',
+                'route' => 'fitting.doctrineview',
+                'permission' => 'fitting.doctrineview'
+            ],
+            'doctrinereport' => [
+                'name' => 'Doctrine Report',
+                'icon' => 'fa-pie-chart',
+                'route_segment' => 'fitting',
+                'route' => 'fitting.doctrinereport',
+                'permission' => 'fitting.reportview'
+            ],
+        ]
+    ]
+];*/
