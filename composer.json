@@ -1,12 +1,34 @@
 {
-    "name": "flyingferret/whtools",
-    "description": "wh corporation tools for SeAT",
-    "type": "package",
+    "name": "flyingferret/seat-whtools",
+    "description": "Wh corporation tools for SeAT",
+    "type": "seat-plugin",
     "authors": [
         {
             "name": "flyingferret",
             "email": "flyingferret88@googlemail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=7.1",
+        "laravel/framework": "5.5.*",
+        "eveseat/web": "~3.0.14",
+        "denngarr/seat-fitting": "~3.0.12" 
+    },
+    
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "FlyingFerret\\Seat\\SeatWHTools\\": "src/"
+        }
+    },
+    
+    "license": "MIT",
+    "minimum-stability": "alpha",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
+            ]
+        }
+    }
 }

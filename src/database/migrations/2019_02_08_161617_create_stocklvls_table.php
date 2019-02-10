@@ -31,6 +31,6 @@ class CreateStocklvlsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('whtools_stocklvls');
+        Schema::dropIfExists('whtools_stocklvls');
     }
 }

@@ -20,8 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 return [
-    // Integrating with the SeAT menu is defined here.
-    // Refer to the web package for a structure reference.
     'whtools' => [
         'name' => 'WHTools',
         'icon' => 'fa fa-sun-o',
@@ -39,36 +37,3 @@ return [
         ]
 
     ];
-
-
-/*return [
-    'doctrine' => [
-        'name' => 'Doctrines & Fittings',
-        'permission' => 'fitting.doctrineview',
-        'route_segment' => 'fitting',
-        'icon' => 'fa-rocket',
-        'entries'       => [
-            'fitting' => [
-                'name' => 'Fittings',
-                'icon' => 'fa-rocket',
-                'route_segment' => 'fitting',
-                'route' => 'fitting.view',
-                'permission' => 'fitting.view'
-            ],
-            'doctrine' => [
-                'name' => 'Doctrine',
-                'icon' => 'fa-list',
-                'route_segment' => 'fitting',
-                'route' => 'fitting.doctrineview',
-                'permission' => 'fitting.doctrineview'
-            ],
-            'doctrinereport' => [
-                'name' => 'Doctrine Report',
-                'icon' => 'fa-pie-chart',
-                'route_segment' => 'fitting',
-                'route' => 'fitting.doctrinereport',
-                'permission' => 'fitting.reportview'
-            ],
-        ]
-    ]
-];*/
