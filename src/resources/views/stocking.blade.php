@@ -77,14 +77,16 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                <div class="modal-body">
                    <p id="pedittext">Select the fitting to add a stocking level for and enter the minimum stock level.</p>
                    {{ csrf_field() }}
-                    <select name="selectedfit" id="selectedfit" style="width: 60%">
-                        @if (count($fitlist) > 0)
-                        @foreach($fitlist as $fit)
-                        <option id="selectfit{{$fit['id']}}" value="{{$fit['id']}}">{{$fit['fitname']}} {{$fit['shiptype']}}</option>
-                        @endforeach
-                        @endif
-                        <input type="number" name='minlvl' min='1' max='50' value="1" style="width: 60%">
-                    </select>
+                   <div class="" id='selectfitbox'>
+                        <select name="selectedfit" id="selectedfit" style="width: 60%">
+                            @if (count($fitlist) > 0)
+                            @foreach($fitlist as $fit)
+                            <option id="selectfit{{$fit['id']}}" value="{{$fit['id']}}">{{$fit['fitname']}} {{$fit['shiptype']}}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+                   <input type="number" name='minlvl' min='1' max='50' value="1" style="width: 60%">
                </div>
                <div class="modal-footer">
                    <div class="btn-group pull-right" role="group">
@@ -197,23 +199,27 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     $("#selectedfit,"+"minlvl").select2({
       placeholder: "{{ trans('web::seat.select_item_add') }}"});
     
+    /*ADD STOCK*/
     $('#addStocklvl').on('click', function () {
-            document.getElementById('selectedfit').style.visibility = 'visible';
+            $('selectfitbox').show();
             document.getElementById('pedittext').innerHTML = "Select the fitting to add a stocking level for and enter the minimum stock level. ";
             $('#editStocklvlModal').modal('show');
             $('#stockSelection').val('0');
             
         });
-        
+    
+    /*DELETE STOCK*/
     $('#stocklist').on('click', '#deletestock', function () {
         $('#stockConfirmModal').modal('show');
         $('#stockSelection').val($(this).data('id'));
+    
+    /*EDIT STOCK*/
     }).on('click', '#editStock', function () {
         id = $(this).data('id');
-        
+        $('#selectfitbox').hide();
         $('#stockSelection').val(id);
         document.getElementById('pedittext').innerHTML = "Enter the new minimum stock level. ";
-        document.getElementById('selectedfit').style.visibility = 'hidden';
+        
         $('#editStocklvlModal').modal('show');
         $.ajax({
             headers: function () {
@@ -226,6 +232,8 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
           $('textarea#eftfitting').val(result);
         }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
         });
+        
+        /*VIEW FIT*/
     }).on('click', '#viewfit', function () {
         uri = "['id' => " + $(this).data('id') +"]";
         $('#highSlots, #midSlots, #lowSlots, #rigs, #cargo, #drones, #subSlots')
@@ -250,7 +258,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
 
     });
 
-
+    /*DELETE CONFIRM*/
     $('#deleteConfirm').on('click', function () {
        id = $('#stockSelection').val();
         $('#stocklist #stockid[data-id="'+id+'"]').remove();
