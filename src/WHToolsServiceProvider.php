@@ -113,11 +113,11 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
     }
     public function getPackageRepositoryUrl(): string
     {
-        return 'https://github.com/flyingferret/WH-Tools';
+        return 'https://github.com/flyingferret/seat-whtools';
     }
     public function getPackagistPackageName(): string
     {
-        return 'whtools';
+        return 'seat-whtools';
     }
     public function getPackagistVendorName(): string
     {
@@ -129,6 +129,6 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
     }
     public function getChangelogUri(): ?string
     {
-        return 'https://raw.githubusercontent.com/flyingferret/WH-Tools/master/CHANGELOG.md';
+        return 'https://raw.githubusercontent.com/flyingferret/seat-whTools/master/CHANGELOG.md';
     }
 }
