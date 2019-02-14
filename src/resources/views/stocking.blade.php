@@ -1,4 +1,4 @@
-@extends('web::layouts.grids.4-4-4')
+@extends('web::layouts.grids.8-4')
 
 @section('title', trans('whtools::seat.name'))
 @section('page_header', trans('whtools::seat.name'))
@@ -59,6 +59,15 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
              </tr>
              @endforeach
              @endif
+            <tfoot>
+                <th></th>
+                <th></th>
+                <th>Total (All)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tfoot>
              </tbody>
         </table>
         </div>
@@ -128,7 +137,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
 
 @endsection
 
-@section('center')
+@section('right')
     <div class="box box-primary box-solid" id="fitting-box">
         <div class="box-header"><h3 class="box-title" id='middle-header'></h3></div>
         <input type="hidden" id="fittingId" value=""\>
@@ -194,7 +203,75 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     $('#fitting-box').hide();
     $('#eftexport').hide();
     $('#showeft').val('');
-    $('#stocklist').DataTable();
+    $('#stocklist').DataTable({
+        "columns":[
+            {'data': 'image'},
+            {'data': 'ship'},
+            {'data': 'fitName'},
+            {'data': 'min'},
+            {'data': 'stock'},
+            {'data': 'contract'},
+            {'data': 'option'}
+        ],
+        /*based on stock value update colour*/
+        "rowCallback": function(row,data,index){
+            if(parseInt(data.stock) < parseInt(data.min)){
+                $('td:eq(4)',row).css('background-color','MistyRose');
+            }
+            if(data.stock ==0){
+                $('td:eq(4)',row).css('background-color','DarkSalmon');
+            }
+        },
+        /*Add total for min level and stock to footer*/
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+            
+            var pageTotal= function(i){
+                return api
+                .column(i, { page: 'current'})
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            };
+            var allPagesTotal= function(i){
+                return api
+                .column(i)
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            };
+            
+            
+            // Update footers
+            $( api.column(3).footer() ).html(
+                pageTotal(3) +' ('+ allPagesTotal(3) +')'
+            );
+            $( api.column(4).footer() ).html(
+                pageTotal(4) +' ('+ allPagesTotal(4) +')'
+            );
+            $( api.column(5).footer() ).html(
+                'Stocked '+(pageTotal(4)/pageTotal(3)*100).toFixed(0) + '% ('+(allPagesTotal(4)/allPagesTotal(3)*100).toFixed(0) +'%)'
+            );
+            if(allPagesTotal(4)/allPagesTotal(3) < 0.5){
+                $( api.column(5).footer()).css('background-color','MistyRose');
+            }else if(allPagesTotal(4)/allPagesTotal(3) < 0.75){
+                $( api.column(5).footer()).css('background-color','Moccasin');
+            }else{
+                 $( api.column(5).footer()).css('background-color','PaleGreen');
+            }
+        }
+            
+    });
     
     $("#selectedfit,"+"minlvl").select2({
       placeholder: "{{ trans('web::seat.select_item_add') }}"});
