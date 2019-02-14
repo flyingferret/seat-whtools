@@ -26,6 +26,6 @@ This addon allows corporations to monitor then number of doctrine fits that they
 Also allows you to see the fit linked with the desired stocking level.
 
 ### Screen Shot
-![Stocking](https://i.imgur.com/3mObTBs.png)
+![Stocking](https://i.imgur.com/kzlKHd6.png)
 
 
