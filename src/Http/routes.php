@@ -23,20 +23,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 Route::group([
     'namespace' => 'FlyingFerret\Seat\WHTools\Http\Controllers',
-    'prefix' => 'whtools'
+    'prefix' => 'whtools',
+    'middleware' => ['web', 'auth']
 ], function () {
-        Route::group([
-            'middleware' => ['web', 'auth'],
-        ], function () {
         // Your route definitions go here.
         Route::get('/', [
             'as'   => 'view',
             'uses' => 'WHtoolsController@getHome'
         ]);
-        //Route for Doctine stocking
+        //Routes for Doctine stocking
         Route::get('/stocking', [
             'as'   => 'whtools.stocking',
-            'uses' => 'WHtoolsController@getFittingView',
+            'uses' => 'WHtoolsController@getStockingView',
             'middleware' => 'bouncer:whtools.stockview'
         ]);
 
@@ -49,7 +47,16 @@ Route::group([
             'uses' => 'WHToolsController@deleteStockingById',
             'middleware' => 'bouncer:whtools.stockedit'
         ]);
-
+        Route::get('/showContractIG/{id}/{token}', [
+            'as'=>'whtools.test',
+            'uses' => 'WHToolsController@testEseye',
+            'middleware' => 'bouncer:whtools.stockedit'
+        ]);
+        //routes for blue loot tax audits
+        Route::get('/bluesales', [
+            'as'   => 'whtools.bluesales',
+            'uses' => 'WHtoolsController@getBlueSalesView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
 
     });
-});
