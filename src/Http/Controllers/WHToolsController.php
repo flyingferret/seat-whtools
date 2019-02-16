@@ -258,9 +258,6 @@ class WHtoolsController extends FittingController
                 $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
             })
-            -addColumn('seller_main',function($row){
-                
-            })
             ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
             ->make(true); 
     }
