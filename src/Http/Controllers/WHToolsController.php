@@ -35,6 +35,13 @@ use FlyingFerret\Seat\WHTools\Validation\StocklvlValidation;
 use Seat\Eveapi\Models\Wallet\CharacterWalletTransaction;
 use Seat\Web\Models\User;
 
+use Yajra\DataTables\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Seat\Eveapi\Models\Character\CharacterInfo;
+
+use DateTime;
+
 /**
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
@@ -100,7 +107,7 @@ class WHtoolsController extends FittingController
     }
     
     public function saveStocking(StocklvlValidation $request){
-        $stocklvl = Stocklvl::firstOrNew(['fitting_id' =>$request->selectedfit]);
+        $stocklvl = Stocklvl::firstOrNew(['fitting_id'=>$request->selectedfit]);
 
         $stocklvl->minLvl = $request->minlvl;
         $stocklvl->fitting_id = $request->selectedfit;
@@ -118,56 +125,155 @@ class WHtoolsController extends FittingController
         
         return "Success";
     }
-    public function getBlueSalesView()
+    public function getBlueSalesView($startdate = null, $enddate = null)
     {
-        $bluesales = $this->getBlueSales();
-        
-        return view('whtools::bluesales', compact('bluesales', 'stock','contracts'));
+        if($startdate != null and $enddate != null){
+            
+            $daterange = ['start'=>$startdate,'end'=>$enddate];
+            
+        }else{
+            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        }
+        return view('whtools::bluesales', compact('daterange'));
     }    
-    public function getBlueSales()
+    public function getBlueSalesData($startdate = null, $enddate = null)
     {
-        $bluesales = [];
-        $bluelootIDs = [30747,30744,30745,30746,21572,30378,30377,30376,30375,21585,20110,30373,30370,30374,21570,21721,21722,21720,21723,21073,21584,30371,21586,34431,45611];
-        
-        
+  
         /*$transactions = CharacterWalletTransaction::all();*/
         
-        $transactions = CharacterWalletTransaction::with('type')->get();
-        $transactions = $transactions->whereIn('type.typeID',$bluelootIDs)
-            ->where('is_buy',false)
-            ->all();
+        $transactions = $this->getBlueLootTransactions();
+        if($startdate != null and $enddate != null){
+            $startdate = new DateTime($startdate);
+            $enddate = new DateTime($enddate);
+            
+            $transactions = $transactions->whereBetween('date',array($startdate,$enddate));
+        }
+
+        return DataTables::of($transactions)->editColumn('is_buy', function ($row) {
+                return view('web::partials.transactionbuysell', compact('row'));
+            })
+            ->editColumn('unit_price', function ($row) {
+                return number($row->unit_price);
+            })
+            ->editColumn('sum', function ($row) {
+                return number($row->sum);
+            })
+            ->addColumn('item_view', function ($row) {
+                return view('web::partials.transactiontype', compact('row'));
+            })
+            ->addColumn('total', function ($row) {
+                return number($row->unit_price * $row->quantity);
+            })
+            ->addColumn('client_view', function ($row) {
+                $character_id = $row->character_id;
+                $character = CharacterInfo::find($row->client_id) ?: $row->client_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->addColumn('seller_view', function ($row) {
+                $character_id = $row->character_id;
+                $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
+            ->make(true);
         
-        foreach($transactions as $trans){
-            $mainCharacterInfo = User::find($trans->character_id)->group->main_character;
-            array_push($bluesales,[
-                'transaction_id'=>$trans->transaction_id,
-                'maincharacter'=> $mainCharacterInfo->name,
-                'maincorpID'=>$mainCharacterInfo->corporation_id,
-                'transcharacterID'=>$trans->character_id,
-                'date'=>$trans->date,
-                'itemID'=>$trans->type->typeID,
-                'quantity'=>$trans->quantity,
-                'unitprice'=>($this->bd_nice_number($trans->unit_price)),
-                'total'=>($this->bd_nice_number($trans->quantity * $trans->unit_price))
-            ]);
+    }
+
+     public function getBlueLootTransactions($startdate = null, $enddate = null) : Builder
+    {
+         $bluelootIDs = [30747,30744,30745,30746,21572,30378,30377,30376,30375,21585,20110,30373,30370,30374,21570,21721,21722,21720,21723,21073,21584,30371,21586,34431];
+        return CharacterWalletTransaction::with('client', 'type')
+            ->select(DB::raw('
+            *, CASE
+                when character_wallet_transactions.location_id BETWEEN 66015148 AND 66015151 then
+                    (SELECT s.stationName FROM staStations AS s
+                      WHERE s.stationID=character_wallet_transactions.location_id-6000000)
+                when character_wallet_transactions.location_id BETWEEN 66000000 AND 66014933 then
+                    (SELECT s.stationName FROM staStations AS s
+                      WHERE s.stationID=character_wallet_transactions.location_id-6000001)
+                when character_wallet_transactions.location_id BETWEEN 66014934 AND 67999999 then
+                    (SELECT d.name FROM `sovereignty_structures` AS c
+                      JOIN universe_stations d ON c.structure_id = d.station_id
+                      WHERE c.structure_id=character_wallet_transactions.location_id-6000000)
+                when character_wallet_transactions.location_id BETWEEN 60014861 AND 60014928 then
+                    (SELECT d.name FROM `sovereignty_structures` AS c
+                      JOIN universe_stations d ON c.structure_id = d.station_id
+                      WHERE c.structure_id=character_wallet_transactions.location_id)
+                when character_wallet_transactions.location_id BETWEEN 60000000 AND 61000000 then
+                    (SELECT s.stationName FROM staStations AS s
+                      WHERE s.stationID=character_wallet_transactions.location_id)
+                when character_wallet_transactions.location_id BETWEEN 61000000 AND 61001146 then
+                    (SELECT d.name FROM `sovereignty_structures` AS c
+                      JOIN universe_stations d ON c.structure_id = d.station_id
+                      WHERE c.structure_id=character_wallet_transactions.location_id)
+                when character_wallet_transactions.location_id > 61001146 then
+                    (SELECT name FROM `universe_structures` AS c
+                     WHERE c.structure_id = character_wallet_transactions.location_id)
+                else (SELECT m.itemName FROM mapDenormalize AS m
+                    WHERE m.itemID=character_wallet_transactions.location_id) end
+                AS locationName'
+            ))
+            ->whereIn('type_id',$bluelootIDs)
+            ->where('is_buy',False);
+            
+    }
+
+    public function getBlueSaleTotalsData($startdate = null, $enddate = null)
+    {
+
+        $transactions = $this->getBlueLootTransactions()
+        ->selectRaw('sum(unit_price*quantity) as sum')
+        ->groupBy('character_id');
+            
+        if($startdate != null and $enddate != null){
+            $startdate = new DateTime($startdate);
+            $enddate = new DateTime($enddate);
+
+            $transactions = $transactions->whereBetween('date',array($startdate,$enddate));
         }
         
-        return $bluesales;
+
+        return DataTables::of($transactions)->editColumn('is_buy', function ($row) {
+                return view('web::partials.transactionbuysell', compact('row'));
+            })
+            ->editColumn('unit_price', function ($row) {
+                return number($row->unit_price);
+            })
+            ->editColumn('sum', function ($row) {
+                return number($row->sum);
+            })
+            ->addColumn('item_view', function ($row) {
+                return view('web::partials.transactiontype', compact('row'));
+            })
+            ->addColumn('total', function ($row) {
+                return number($row->unit_price * $row->quantity);
+            })
+            ->addColumn('client_view', function ($row) {
+                $character_id = $row->character_id;
+                $character = CharacterInfo::find($row->client_id) ?: $row->client_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->addColumn('seller_view', function ($row) {
+                $character_id = $row->character_id;
+                $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            -addColumn('seller_main',function($row){
+                
+            })
+            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
+            ->make(true); 
     }
-    function bd_nice_number($n) {
-        // first strip any formatting;
-        $n = (0+str_replace(",","",$n));
-       
-        // is this a number?
-        if(!is_numeric($n)) return false;
-       
-        // now filter it;
-        if($n>1000000000000) return round(($n/1000000000000),1).' Tril ISK';
-        else if($n>1000000000) return round(($n/1000000000),1).' Bil ISK';
-        else if($n>1000000) return round(($n/1000000),1).' Mil ISK';
-        else if($n>1000) return round(($n/1000),1).'K ISK ';
-       
-        return number_format($n);
-    }
+    public function getBlueSaleTotalsView($startdate = null, $enddate = null)
+    {
+        if($startdate != null and $enddate != null){
+            
+            $daterange = ['start'=>$startdate,'end'=>$enddate];
+            
+        }else{
+            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        }
+        return view('whtools::bluesaletotals', compact('daterange'));
+    } 
 
 }

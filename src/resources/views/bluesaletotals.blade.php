@@ -18,9 +18,8 @@
 
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="" data-toggle="tab" data-characters="single">Blue Loot Sales </a></li>
-            <li class=""><a href= "#" id='totallink'>Blue Loot Sales Totals </a></li>
-
+            <li class=""><a href="#" data-toggle="tab" data-characters="single" id='saleslink'>Blue Loot Sales </a></li>
+            <li class="active"><a href="#" data-toggle="tab" data-characters="single">Blue Loot Sales Totals </a></li>
 
         </ul>
         <div class="tab-content">
@@ -31,12 +30,9 @@
             <tr>
               <th>{{ trans('web::seat.date') }}</th>
               <th>Seller</th>
-              <th></th>
-              <th>{{ trans_choice('web::seat.type', 1) }}</th>
-              <th>{{ trans('web::seat.qty') }}</th>
-              <th>{{ trans('web::seat.price') }}</th>
+              
               <th>{{ trans('web::seat.total') }}</th>
-              <th>{{ trans('web::seat.client') }}</th>
+
             </tr>
             </thead>
           </table>
@@ -57,18 +53,13 @@
     var character_transactions = $('table#character-transactions').DataTable({
       processing  : true,
       serverSide  : true,
-      ajax        :'{{ route('whtools.bluesales.databydate', [$daterange['start'],$daterange['end']]) }}'
+      ajax        :'{{ route('whtools.bluesaletotals.databydate', [$daterange['start'],$daterange['end']]) }}'
         
       ,
       columns     : [
         {data: 'date', name: 'date'},
         {data: 'seller_view', name: 'character.name'},
-        {data: 'is_buy', searchable: false},
-        {data: 'item_view', name: 'type.typeName'},
-        {data: 'quantity', name: 'quantity'},
-        {data: 'unit_price', name: 'unit_price'},
         {data: 'sum', name: 'sum'},
-        {data: 'client_view', name: 'client.name'}
       ],
       drawCallback: function () {
         $('img').unveil(100);
@@ -118,14 +109,15 @@
       document.getElementById('month').onchange =function(){
           startdate = (new Date($('#year').val(),$('#month').val(),1)).toISOString();
           enddate = (new Date($('#year').val(),parseInt($('#month').val())+1,0)).toISOString();
-          url = "{{ route('whtools.bluesalesbydate', ['start'=>'start','end'=>'end']) }}";
+          url = "{{ route('whtools.bluetotals', ['start'=>'start','end'=>'end']) }}";
+          
           url =url.replace('start', startdate);
           url =url.replace('end', enddate);
           document.getElementById('test').innerHTML = url;
           window.location = url;
       }
-      document.getElementById('totallink').onclick =function(){
-        url = "{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}";
+      document.getElementById('saleslink').onclick =function(){
+        url = "{{route('whtools.bluesalesbydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}";
         window.location = url;
       };
   </script>

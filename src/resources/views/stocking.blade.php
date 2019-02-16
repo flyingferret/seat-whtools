@@ -48,7 +48,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                  <td class="no-hover pull-right">
                      
                      @if (auth()->user()->has('whtools.stockedit', false)) 
-                     <button type="button" id="editStock" class="btn btn-xs btn-warning" data-id="{{$item['id']}}" data-toggle="tooltip" data-placement="top" title="Edit Stocking">
+                     <button type="button" id="editStock" class="btn btn-xs btn-warning" data-id="{{$item['fitting_id']}}" data-toggle="tooltip" data-placement="top" title="Edit Stocking">
                          <span class="fa fa-pencil text-white"></span>
                      </button>
                      <button type="button" id="deletestock" class="btn btn-xs btn-danger" data-id="{{$item['id']}}" data-toggle="tooltip" data-placement="top" title="Delete Stocking">
@@ -275,7 +275,9 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     });
     
     $("#selectedfit,"+"minlvl").select2({
-      placeholder: "{{ trans('web::seat.select_item_add') }}"});
+      placeholder: "{{ trans('web::seat.select_item_add') }}",
+      dropdownParent: $('#editStocklvlModal')
+    });
     
     /*ADD STOCK*/
     $('#addStocklvl').on('click', function () {
@@ -294,23 +296,11 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
     /*EDIT STOCK*/
     }).on('click', '#editStock', function () {
         id = $(this).data('id');
-        $('#selectfitbox').hide();
-        $('#stockSelection').val(id);
+        /*$('#selectfitbox').hide();*/
+        $('#selectedfit').val($(this).data('id')).trigger('change');
         document.getElementById('pedittext').innerHTML = "Enter the new minimum stock level. ";
-        
         $('#editStocklvlModal').modal('show');
-        $.ajax({
-            headers: function () {
-            },
-            url: "/fitting/geteftfittingbyid/" + id,
-            type: "GET",
-            datatype: 'string',
-            timeout: 10000
-        }).done( function (result) {
-          $('textarea#eftfitting').val(result);
-        }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
-        });
-        
+
         /*VIEW FIT*/
     }).on('click', '#viewfit', function () {
         uri = "['id' => " + $(this).data('id') +"]";
@@ -333,6 +323,18 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             $('#fitting-box').show();
             fillFittingWindow(result);
         });
+        $.ajax({
+            headers: function () {
+            },
+            url: "/fitting/geteftfittingbyid/" + id,
+            type: "GET",
+            datatype: 'string',
+            timeout: 10000
+        }).done( function (result) {
+          $('textarea#eftfitting').val(result);
+        }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+        });
+        
 
     });
 

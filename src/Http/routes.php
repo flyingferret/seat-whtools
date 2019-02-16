@@ -58,5 +58,32 @@ Route::group([
             'uses' => 'WHtoolsController@getBlueSalesView',
             'middleware' => 'bouncer:whtools.bluetaxview'
         ]);
+    
+        Route::get('/bluesales/{start}/{end}', [
+            'as'   => 'whtools.bluesalesbydate',
+            'uses' => 'WHtoolsController@getBlueSalesView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluesales/data/', [
+            'as'   => 'whtools.bluesales.data',
+            'uses' => 'WHtoolsController@getBlueSalesData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluesales/data/bydate/{start}/{end}', [
+            'as'   => 'whtools.bluesales.databydate',
+            'uses' => 'WHtoolsController@getBlueSalesData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluesales/totals/data/bydate/{start}/{end}', [
+            'as'   => 'whtools.bluesaletotals.databydate',
+            'uses' => 'WHtoolsController@getBlueSaleTotalsData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetotals/{start}/{end}', [
+            'as'   => 'whtools.bluetotals',
+            'uses' => 'WHtoolsController@getBlueSaleTotalsView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+
 
     });
