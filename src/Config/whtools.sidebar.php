@@ -26,11 +26,17 @@ return [
         'route_segment' => 'whtool',
         'permission'=>['whtools.stockview','whtools.taxview'],        
         'entries' => [
-            'whtools'=>[
-                    'name' => 'Stocking',
+            [
+                    'name' => 'stocking',
                     'icon' => 'fa fa-suitcase',
                     'route' => 'whtools.stocking',
                     'permission'=>'whtools.stockview'
+                ],
+            [
+                    'name' => 'bluesales',
+                    'icon' => 'fa fa-truck',
+                    'route' => 'whtools.bluesales',
+                    'permission'=>'whtools.bluetaxview'
                 ],
                 
             ]
