@@ -65,17 +65,13 @@ class WHtoolsController extends FittingController
         
         return view('whtools::stocking', compact('fitlist', 'stock','contracts'));
     }
-    
-    public function getStockLvls(){
-        return Stocklvl::all();
-    }
         
     
     public function getStockList(){
-        $stocklvllist = $this->getStockLvls();
+        $stocklvllist = Stocklvl::all();
         $stock = [];
         
-        if(count($stocklvllist)<= 0)
+        if($stocklvllist)->isEmpty())
             return $stock;
         
         foreach($stocklvllist as $stocklvl){
