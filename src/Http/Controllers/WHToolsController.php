@@ -71,7 +71,7 @@ class WHtoolsController extends FittingController
         $stocklvllist = Stocklvl::all();
         $stock = [];
         
-        if($stocklvllist)->isEmpty())
+        if($stocklvllist->isEmpty())
             return $stock;
         
         $corporation_id = auth()->user()->character->corporation_id;
