@@ -74,12 +74,10 @@ class WHtoolsController extends FittingController
         if($stocklvllist)->isEmpty())
             return $stock;
         
+        $corporation_id = auth()->user()->character->corporation_id;
+        
         foreach($stocklvllist as $stocklvl){
             $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
-
-            $corporation_id = auth()->user()->character->corporation_id;
-            
-            $stock_contracts = [];
            
             $stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
                 ->where('title', 'LIKE', '%'.$stocklvl->fitting->shiptype.' '.$stocklvl->fitting->fitname.'%')
@@ -90,7 +88,7 @@ class WHtoolsController extends FittingController
             array_push($stock, [
                 'id' =>  $stocklvl->id,
                 'minlvl' =>  $stocklvl->minLvl,
-                'stock' =>  count($stock_contracts),
+                'stock' =>  $stock_contracts->count(),
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
                 'shiptype' =>$stocklvl->fitting->shiptype,
