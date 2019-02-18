@@ -84,6 +84,55 @@ Route::group([
             'uses' => 'WHtoolsController@getBlueSaleTotalsView',
             'middleware' => 'bouncer:whtools.bluetaxview'
         ]);
-
-
+        Route::get('/config}', [
+            'as'   => 'whtools.config',
+            'uses' => 'WHtoolsController@getConfigView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::post('/config/post', [
+            'as'   => 'whtools.config.post',
+            'uses' => 'WHtoolsController@postConfig'
+        ]); 
+        Route::get('/bluetaxpayments/data/', [
+            'as'   => 'whtools.bluetaxpayments.data',
+            'uses' => 'WHtoolsController@getTaxPaymentsData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetaxpayments/data/bydate/{start}/{end}', [
+            'as'   => 'whtools.bluetaxpayments.data.bydate',
+            'uses' => 'WHtoolsController@getTaxPaymentsData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetaxpayments', [
+            'as'   => 'whtools.bluetaxpayments',
+            'uses' => 'WHtoolsController@getTaxPaymentsView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+    
+        Route::get('/bluetaxpayments/{start}/{end}', [
+            'as'   => 'whtools.bluetaxpayments.bydate',
+            'uses' => 'WHtoolsController@getTaxPaymentsView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetaxpaymenttotals', [
+            'as'   => 'whtools.bluetaxpayment.totals',
+            'uses' => 'WHtoolsController@getTaxPaymentTotalsView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+    
+        Route::get('/bluetaxpaymenttotals/{start}/{end}', [
+            'as'   => 'whtools.bluetaxpayment.totals.bydate',
+            'uses' => 'WHtoolsController@getTaxPaymentTotalsView',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetaxpaymenttotals/data/', [
+            'as'   => 'whtools.bluetaxpayment.totals.data',
+            'uses' => 'WHtoolsController@getTaxPaymentTotalsData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
+        Route::get('/bluetaxpaymenttotals/data/bydate/{start}/{end}', [
+            'as'   => 'whtools.bluetaxpayment.totals.data.bydate',
+            'uses' => 'WHtoolsController@getTaxPaymentTotalsData',
+            'middleware' => 'bouncer:whtools.bluetaxview'
+        ]);
     });

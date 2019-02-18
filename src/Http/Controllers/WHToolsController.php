@@ -41,7 +41,10 @@ use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterInfo;
 
 use DateTime;
-
+use GuzzleHttp\Client;
+use Parsedown;
+use Seat\Eveapi\Models\Corporation\CorporationInfo;
+use Seat\Eveapi\Models\Wallet\CorporationWalletJournal;
 /**
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
@@ -165,15 +168,20 @@ class WHtoolsController extends FittingController
             })
             ->addColumn('seller_view', function ($row) {
                 $character_id = $row->character_id;
-                $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
+                $character = User::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->addColumn('main_view',function($row){
+                $character = User::find($row->character_id);
+                $character = User::find($character->group->main_character_id);
+                $character_id = $character->group->getMainCharacterIdAttribute();
             })
             ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
             ->make(true);
         
     }
 
-     public function getBlueLootTransactions($startdate = null, $enddate = null) : Builder
+     public function getBlueLootTransactions() : Builder
     {
          $bluelootIDs = [30747,30744,30745,30746,21572,30378,30377,30376,30375,21585,20110,30373,30370,30374,21570,21721,21722,21720,21723,21073,21584,30371,21586,34431];
         return CharacterWalletTransaction::with('client', 'type')
@@ -252,7 +260,13 @@ class WHtoolsController extends FittingController
                 $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
             })
-            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
+            ->addColumn('main_view',function($row){
+                $character = User::find($row->character_id);
+                $character = User::find($character->group->main_character_id);
+                $character_id = $character->id;                
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view','main_view'])
             ->make(true); 
     }
     public function getBlueSaleTotalsView($startdate = null, $enddate = null)
@@ -265,6 +279,154 @@ class WHtoolsController extends FittingController
             $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluesaletotals', compact('daterange'));
+    }
+    public function getConfigView(){
+        $changelog = $this->getChangelog();
+        $corporationsInfo = CorporationInfo::all();
+        $corps = [];
+        
+        foreach($corporationsInfo as $c){
+            array_push($corps,[
+                'name'=>  $c->name,
+                'id'=> $c->corporation_id
+            ]);
+        }
+        
+        return view('whtools::config', compact('changelog','corps'));
+    }
+    
+    private function getChangelog() : string
+    {
+        try {
+            $response = (new Client())
+                ->request('GET', "https://raw.githubusercontent.com/flyingferret/seat-whtools/master/CHANGELOG.md");
+            if ($response->getStatusCode() != 200) {
+                return 'Error while fetching changelog';
+            }
+            $parser = new Parsedown();
+            return $parser->parse($response->getBody());
+        } catch (RequestException $e) {
+            return 'Error while fetching changelog';
+        }
+    }
+    /*add validation*/
+    public function postConfig(){
+        setting(['whtools.bluetax.percentage',request('whtools-tax-percentage')],true);
+        setting(['whtools.bluetax.collector',request('whtools-tax-collector')],true);
+        
+        return redirect()->route('whtools.config');
+    }
+    
+    public function getTaxPayments()
+    {
+        return DB::table('corporation_wallet_journals')
+            ->leftJoin('users','corporation_wallet_journals.first_party_id','=','users.id')
+            ->leftJoin('user_settings','users.group_id','=','user_settings.group_id')
+            ->where('ref_type','=','player_donation')
+            ->where('reason','like','%tax%')
+            ->select('corporation_wallet_journals.id as payment_id',
+                    'corporation_wallet_journals.division as division',
+                    'corporation_wallet_journals.date as payment_date',
+                    'corporation_wallet_journals.first_party_id as first_party_id',
+                    'corporation_wallet_journals.second_party_id as second_party_id',
+                    'corporation_wallet_journals.amount as payment_amount',
+                    'corporation_wallet_journals.reason as payment_reason'
+                    )
+            ->selectRaw('IF(isnull(user_settings.value),first_party_id,user_settings.value) as main_character_id');
+        
+    }
+    public function getTaxPaymentsData($startdate = null, $enddate = null){
+        $taxPayments = $this->getTaxPayments();
+        if($startdate != null and $enddate != null){
+            $startdate = new DateTime($startdate);
+            $enddate = new DateTime($enddate);
+            
+            $taxPayments = $taxPayments->whereBetween('date',array($startdate,$enddate));
+        }
+
+        return DataTables::of($taxPayments)
+            ->addColumn('first_party_view', function ($row) {
+                $character_id = $row->first_party_id;
+                $character = CharacterInfo::find($row->first_party_id) ?: $row->first_party_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->addColumn('main_view',function($row){
+                $character = User::find($row->first_party_id);
+                if($character){
+                $character = User::find($character->group->main_character_id);
+                $character_id = $character->group->getMainCharacterIdAttribute();
+                return view('web::partials.character', compact('character', 'character_id'));
+                }else{
+                    return 'Not on SeAT';    
+                }
+                
+            })
+            ->editColumn('payment_amount', function ($row) {
+                return number($row->payment_amount);
+            })
+            ->rawColumns(['first_party_view','main_view'])
+            ->make(true);
+    }
+    
+    public function getTaxPaymentsView($startdate = null, $enddate = null)
+    {
+        if($startdate != null and $enddate != null){
+            
+            $daterange = ['start'=>$startdate,'end'=>$enddate];
+            
+        }else{
+            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        }
+        return view('whtools::bluetaxpayments', compact('daterange'));
     } 
 
+
+    public function getTaxPaymentTotalsData($startdate = null, $enddate = null){
+        $taxPayments = $this->getTaxPayments()
+        ->selectRaw('sum(amount) as total_payments')
+        ->groupBy('main_character_id');
+
+        if($startdate != null and $enddate != null){
+            $startdate = new DateTime($startdate);
+            $enddate = new DateTime($enddate);
+            
+            $taxPayments = $taxPayments->whereBetween('date',array($startdate,$enddate));
+        }
+
+        return DataTables::of($taxPayments)
+            ->addColumn('first_party_view', function ($row) {
+                $character_id = $row->first_party_id;
+                $character = CharacterInfo::find($row->first_party_id) ?: $row->first_party_id;
+                return view('web::partials.character', compact('character', 'character_id'));
+            })
+            ->addColumn('main_view',function($row){
+                $character = User::find($row->first_party_id);
+                if($character){
+                $character = User::find($character->group->main_character_id);
+                $character_id = $character->group->getMainCharacterIdAttribute();
+                return view('web::partials.character', compact('character', 'character_id'));
+                }else{
+                    return 'Not on SeAT';    
+                }
+                
+            })
+            ->editColumn('total_payments', function ($row) {
+                return number($row->total_payments);
+            })
+
+            
+            ->rawColumns(['first_party_view','main_view'])
+            ->make(true);
+    }
+        public function getTaxPaymentTotalsView($startdate = null, $enddate = null)
+    {
+        if($startdate != null and $enddate != null){
+            
+            $daterange = ['start'=>$startdate,'end'=>$enddate];
+            
+        }else{
+            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        }
+        return view('whtools::bluetaxpaymenttotals', compact('daterange'));
+    } 
 }

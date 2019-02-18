@@ -33,9 +33,15 @@ return [
                     'permission'=>'whtools.stockview'
                 ],
             [
-                    'name' => 'bluesales',
+                    'name' => 'blue tax',
                     'icon' => 'fa fa-truck',
                     'route' => 'whtools.bluesales',
+                    'permission'=>'whtools.bluetaxview'
+                ],
+            [
+                    'name' => 'config',
+                    'icon' => 'fa fa-cog',
+                    'route' => 'whtools.config',
                     'permission'=>'whtools.bluetaxview'
                 ],
                 

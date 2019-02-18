@@ -18,10 +18,10 @@
 
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="" data-toggle="tab" data-characters="single">Blue Loot Sales </a></li>
-            <li class=""><a href= "#" id='totallink'>Blue Loot Sales Totals </a></li>
-
-
+            <li class="active" id='sales'><a href="{{route('whtools.bluesales',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='sales'>Blue Loot Sales </a></li>
+            <li class="" id='salestotals'><a href= "{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}" id='salestotals'>Blue Loot Sales Totals </a></li>
+            <li class="" id='payments'><a href="{{route('whtools.bluetaxpayments',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='payments'>Blue tax payments </a></li>
+            <li class="" id='paymentstotals'><a href="{{route('whtools.bluetaxpayment.totals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='paymentstotals'>Blue tax payment Totals </a></li>
         </ul>
         <div class="tab-content">
 
@@ -124,10 +124,7 @@
           document.getElementById('test').innerHTML = url;
           window.location = url;
       }
-      document.getElementById('totallink').onclick =function(){
-        url = "{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}";
-        window.location = url;
-      };
+
   </script>
 
 @include('web::includes.javascript.id-to-name')

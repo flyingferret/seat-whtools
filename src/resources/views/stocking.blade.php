@@ -101,7 +101,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                <div class="modal-footer">
                    <div class="btn-group pull-right" role="group">
                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                       <input type="submit" class="btn btn-primary" id="addstock" value="Submit Stock" />
+                       <input type="submit" class="btn btn-primary" id="addstock" value="Submit Stock"/>
                    </div>
               </div>
            </form>
