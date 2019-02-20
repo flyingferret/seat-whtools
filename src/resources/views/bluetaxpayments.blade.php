@@ -35,6 +35,7 @@
               <th>{{ trans('web::seat.date') }}</th>
               <th>Main</th>
               <th>Seller</th>
+              <th>Reason</th>
               <th>Amount</th>
             </tr>
             </thead>
@@ -60,10 +61,11 @@
         
       ,
       columns     : [
-        {data: 'payment_date', name: 'payment_date'},
-        {data: 'main_view', name: 'main_character_id'},
-        {data: 'first_party_view', name: 'first_party_id'},
-        {data: 'payment_amount', name: 'payment_amount'}
+        {data: 'date', name: 'date'},
+        {data: 'main_view', name: 'main_character'},
+        {data: 'first_party_id', name: 'first_party.name'},
+        {data: 'reason', name:'reason'},
+        {data: 'amount', name: 'amount'}
       ],
       drawCallback: function () {
         $('img').unveil(100);

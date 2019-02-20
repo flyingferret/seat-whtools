@@ -32,7 +32,6 @@
             <tr>
               <th>{{ trans('web::seat.date') }}</th>
               <th>Seller</th>
-              
               <th>{{ trans('web::seat.total') }}</th>
 
             </tr>
@@ -60,8 +59,8 @@
       ,
       columns     : [
         {data: 'date', name: 'date'},
-        {data: 'seller_view', name: 'character.name'},
-        {data: 'sum', name: 'sum'},
+        {data: 'seller_view', name: 'users.name'},
+        {data: 'sum', name: 'sum', searchable: 'false'},
       ],
       drawCallback: function () {
         $('img').unveil(100);

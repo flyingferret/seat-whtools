@@ -62,12 +62,12 @@
       ,
       columns     : [
         {data: 'date', name: 'date'},
-        {data: 'seller_view', name: 'character.name'},
+        {data: 'seller_view', name: 'users.name'},
         {data: 'is_buy', searchable: false},
         {data: 'item_view', name: 'type.typeName'},
         {data: 'quantity', name: 'quantity'},
         {data: 'unit_price', name: 'unit_price'},
-        {data: 'sum', name: 'sum'},
+        {data: 'sum', searchable: false},
         {data: 'client_view', name: 'client.name'}
       ],
       drawCallback: function () {

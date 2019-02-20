@@ -32,7 +32,7 @@
             <thead>
             <tr>
               <th>Main</th>
-              <th>Seller</th>
+            <th></th>
               <th>Total Payments</th>
             </tr>
             </thead>
@@ -58,10 +58,11 @@
         
       ,
       columns     : [
-        {data: 'main_view', name: 'main_character_id'},
-        {data: 'first_party_view', name: 'first_party_id'},
-        {data: 'total_payments', name: 'total_payments'}
+        {data: 'main_view', name: 'main_character_name'},
+        {data: 'first_party_id', name: 'first_party.name'},
+        {data: 'total_payments', name: 'amount'}
       ],
+
       drawCallback: function () {
         $('img').unveil(100);
         ids_to_names();
