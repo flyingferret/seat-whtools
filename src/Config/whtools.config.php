@@ -21,6 +21,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 return [
 
-    'version' => '0.0.16',
+    'version' => '0.0.18',
 
 ];
