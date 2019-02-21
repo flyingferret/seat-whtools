@@ -24,6 +24,7 @@ return [
     // Language strings for your app go here
     'name' => 'WHTools',
     'stocking' => 'Stocking',
+    'bluetax' => 'Blue Tax',
 
 ];
 

@@ -1,7 +1,7 @@
 @extends('web::layouts.grids.12')
 @section('title', trans('whtools::seat.name'))
 @section('page_header', trans('whtools::seat.name'))
-@section('page_description', trans('whtools::seat.stocking'))
+@section('page_description', trans('whtools::seat.bluetax'))
 
 @section('content')
 
@@ -18,11 +18,10 @@
 
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="" id='sales'><a href="{{route('whtools.bluesales',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='sales'>Blue Loot Sales </a></li>
+            <li class="" id='sales'><a href="{{route('whtools.bluesalesbydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='sales'>Blue Loot Sales </a></li>
             <li class="" id='salestotals'><a href= "{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}" id='salestotals'>Blue Loot Sales Totals </a></li>
-            <li class="active" id='payments'><a href="{{route('whtools.bluetaxpayments',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='payments'>Blue tax payments </a></li>
-            <li class="" id='paymentstotals'><a href="{{route('whtools.bluetaxpayment.totals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='paymentstotals'>Blue tax payment Totals </a></li>
-
+            <li class="active" id='payments'><a href="{{route('whtools.bluetaxpayments.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='payments'>Blue tax payments </a></li>
+            <li class="" id='paymentstotals'><a href="{{route('whtools.bluetaxpayment.totals.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='paymentstotals'>Blue tax payment Totals </a></li>
 
 
         </ul>
@@ -34,7 +33,7 @@
             <tr>
               <th>{{ trans('web::seat.date') }}</th>
               <th>Main</th>
-              <th>Seller</th>
+              <th>Payed by</th>
               <th>Reason</th>
               <th>Amount</th>
             </tr>
@@ -67,6 +66,7 @@
         {data: 'reason', name:'reason'},
         {data: 'amount', name: 'amount'}
       ],
+      "order": [[ 4, "desc" ]],
       drawCallback: function () {
         $('img').unveil(100);
         ids_to_names();

@@ -1,7 +1,7 @@
 @extends('web::layouts.grids.12')
 @section('title', trans('whtools::seat.name'))
 @section('page_header', trans('whtools::seat.name'))
-@section('page_description', trans('whtools::seat.stocking'))
+@section('page_description', trans('whtools::seat.bluetax'))
 
 @section('content')
 
@@ -18,10 +18,12 @@
 
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active" id='sales'><a href="{{route('whtools.bluesales',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='sales'>Blue Loot Sales </a></li>
+            <li class="active" id='sales'><a href="{{route('whtools.bluesalesbydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='sales'>Blue Loot Sales </a></li>
             <li class="" id='salestotals'><a href= "{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}" id='salestotals'>Blue Loot Sales Totals </a></li>
-            <li class="" id='payments'><a href="{{route('whtools.bluetaxpayments',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='payments'>Blue tax payments </a></li>
-            <li class="" id='paymentstotals'><a href="{{route('whtools.bluetaxpayment.totals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='paymentstotals'>Blue tax payment Totals </a></li>
+            <li class="" id='payments'><a href="{{route('whtools.bluetaxpayments.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='payments'>Blue tax payments </a></li>
+            <li class="" id='paymentstotals'><a href="{{route('whtools.bluetaxpayment.totals.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"  id='paymentstotals'>Blue tax payment Totals </a></li>
+
+
         </ul>
         <div class="tab-content">
 
@@ -66,10 +68,11 @@
         {data: 'is_buy', searchable: false},
         {data: 'item_view', name: 'type.typeName'},
         {data: 'quantity', name: 'quantity'},
-        {data: 'unit_price', name: 'unit_price'},
+        {data: 'unit_price', name: 'unit_price', searchable: 'false'},
         {data: 'sum', searchable: false},
         {data: 'client_view', name: 'client.name'}
       ],
+     "order": [[ 6, "desc" ]],
       drawCallback: function () {
         $('img').unveil(100);
         ids_to_names();

@@ -130,7 +130,7 @@ class WHtoolsController extends FittingController
             $daterange = ['start'=>$startdate,'end'=>$enddate];
             
         }else{
-            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluesales', compact('daterange'));
     }    
@@ -168,11 +168,6 @@ class WHtoolsController extends FittingController
                 $character_id = $row->character_id;
                 $character = User::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
-            })
-            ->addColumn('main_view',function($row){
-                $character = User::find($row->character_id);
-                $character = User::find($character->group->main_character_id);
-                $character_id = $character->group->getMainCharacterIdAttribute();
             })
             ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
             ->make(true);
@@ -213,7 +208,7 @@ class WHtoolsController extends FittingController
                     WHERE m.itemID=character_wallet_transactions.location_id) end
                 AS locationName'
             ))
-            ->select('character_id', 'transaction_id', 'date', 'type_id', 'location_id', 'unit_price', 'quantity', 'client_id', 'is_buy', 'is_personal', 'journal_ref_id')
+            ->select('id','character_id', 'transaction_id', 'date', 'type_id', 'location_id', 'unit_price', 'quantity', 'client_id', 'is_buy', 'is_personal', 'journal_ref_id')
             ->whereIn('type_id',$bluelootIDs)
             ->where('is_buy',False)
             ->join('users','users.id','character_id')
@@ -225,7 +220,8 @@ class WHtoolsController extends FittingController
     {
 
         $transactions = $this->getBlueLootTransactions()
-        ->groupBy('character_id');
+        ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
+        ->groupBy('users.group_id');
             
         if($startdate != null and $enddate != null){
             $startdate = new DateTime($startdate);
@@ -242,8 +238,8 @@ class WHtoolsController extends FittingController
             ->editColumn('unit_price', function ($row) {
                 return number($row->unit_price);
             })
-            ->editColumn('sum', function ($row) {
-                return number($row->sum);
+            ->editColumn('total', function ($row) {
+                return number($row->total);
             })
             ->addColumn('item_view', function ($row) {
                 return view('web::partials.transactiontype', compact('row'));
@@ -258,12 +254,12 @@ class WHtoolsController extends FittingController
                 $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
             })
-            ->addColumn('main_view',function($row){
+           ->addColumn('main_view',function($row){
                 $character = User::find($row->character_id);
                 $character = User::find($character->group->main_character_id);
                 $character_id = $character->id;                
                 return view('web::partials.character', compact('character', 'character_id'));
-            })
+           })
             ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view','main_view'])
             ->make(true); 
     }
@@ -274,7 +270,7 @@ class WHtoolsController extends FittingController
             $daterange = ['start'=>$startdate,'end'=>$enddate];
             
         }else{
-            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluesaletotals', compact('daterange'));
     }
@@ -321,14 +317,15 @@ class WHtoolsController extends FittingController
         with('first_party', 'second_party')
         ->where('ref_type','=','player_donation')
         ->where('reason','like','%tax%')
-        
+        ->select('corporation_id', 'division', 'date', 'ref_type', 'first_party_id', 'second_party_id', 'amount', 'balance', 'reason')
         ->leftjoin('users', 'users.id','first_party_id')
         ->leftjoin('user_settings','user_settings.group_id','users.group_id');
         
         
     }
     public function getTaxPaymentsData($startdate = null, $enddate = null){
-        $taxPayments = $this->getTaxPayments();
+        $taxPayments = $this->getTaxPayments()
+            ->groupBy('users.group_id');
         if($startdate != null and $enddate != null){
             $startdate = new DateTime($startdate);
             $enddate = new DateTime($enddate);
@@ -372,8 +369,8 @@ class WHtoolsController extends FittingController
                 return view('web::partials.character', compact('character', 'character_id'));
 
             })            
-            ->editColumn('payment_amount', function ($row) {
-                return number($row->payment_amount);
+            ->editColumn('amount', function ($row) {
+                return number($row->amount);
             })
             ->rawColumns(['first_party_id','main_view'])
             ->make(true);
@@ -386,7 +383,7 @@ class WHtoolsController extends FittingController
             $daterange = ['start'=>$startdate,'end'=>$enddate];
             
         }else{
-            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluetaxpayments', compact('daterange'));
     } 
@@ -454,7 +451,7 @@ class WHtoolsController extends FittingController
             $daterange = ['start'=>$startdate,'end'=>$enddate];
             
         }else{
-            $daterange = ['start'=>'2018-02-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluetaxpaymenttotals', compact('daterange'));
     } 
