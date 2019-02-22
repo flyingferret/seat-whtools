@@ -32,6 +32,7 @@
             <thead>
             <tr>
               <th>Main</th>
+                <th>Main name</th>
               <th>Total Payments</th>
             </tr>
             </thead>
@@ -57,8 +58,9 @@
         
       ,
       columns     : [
-        {data: 'main_view', name: 'main_character_name'},
-        {data: 'total_payments', name: 'total_payments'}
+        {data: 'main_view', name: 'main_character_name', searchable: true},
+        {data: 'main_character_name', name: 'main_character_name' ,"visible": false},
+        {data: 'total_payments', name: 'total_payments', searchable: false}
       ],
       "order": [[ 1, "desc" ]],
       drawCallback: function () {
