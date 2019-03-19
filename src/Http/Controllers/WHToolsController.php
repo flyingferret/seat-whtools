@@ -84,10 +84,16 @@ class WHtoolsController extends FittingController
             $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
            
             $stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
-                ->where('title', 'LIKE', '%'.$stocklvl->fitting->shiptype.' '.$stocklvl->fitting->fitname.'%')
+                ->where('title', 'LIKE', '%'.($stocklvl->fitting->shiptype).' '.trim($stocklvl->fitting->fitname).'%')
                 ->where('for_corporation', '=', '1')
                 ->where('status','LIKE','outstanding')
                 ->get();
+            
+            $totalContractsValue = 0;
+            
+            foreach($stock_contracts as $contract){
+                $totalContractsValue += $contract->price;
+            }
             
             array_push($stock, [
                 'id' =>  $stocklvl->id,
@@ -96,7 +102,8 @@ class WHtoolsController extends FittingController
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
                 'shiptype' =>$stocklvl->fitting->shiptype,
-                'typeID' => $ship->typeID
+                'typeID' => $ship->typeID,
+                'totalContractsValue' =>$totalContractsValue 
             ]);
         }
         return $stock;
@@ -393,6 +400,12 @@ class WHtoolsController extends FittingController
         $taxPayments = $this->getTaxPayments()
         ->groupBy('users.group_id')
         ->selectRaw('sum(amount) as total_payments , users.group_id');
+        
+        $transactions = $this->getBlueLootTransactions()
+        ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
+        ->groupBy('users.group_id');
+        
+        $combined = $transactions->leftjoin($taxPayments,'users.group_id');
 
         if($startdate != null and $enddate != null){
             $startdate = new DateTime($startdate);

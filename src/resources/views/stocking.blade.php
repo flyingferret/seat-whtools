@@ -19,7 +19,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
            @endif
         </div>
         <div class="box-body">
-        <table id='stocklist' class="table table-hover" style="vertical-align: top">
+        <table id='stocklist' class="table table-hover" style="vertical-align: top" data-page-length='100'>
             <thead>
             <tr>
                 <th></th>
@@ -28,6 +28,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th>Min</th>
                 <th>Stock</th>
                 <th>Contract Title</th>
+                <th>Value</th>
                 <th class="pull-right">Option</th>
              </tr>
              </thead>
@@ -45,6 +46,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                  <td>{{ $item['minlvl'] }}</td>
                  <td>{{ $item['stock'] }}</td>
                  <td>{{ $item['shiptype'] }} {{ $item['fitname'] }}</td>
+                 <td>{{ number_format($item['totalContractsValue']) }}</td>
                  <td class="no-hover pull-right">
                      
                      @if (auth()->user()->has('whtools.stockedit', false)) 
@@ -64,6 +66,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th></th>
                 <th></th>
                 <th>Total (All)</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -212,6 +215,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             {'data': 'min'},
             {'data': 'stock'},
             {'data': 'contract'},
+            {'data': 'value'},
             {'data': 'option'}
         ],
         /*based on stock value update colour*/
@@ -251,6 +255,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                     return intVal(a) + intVal(b);
                 }, 0 );
             };
+
             
             
             // Update footers
@@ -260,6 +265,10 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             $( api.column(4).footer() ).html(
                 pageTotal(4) +' ('+ allPagesTotal(4) +')'
             );
+            $( api.column(6).footer() ).html(
+                addCommas(pageTotal(6)) +' ('+ addCommas(allPagesTotal(6)) +')'
+            );
+            
             $( api.column(5).footer() ).html(
                 'Stocked '+(pageTotal(4)/pageTotal(3)*100).toFixed(0) + '% ('+(allPagesTotal(4)/allPagesTotal(3)*100).toFixed(0) +'%)'
             );
@@ -385,6 +394,19 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             }
         }
     }
+    
+    function addCommas(nStr)
+{  
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
 
 </script>
 @endpush

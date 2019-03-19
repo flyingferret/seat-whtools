@@ -28,7 +28,7 @@
         <div class="tab-content">
 
           <table class="table compact table-condensed table-hover table-responsive"
-                 id="tax-payments">
+                 id="tax-payments" data-page-length='100'>
             <thead>
             <tr>
               <th>Main</th>
@@ -58,7 +58,7 @@
         
       ,
       columns     : [
-        {data: 'main_view', name: 'main_character_name', searchable: true},
+        {data: 'main_view', name: 'users.name', searchable: true},
         {data: 'main_character_name', name: 'main_character_name' ,"visible": false},
         {data: 'total_payments', name: 'total_payments', searchable: false}
       ],

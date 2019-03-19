@@ -28,7 +28,7 @@
         <div class="tab-content">
 
           <table class="table compact table-condensed table-hover table-responsive"
-                 id="tax-payments">
+                 id="tax-payments" data-page-length='100'>
             <thead>
             <tr>
               <th>{{ trans('web::seat.date') }}</th>
