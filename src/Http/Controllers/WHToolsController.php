@@ -67,7 +67,7 @@ class WHtoolsController extends FittingController
           
         $fitlist = $this->getFittingList();
         
-        return view('whtools::stocking', compact('fitlist', 'stock','contracts'));
+        return view('whtools::stocking', compact('fitlist', 'stock'));
     }
         
     
