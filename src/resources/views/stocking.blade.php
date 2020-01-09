@@ -27,6 +27,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th>Fit Name</th>
                 <th>Min</th>
                 <th>Stock</th>
+				<th>Members Stock</th>
                 <th>Contract Title</th>
                 <th>Value</th>
                 <th class="pull-right">Option</th>
@@ -45,6 +46,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                  </td>
                  <td>{{ $item['minlvl'] }}</td>
                  <td>{{ $item['stock'] }}</td>
+				 <td>{{ $item['members_stock'] }}</td>
                  <td>{{ $item['shiptype'] }} {{ $item['fitname'] }}</td>
                  <td>{{ number_format($item['totalContractsValue']) }}</td>
                  <td class="no-hover pull-right">
@@ -67,6 +69,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th></th>
                 <th>Total (All)</th>
                 <th></th>
+		<th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -214,6 +217,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             {'data': 'fitName'},
             {'data': 'min'},
             {'data': 'stock'},
+			{'data': 'members_stock'},
             {'data': 'contract'},
             {'data': 'value'},
             {'data': 'option'}
