@@ -84,10 +84,17 @@ class WHtoolsController extends FittingController
                 ->where('status','LIKE','outstanding')
                 ->get();
             
+            $personal_stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
+                ->where('title', 'LIKE', '%'.$stocklvl->fitting->shiptype.' '.$stocklvl->fitting->fitname.'%')
+                ->where('for_corporation', '=', '0')
+                ->where('status','LIKE','outstanding')
+                ->get();
+            
             array_push($stock, [
                 'id' =>  $stocklvl->id,
                 'minlvl' =>  $stocklvl->minLvl,
                 'stock' =>  count($stock_contracts),
+                'personal_stock' => count($personal_stock_contracts),
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
                 'shiptype' =>$stocklvl->fitting->shiptype,
