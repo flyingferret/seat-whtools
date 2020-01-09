@@ -106,7 +106,7 @@ class WHtoolsController extends FittingController
                 'id' =>  $stocklvl->id,
                 'minlvl' =>  $stocklvl->minLvl,
                 'stock' =>  $stock_contracts->count(),
-				'member_stock' =>  $member_stock_contracts->count(),
+		'member_stock' =>  $member_stock_contracts->count(),
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
                 'shiptype' =>$stocklvl->fitting->shiptype,
