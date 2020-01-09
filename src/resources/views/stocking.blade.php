@@ -259,7 +259,6 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                     return intVal(a) + intVal(b);
                 }, 0 );
             };
-
             
             
             // Update footers
@@ -269,19 +268,26 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
             $( api.column(4).footer() ).html(
                 pageTotal(4) +' ('+ allPagesTotal(4) +')'
             );
-            $( api.column(6).footer() ).html(
-                addCommas(pageTotal(6)) +' ('+ addCommas(allPagesTotal(6)) +')'
-            );
             
-            $( api.column(5).footer() ).html(
+	    $( api.column(5).footer() ).html(
+                pageTotal(5) +' ('+ allPagesTotal(5) +')'
+            );
+			
+            $( api.column(6).footer() ).html(
                 'Stocked '+(pageTotal(4)/pageTotal(3)*100).toFixed(0) + '% ('+(allPagesTotal(4)/allPagesTotal(3)*100).toFixed(0) +'%)'
             );
+			
+	     $( api.column(7).footer() ).html(
+                addCommas(pageTotal(7)) +' ('+ addCommas(allPagesTotal(7)) +')'
+            );
+            
+            
             if(allPagesTotal(4)/allPagesTotal(3) < 0.5){
-                $( api.column(5).footer()).css('background-color','MistyRose');
+                $( api.column(6).footer()).css('background-color','MistyRose');
             }else if(allPagesTotal(4)/allPagesTotal(3) < 0.75){
-                $( api.column(5).footer()).css('background-color','Moccasin');
+                $( api.column(6).footer()).css('background-color','Moccasin');
             }else{
-                 $( api.column(5).footer()).css('background-color','PaleGreen');
+                 $( api.column(6).footer()).css('background-color','PaleGreen');
             }
         }
             
@@ -313,7 +319,6 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
         $('#selectedfit').val($(this).data('id')).trigger('change');
         document.getElementById('pedittext').innerHTML = "Enter the new minimum stock level. ";
         $('#editStocklvlModal').modal('show');
-
         /*VIEW FIT*/
     }).on('click', '#viewfit', function () {
         uri = "['id' => " + $(this).data('id') +"]";
@@ -348,9 +353,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
         }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
         });
         
-
     });
-
     /*DELETE CONFIRM*/
     $('#deleteConfirm').on('click', function () {
        id = $('#stockSelection').val();
@@ -411,6 +414,5 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
 	}
 	return x1 + x2;
 }
-
 </script>
 @endpush
