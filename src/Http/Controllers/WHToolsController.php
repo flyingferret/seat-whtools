@@ -82,7 +82,7 @@ class WHtoolsController extends FittingController
         
         foreach($stocklvllist as $stocklvl){
             $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
-            
+           
             //Contracts made to the corp but by corp members not on behalf of the corp
             $member_stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
                 ->where('title', 'LIKE', '%'.($stocklvl->fitting->shiptype).' '.trim($stocklvl->fitting->fitname).'%')
@@ -106,7 +106,7 @@ class WHtoolsController extends FittingController
                 'id' =>  $stocklvl->id,
                 'minlvl' =>  $stocklvl->minLvl,
                 'stock' =>  $stock_contracts->count(),
-                'member_stock' =>  $member_stock_contracts->count(),
+				'member_stock' =>  $member_stock_contracts->count(),
                 'fitting_id' =>  $stocklvl ->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
                 'shiptype' =>$stocklvl->fitting->shiptype,
