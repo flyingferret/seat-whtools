@@ -21,8 +21,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 return [
 
-    'whtools' => [
-        'stockview','stockedit','bluetaxview','certview','certchecker','certManager'
-    ],
+    // Language strings for your app go here
+    'name' => 'WHTools',
+    'stocking' => 'Stocking',
+    'bluetax' => 'Blue Tax',
+    'skillcheck' => 'Skills Check',
+    'certificates' => 'Certificates'
 
 ];
+

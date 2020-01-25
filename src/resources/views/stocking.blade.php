@@ -26,7 +26,7 @@ data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unkn
                 <th>Ship</th>
                 <th>Fit Name</th>
                 <th>Min</th>
-                <th>Stock</th>
+                <th>Corp Stock</th>
 				<th>Members Stock</th>
                 <th>Contract Title</th>
                 <th>Value</th>

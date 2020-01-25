@@ -135,4 +135,51 @@ Route::group([
             'uses' => 'WHtoolsController@getTaxPaymentTotalsData',
             'middleware' => 'bouncer:whtools.bluetaxview'
         ]);
+        //Routes for Skill Checker
+        Route::get('/certificates/', [
+        'as'   => 'whtools.certificates',
+        'uses' => 'SkillCheckerController@getCertificatesView',
+        'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::post('/addCertificate', [
+        'as'   => 'whtools.addCertificate',
+        'uses' => 'SkillCheckerController@saveCertificate',
+        'middleware' => 'bouncer:whtools.certManager'
+        ]);
+        Route::get('/skilllist', [
+        'as'   => 'whtools.skilllist',
+        'uses' => 'SkillCheckerController@getAllSkills',
+        'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::get('/getcertbyid/{id}', [
+        'as'   => 'whtools.getcertbyid',
+        'uses' => 'SkillCheckerController@getCertificateByID',
+        'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::get('/delcert/{id}', [
+        'as'   => 'whtools.delcert',
+        'uses' => 'SkillCheckerController@delCertificate',
+        'middleware' => 'bouncer:whtools.certManager'
+        ]);
+        Route::get('/getcertedit/{id}',[
+            'as'   => 'whtools.getcertedit',
+            'uses' => 'SkillCheckerController@getCertEdit',
+            'middleware' => 'bouncer:whtools.certManager'
+        ]);
+
+         Route::get('/getcharskills/{id}',[
+            'as'   => 'whtools.getcharskills',
+            'uses' => 'SkillCheckerController@getCharacterSkills',
+            'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::get('/getcharskills/{charID}/',[
+            'as'   => 'whtools.getcharskills',
+            'uses' => 'SkillCheckerController@getCharacterSkills',
+            'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::get('/getcharcert/{charID}/',[
+        'as'   => 'whtools.getcharskills',
+        'uses' => 'SkillCheckerController@getCharacterCerts',
+        'middleware' => 'bouncer:whtools.certview'
+    ]);
     });

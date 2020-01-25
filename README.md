@@ -1,5 +1,5 @@
 ![SeAT](http://i.imgur.com/aPPOxSK.png)
-# WH-Tools
+# WH-Tools 
 
 ## Useful tools aimed at helping manage WH Corporation activities.
 Curently this is a W.I.P. based on SeAT found [here](https://github.com/eveseat/seat).

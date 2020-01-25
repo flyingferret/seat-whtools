@@ -24,7 +24,7 @@ return [
         'name' => 'WHTools',
         'icon' => 'fa fa-sun-o',
         'route_segment' => 'whtool',
-        'permission'=>['whtools.stockview','whtools.taxview'],        
+        'permission'=>['whtools.stockview','whtools.taxview','whtools.certview'],
         'entries' => [
             [
                     'name' => 'stocking',
@@ -44,6 +44,12 @@ return [
                     'route' => 'whtools.config',
                     'permission'=>'whtools.bluetaxview'
                 ],
+            [
+                'name' => 'Certificates',
+                'icon' => 'fa fa-book',
+                'route' => 'whtools.certificates',
+                'permission'=>'whtools.certview'
+            ]
                 
             ]
         ]
