@@ -105,6 +105,7 @@
             }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
             });
         });
+        $('#listofskills').select2();
         $('#addSkills').on('click', function () {
             $("#listofskills option:selected").each(function() {
 
