@@ -42,8 +42,9 @@
                     <th></th>
                     <th>Skill</th>
                     <th>Required Level</th>
-                    <th>Certificate Rank</th>
                     <th>Character Level</th>
+                    <th>Certificate Rank</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -150,6 +151,7 @@
             }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
             });
         });
+        //ensure lvl number is last character used in comparitor
         function drawStars(lvl) {
 
             var stars = '';
@@ -215,15 +217,18 @@
                     if (result) {
                         certTable.destroy();
                         $('#skilllist').find("tbody").empty();
+                        rowNum = 1;
                         for (var skill in result) {
 
-                            row = "<tr><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
-                            row = row + "<td>" + result[skill].skillName + "</td>";
-                            row = row + "<td class='text-right'>" + drawStars(result[skill].reqLvl) + "</td>";
-                            row = row + "<td class='text-right'>" + drawStars(result[skill].certRank) + "</td>";
-                            row = row + "<td class='charSkill"+result[skill].skillID+" text-right'>Not Injected</td>";
+                            row = "<tr id='row"+rowNum+"'><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
+                            row = row + "<td id='skillNameCell'>" + result[skill].skillName + "</td>";
+                            row = row + "<td id='reqLvlCell' class='text-right'>" + drawStars(result[skill].reqLvl) + "</td>";
+                            row = row + "<td id='charSkillCell' class='charSkill"+result[skill].skillID+" text-right'>Not Injected</td>";
+                            row = row + "<td id='certRankCell' class='text-right'>" + drawStars(result[skill].certRank) + "</td>";
+                            row = row + "<td id='statusCell'>Status</td>";
                             row = row + "</tr>";
                             $('#skilllist').find("tbody").append(row);
+                            rowNum++;
                         }
                         updateCharacterTrained($('#characterSpinner').val());
 
@@ -248,6 +253,21 @@
                 $.each(result, function(key,value){
                     $('td.charSkill'+value.skill_id).html(drawStars(value.trained_skill_level));
                 })
+                $('#skilllist > tbody > tr').each(function(index,tr){
+                    currentRow = $(this);
+                    reqLvlText = currentRow.find('#reqLvlCell').text();
+                    reqLvl = reqLvlText.substr(reqLvlText.length-1);
+                    charSkillText = currentRow.find('#charSkillCell').text();
+                    charSkill = charSkillText.substr(charSkillText.length-1);
+                    if(reqLvl <= charSkill ){
+                        currentRow.find('#statusCell').html("Trained");
+                    }else{
+                        currentRow.find('#statusCell').html("Missing");
+                    }
+
+
+
+                });
                 certTable = $('#skilllist').DataTable();
             });
         }
