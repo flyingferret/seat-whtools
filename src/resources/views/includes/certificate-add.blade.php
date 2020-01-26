@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                       <label for="listofskills">Select Skills to Add to Certificate</label>
-                      <select multiple class="form-control" size="6" id="listofskills">
+                      <select multiple class="form-control" size="6" style="width: 75%" id="listofskills">
                       </select>
                     </div>
                     <div class="form-group">

@@ -105,6 +105,7 @@
             }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
             });
         });
+        $('#listofskills').select2();
         $('#addSkills').on('click', function () {
             $("#listofskills option:selected").each(function() {
 
@@ -272,6 +273,7 @@
                             for (var toons in result[certificate].characters) {
                                 $('#characterSpinner').append('<option value="' + result[certificate].characters[toons].character_id + '">' + result[certificate].characters[toons].name + '</option>');
                             }
+                            $('#characterSpinner').select2();
                         }
                     }
                     $('#certSpinner').find('option value="0"').prop('selected', true);
