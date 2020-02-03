@@ -53,7 +53,7 @@ class CertificatesSync extends WHToolsJobBase
                 }
 
                 CharacterCertificate::updateOrCreate(
-                    ['character_id'=>$character->character_id,'certID'=>$cert->name],
+                    ['character_id'=>$character->character_id,'certID'=>$cert->certID],
                     ['character_name'=>$character->name,'cert_name'=>$cert->name,'rank'=>$certRank]
                 );
             }
