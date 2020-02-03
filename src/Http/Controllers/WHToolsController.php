@@ -132,7 +132,7 @@ class WHtoolsController extends FittingController
         return view('whtools::stocking', compact('fitlist', 'stock'));
     }
     
-        public function deleteStockingById($id)
+    public function deleteStockingById($id)
     {
         Stocklvl::destroy($id);
         

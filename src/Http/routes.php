@@ -181,5 +181,10 @@ Route::group([
         'as'   => 'whtools.getcharskills',
         'uses' => 'SkillCheckerController@getCharacterCerts',
         'middleware' => 'bouncer:whtools.certview'
+        ]);
+        Route::get('/getcorpcert/{corpID}/',[
+        'as'   => 'whtools.getcharskills',
+        'uses' => 'SkillCheckerController@getCorporationCertificates',
+        'middleware' => 'bouncer:whtools.certview'
     ]);
     });

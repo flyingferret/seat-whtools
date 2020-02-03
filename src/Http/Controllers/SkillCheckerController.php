@@ -30,6 +30,7 @@ use FlyingFerret\Seat\WHTools\Models\Sde\InvGroups;
 use FlyingFerret\Seat\WHTools\Validation\CertificateValidation;
 
 use Seat\Eveapi\Models\Character\CharacterInfo;
+use Seat\Eveapi\Models\Corporation\CorporationInfo;
 
 /**
  * Class HomeController
@@ -53,7 +54,7 @@ class SkillCheckerController extends Controller
     public function getCertificatesView()
     {
         $certificates = Certificate::all();
-        return view('whtools::certificates',compact('certificates'));
+        return view('whtools::index',compact('certificates'));
     }
     public function saveCertificate(CertificateValidation $request)
     {
@@ -194,5 +195,18 @@ class SkillCheckerController extends Controller
         }
         array_push($charCerts,['characters'=>$characters]);
         return $charCerts;
+    }
+
+    public function getCorporationCertificates($corporationID){
+        $corporationCertificates = [];
+        $characters = CorporationInfo::where('corporation_id',$corporationID)->firstOrFail()->characters()->get();
+        foreach ($characters as $character){
+            $data = [];
+            array_push($data,['Character'=> $character]);
+            array_push($data,['CharacterCerts'=> $this->getCharacterCerts($character->character_id)]);
+            array_push($corporationCertificates,['data'=>$data]);
+            $data = [];
+        }
+        return json_encode($corporationCertificates);
     }
 }
