@@ -24,16 +24,17 @@
 
 @push('javascript')
     <script type="application/javascript">
+
         var corpCertTable = $('#corpCertTable').DataTable();
         $(function () {
             populateCorporationCertificates('{{auth()->user()->character->corporation_id}}');
         });
 
-        function populateCorporationCertificates(characterID) {
+        function populateCorporationCertificates(corpID) {
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/getcorpcert/" + characterID,
+                url: "/whtools/getcorpcert/" + corpID,
                 type: "GET",
                 dataType: 'json',
                 timeout: 10000
@@ -44,23 +45,24 @@
                         corpCertTable.destroy();
                     };
                     headerPopulated = false;
-                    for (var certificate in result) {
-                        row ="<tr>"
-                        row = row +"<td>" + result[certificate]['data']['0']['Character'].name + "</td>";
-                        certs = result[certificate]['data']['1']['CharacterCerts'];
-                        // minus 1 from length to ignore character information passed by pop charactercert
-                        for(var i =0; i < certs.length -1;i++) {
-                            row = row + "<td>" + drawStars(certs[i].certRank) + "</td>";
-                            row = row + "<td >" + (certs[i].certRank >4? 1:0) + "</td>";
+                    for (var character in result) {
+                        row ="<tr>";
+                        row = row +"<td>" + result[character]['0'].character_name + "</td>";
+                        for(var certificate in result[character]){
+                            row = row +"<td>" + drawStars(result[character][certificate].rank) + "</td>";
+                            row = row + "<td>" + (result[character][certificate].rank >4? 1:0) + "</td>";
+
+                            // populate header and footer only once
                             if (!headerPopulated){
-                                $('#corpCertTable').find("thead").find("tr").append( "<th>"+certs[i]['characterCert'].name+"</th>");
+                                $('#corpCertTable').find("thead").find("tr").append( "<th>"+result[character][certificate].cert_name+"</th>");
                                 $('#corpCertTable').find("thead").find("tr").append( "<th></th>");
                                 $('#corpCertTable').find("tfoot").find("tr").append( "<td></td>");
                                 $('#corpCertTable').find("tfoot").find("tr").append( "<td></td>");
                             }
                         }
+                        row = row + "</tr>";
+
                         headerPopulated = true;
-                        row = row + "</tr>"
                         $('#corpCertTable').find("tbody").append(row);
                     }
                 }
@@ -108,6 +110,8 @@
                     }
                 } );
             });
+            ids_to_names();
         }
     </script>
+    @include('web::includes.javascript.id-to-name')
 @endpush

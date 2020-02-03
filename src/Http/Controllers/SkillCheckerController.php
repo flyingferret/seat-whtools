@@ -23,6 +23,7 @@ namespace FlyingFerret\Seat\WHTools\Http\Controllers;
 
 use FlyingFerret\Seat\WHTools\Models\Certificate;
 use FlyingFerret\Seat\WHTools\Models\CertificateSkill;
+use FlyingFerret\Seat\WHTools\Models\CharacterCertificate;
 use Seat\Web\Http\Controllers\Controller;
 use FlyingFerret\Seat\WHTools\Models\Sde\DgmTypeAttributes;
 use FlyingFerret\Seat\WHTools\Models\Sde\InvType;
@@ -31,6 +32,7 @@ use FlyingFerret\Seat\WHTools\Validation\CertificateValidation;
 
 use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Corporation\CorporationInfo;
+use FlyingFerret\Seat\WHTools\Jobs\CertificatesSync;
 
 /**
  * Class HomeController
@@ -198,15 +200,17 @@ class SkillCheckerController extends Controller
     }
 
     public function getCorporationCertificates($corporationID){
-        $corporationCertificates = [];
-        $characters = CorporationInfo::where('corporation_id',$corporationID)->firstOrFail()->characters()->get();
-        foreach ($characters as $character){
-            $data = [];
-            array_push($data,['Character'=> $character]);
-            array_push($data,['CharacterCerts'=> $this->getCharacterCerts($character->character_id)]);
-            array_push($corporationCertificates,['data'=>$data]);
-            $data = [];
+        $corp = CorporationInfo::findOrFail($corporationID);
+        $corpCerts = collect();
+        foreach($corp->characters()->get() as $character){
+            $corpCerts->push(CharacterCertificate::where('character_id',$character->character_id)->get());
         }
-        return json_encode($corporationCertificates);
+        return json_encode($corpCerts);
+    }
+    public function test()
+    {
+        $corp = CorporationInfo::findOrFail('98560621');
+        dispatch(new CertificatesSync($corp));
+        return $corp->characters()->get();
     }
 }

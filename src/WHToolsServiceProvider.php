@@ -43,6 +43,9 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
 
         // Add the views for WHTools
         $this->add_views();
+
+        //add commands for WHTools
+        $this->addCommands();
         
         // Add the migrations for WHTools
         $this->add_migrations();
@@ -72,7 +75,9 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
     
     private function addCommands()
     {
-        
+        $this->commands([
+            Commands\CorporationCertificateSync::class,
+        ]);
     }
 
     private function add_migrations()
