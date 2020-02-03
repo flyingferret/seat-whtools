@@ -26,8 +26,7 @@
     <script type="application/javascript">
         var corpCertTable = $('#corpCertTable').DataTable();
         $(function () {
-            populateCorporationCertificates('98560621');
-
+            populateCorporationCertificates('{{auth()->user()->character->corporation_id}}');
         });
 
         function populateCorporationCertificates(characterID) {
