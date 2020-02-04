@@ -252,9 +252,9 @@
                 $('#skilllist > tbody > tr').each(function(index,tr){
                     currentRow = $(this);
                     reqLvlText = currentRow.find('#reqLvlCell').text();
-                    reqLvl = reqLvlText.substr(reqLvlText.length-1);
+                    reqLvl = parseInt(reqLvlText.substr(reqLvlText.length-1))|| 0; 
                     charSkillText = currentRow.find('#charSkillCell').text();
-                    charSkill = charSkillText.substr(charSkillText.length-1);
+                    charSkill = parseInt(charSkillText.substr(charSkillText.length-1)) || 0;
                     if(reqLvl <= charSkill ){
                         currentRow.find('#statusCell').html("Trained");
                     }else{

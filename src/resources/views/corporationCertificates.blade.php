@@ -100,8 +100,8 @@
                                 pageTotal + ' (' + total + ' total)'
                             );
                         }
-
-                        for(i = 0; i < parseInt($('#corpCertTable thead th').length+2); i++) {
+			numCol = parseInt($('#corpCertTable thead th').length);
+                        for(i = 0; i < numCol; i++) {
                             if (i > 0 && (i % 2 == 0)) {
                                 populateFooters(i);
                                 api.column(i).visible(false);
