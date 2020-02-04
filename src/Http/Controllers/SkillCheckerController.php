@@ -131,6 +131,7 @@ class SkillCheckerController extends Controller
     {
         $cert = Certificate::findOrFail($id)->first();
         $skills = $cert->skills()->delete();
+        CharacterCertificate::where('certID',$cert->certID)->delete();
         $cert->delete();
 
         return "Success";

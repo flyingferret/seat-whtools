@@ -14,6 +14,7 @@ class CreateCharacterCertificatesTable extends Migration
     public function up()
     {
         Schema::create('whtools-characterCertificates', function (Blueprint $table) {
+            $table->bigInteger('id')->primary();
             $table->bigInteger('character_id');
             $table->string('character_name');
             $table->integer('certID');

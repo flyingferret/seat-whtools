@@ -63,6 +63,7 @@
                                 <th style="width: 80px">Rank</th>
                             </tr>
                             </thead>
+                            </thead>
                             <tbody>
                             </tbody>
                         </table>
@@ -79,6 +80,7 @@
     <script type="application/javascript">
 
         var certTable = $('#skilllist').DataTable();
+        var characterCertTable = $('#certificateTable').DataTable();
 
         populateCharacterCertificates({{auth()->user()->character_id}});
 
@@ -252,7 +254,7 @@
                 $('#skilllist > tbody > tr').each(function(index,tr){
                     currentRow = $(this);
                     reqLvlText = currentRow.find('#reqLvlCell').text();
-                    reqLvl = parseInt(reqLvlText.substr(reqLvlText.length-1))|| 0; 
+                    reqLvl = parseInt(reqLvlText.substr(reqLvlText.length-1))|| 0;
                     charSkillText = currentRow.find('#charSkillCell').text();
                     charSkill = parseInt(charSkillText.substr(charSkillText.length-1)) || 0;
                     if(reqLvl <= charSkill ){
@@ -275,6 +277,7 @@
                 timeout: 10000
             }).done( function (result) {
                 if (result) {
+                    characterCertTable.destroy();
                     $('#certificateTable').find("tbody").empty();
                     for (var certificate in result) {
                         if (typeof (result[certificate]['characterCert']) !== "undefined") {
@@ -290,7 +293,7 @@
                         }
                     }
                 }
-
+                characterCertTable = $('#certificateTable').DataTable();
             });
         }
         $('#characterSpinner').change( function () {

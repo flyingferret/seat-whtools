@@ -9,9 +9,11 @@ class CharacterCertificate extends Model
 {
     public $timestamps = true;
 
+    protected $primaryKey = 'id';
+
     protected $table = 'whtools-characterCertificates';
 
-    protected $fillable = ['character_id','character_name','certID','cert_name','rank'];
+    protected $fillable = ['id','character_id','character_name','certID','cert_name','rank'];
 
     public function certificate(){
         return $this->hasOne('FlyingFerret\Seat\WHTools\Models\Certificate','certID','certID');
