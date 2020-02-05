@@ -47,7 +47,7 @@ class CertificatesSync extends WHToolsJobBase
                 $certRank = 5;
                 foreach ($certSkills as $certSkill){
                     $charSkill = $character->skills()->where('skill_id',$certSkill->skillID)->first();
-                    if(!isset($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl){
+                    if((empty($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl) and $certRank >=  $certSkill->requiredLvl){
                         $certRank = $certSkill->certRank - 1;
                     }
                 }
