@@ -187,9 +187,14 @@ Route::group([
         'uses' => 'SkillCheckerController@getCorporationCertificates',
         'middleware' => 'bouncer:whtools.certview'
         ]);
-//    Route::get('/test/',[
-//        'as'   => 'whtools.test',
-//        'uses' => 'SkillCheckerController@test',
-//        'middleware' => 'bouncer:whtools.certview'
-//    ]);
+    Route::get('/test/',[
+        'as'   => 'whtools.test',
+        'uses' => 'SkillCheckerController@test',
+        'middleware' => 'bouncer:whtools.certview'
+    ]);
+    Route::get('/corpcertcoverchart/{id}',[
+        'as'   => 'whtools.certCoverageChart',
+        'uses' => 'SkillCheckerController@getCorporationCertificateCoverageChartData',
+        'middleware' => 'bouncer:whtools.certview'
+    ]);
     });

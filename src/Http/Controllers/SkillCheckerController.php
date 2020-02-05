@@ -199,19 +199,61 @@ class SkillCheckerController extends Controller
         array_push($charCerts,['characters'=>$characters]);
         return $charCerts;
     }
-
+// Returns corporation certificates in character batches
     public function getCorporationCertificates($corporationID){
         $corp = CorporationInfo::findOrFail($corporationID);
         $corpCerts = collect();
         foreach($corp->characters()->get() as $character){
-            $corpCerts->push(CharacterCertificate::where('character_id',$character->character_id)->get());
+            //filter out null records
+            if(CharacterCertificate::where('character_id',$character->character_id)->first()) {
+                $corpCerts->push(CharacterCertificate::where('character_id',$character->character_id)->get());
+            }
         }
-        return json_encode($corpCerts);
+        return $corpCerts;
     }
-    public function test()
+    public function getCorporationCertificateCoverageChartData($corp_id)
     {
-        $corp = CorporationInfo::findOrFail('98560621');
-        dispatch(new CertificatesSync($corp));
-        return $corp->characters()->get();
+        $corp = CorporationInfo::findOrFail($corp_id);
+        $corpCerts = collect();
+        $characters = $corp->characters()->get();
+        foreach($characters as $character) {
+            //filter out null records
+            if (CharacterCertificate::where('character_id', $character->character_id)->first()) {
+                foreach (CharacterCertificate::where('character_id', $character->character_id)->get() as $cert) {
+                    $corpCerts->push($cert);
+                }
+            }
+        }
+
+        $labels = [];
+        $data = [];
+
+        $certificates = Certificate::all();
+        foreach ($certificates as $certificate) {
+            array_push($labels,$certificate->name);
+            $passCount = 0;
+            foreach($corpCerts as $corpCert){
+                if($corpCert->rank == 5 and $corpCert->certID == $certificate->certID){
+                    $passCount = $passCount + 1;
+                }
+            }
+            array_push($data,($passCount/$characters->count()*100));
+        }
+
+
+        return response()->json([
+            'labels'   => $labels, // certNames
+            'datasets' => [
+                [
+                    'label'                => 'Certificates',
+                    'data'                 => $data,
+                    'fill'                 => true,
+                    'backgroundColor'      => 'rgba(60,141,188,0.3)',
+                    'borderColor'          => '#3c8dbc',
+                    'pointBackgroundColor' => '#3c8dbc',
+                    'pointBorderColor'     => '#fff',
+                ],
+            ],
+        ]);
     }
 }

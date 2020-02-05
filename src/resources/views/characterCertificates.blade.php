@@ -290,6 +290,9 @@
                                 $('#characterSpinner').append('<option value="' + result[certificate].characters[toons].character_id + '">' + result[certificate].characters[toons].name + '</option>');
                             }
                             $('#characterSpinner').select2();
+                            //make sure original character sent to populate function is selected
+                            $('#characterSpinner').val(characterID);
+                            $('#characterSpinner').select2().trigger('change');
                         }
                     }
                 }

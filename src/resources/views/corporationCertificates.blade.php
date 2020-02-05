@@ -21,7 +21,18 @@
         </div>
     </div>
 </div>
-
+<div class="col-md-4">
+    <div class="box box-primary box-solid">
+        <div class="box-header">
+            <h3 class="box-title">Certificates Coverage %</h3>
+        </div>
+        <div class="box-body">
+            <div class="chart">
+                <canvas id="skills-coverage" height="500" width="1200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 @push('javascript')
     <script type="application/javascript">
 
@@ -100,7 +111,7 @@
                                 pageTotal + ' (' + total + ' total)'
                             );
                         }
-			numCol = parseInt($('#corpCertTable thead th').length);
+                        numCol = parseInt($('#corpCertTable thead th').length);
                         for(i = 0; i < numCol; i++) {
                             if (i > 0 && (i % 2 == 0)) {
                                 populateFooters(i);
@@ -112,6 +123,24 @@
             });
             ids_to_names();
         }
+
+        $.get("{{ route('whtools.certCoverageChart',98560621 ) }}", function (data) {
+            new Chart($('canvas#skills-coverage'), {
+                type   : 'radar',
+                data   : data,
+                options: {
+                    scale : {
+                        ticks: {
+                            beginAtZero: true,
+                            max        : 100
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        });
     </script>
     @include('web::includes.javascript.id-to-name')
 @endpush
