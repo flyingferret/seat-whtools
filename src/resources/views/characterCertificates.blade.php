@@ -61,6 +61,7 @@
                             <tr>
                                 <th>Certificate Name</th>
                                 <th style="width: 80px">Rank</th>
+                                <th></th>
                             </tr>
                             </thead>
                             </thead>
@@ -149,7 +150,7 @@
             }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
             });
         });
-        //ensure lvl number is last character used in comparitor
+        //ensure lvl number is last character in cell used in comparitor
         function drawStars(lvl) {
 
             var stars = '';
@@ -283,6 +284,8 @@
                         if (typeof (result[certificate]['characterCert']) !== "undefined") {
                             row = "<tr><td class='text-left'>" + result[certificate]['characterCert'].name + "</td>";
                             row = row + "<td class='text-right'>" + drawStars(result[certificate].certRank) + "</td>";
+                            row = row + "<td class='no-hover pull-right'><button id='displayCert' class='btn btn-xs btn-success' type='button' data-id='"+result[certificate]['characterCert'].certID+"' data-toggle='tooltip' data-placement='top' data-original-title='View Certificate'>" +
+                                "<span class='fa fa-eye text-white'></span></button></td>";
                             row = row + "</tr>";
                             $('#certificateTable').find("tbody").append(row);
                         } else if ($('#characterSpinner option').size() === 0) {
@@ -302,6 +305,12 @@
         $('#characterSpinner').change( function () {
             populateCharacterCertificates($('#characterSpinner').val());
             updateCertificateSkillList();
+        });
+
+        //view button click update certSkillList to display selected cert
+        $(document).on('click','#displayCert', function () {
+            $('#certSpinner').val($(this).data('id'));
+            $('#characterSpinner').trigger('change');
         });
     </script>
 @endpush
