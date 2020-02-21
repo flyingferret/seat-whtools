@@ -262,9 +262,13 @@
                         currentRow.find('#statusCell').html("Trained");
                     }else{
                         currentRow.find('#statusCell').html("Missing");
+                        currentRow.addClass('bg-danger');
                     }
                 });
-                certTable = $('#skilllist').DataTable();
+                certTable = $('#skilllist').DataTable({
+                    //default to missing skills
+                    "oSearch": {"sSearch": "Missing"}
+                });
             });
         }
 
