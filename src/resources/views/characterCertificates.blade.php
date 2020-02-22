@@ -108,6 +108,7 @@
 
         var certTable = $('#skilllist').DataTable({
             "oSearch": {"sSearch": "Missing"},
+            "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
             dom: "<'row'<'col-sm-5'l><'col-sm-7'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -300,7 +301,8 @@
                 });
                 certTable = $('#skilllist').DataTable({
                     //default to missing skills
-                    "oSearch": {"sSearch": "Missing"}
+                    "oSearch": {"sSearch": "Missing"},
+                    "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
                 });
             });
         }
@@ -336,7 +338,9 @@
                         }
                     }
                 }
-                characterCertTable = $('#certificateTable').DataTable();
+                characterCertTable = $('#certificateTable').DataTable({
+                    "lengthMenu": [[25, 50, -1], [25, 50, "All"]]
+                });
             });
         }
         $('#characterSpinner').change( function () {
