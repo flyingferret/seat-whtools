@@ -31,7 +31,27 @@
                             @endif
                         </div>
                     </div>
-                    <hr>
+                    <br>
+                    <br>
+                    <div class="flex-row">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2">
+                        <label id="selectRankLabel" class="form-control">&nbsp;&nbsp; Show Rank</label>
+                        </div>
+                        <div class="col-md-2">
+                                    <select id="selectRank" class="form-control">
+                                        <option value="0">All</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                        </div>
+                    </div>
+                </div>
+                    <div class="box-body">
+
                     <table id='skilllist' class="table table-hover" style="vertical-align: top">
                         <thead>
                         <tr>
@@ -56,6 +76,8 @@
                 <div class="box-body">
                     <div id="certificate-window">
                         <select id="characterSpinner" class="form-control"  style="width: 100%"></select>
+                        <br>
+                        <br>
                         <table id="certificateTable" style="width: 100%" class="table table-condensed table-striped">
                             <thead>
                             <tr>
@@ -79,8 +101,19 @@
 
 @push('javascript')
     <script type="application/javascript">
+        var selectRank = $('#selectRank');
+        var selectRankLabel = $('#selectRankLabel');
 
-        var certTable = $('#skilllist').DataTable();
+        var rankQuery = 0;
+
+        var certTable = $('#skilllist').DataTable({
+            "oSearch": {"sSearch": "Missing"},
+            dom: "<'row'<'col-sm-5'l><'col-sm-7'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+
+        });
+
         var characterCertTable = $('#certificateTable').DataTable();
 
         populateCharacterCertificates({{auth()->user()->character_id}});
@@ -244,23 +277,23 @@
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/getcharskills/"+characterID,
+                url: "/whtools/getcharskills/" + characterID,
                 type: "GET",
                 dataType: 'json',
                 timeout: 10000
-            }).done( function (result) {
-                $.each(result, function(key,value){
-                    $('td.charSkill'+value.skill_id).html(drawStars(value.trained_skill_level));
+            }).done(function (result) {
+                $.each(result, function (key, value) {
+                    $('td.charSkill' + value.skill_id).html(drawStars(value.trained_skill_level));
                 })
-                $('#skilllist > tbody > tr').each(function(index,tr){
+                $('#skilllist > tbody > tr').each(function (index, tr) {
                     currentRow = $(this);
                     reqLvlText = currentRow.find('#reqLvlCell').text();
-                    reqLvl = parseInt(reqLvlText.substr(reqLvlText.length-1))|| 0;
+                    reqLvl = parseInt(reqLvlText.substr(reqLvlText.length - 1)) || 0;
                     charSkillText = currentRow.find('#charSkillCell').text();
-                    charSkill = parseInt(charSkillText.substr(charSkillText.length-1)) || 0;
-                    if(reqLvl <= charSkill ){
+                    charSkill = parseInt(charSkillText.substr(charSkillText.length - 1)) || 0;
+                    if (reqLvl <= charSkill) {
                         currentRow.find('#statusCell').html("Trained");
-                    }else{
+                    } else {
                         currentRow.find('#statusCell').html("Missing");
                         currentRow.addClass('bg-danger');
                     }
@@ -315,6 +348,27 @@
         $(document).on('click','#displayCert', function () {
             $('#certSpinner').val($(this).data('id'));
             $('#characterSpinner').trigger('change');
+        });
+
+        //Add rank Filter
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var rank = parseFloat( data[4].substr(data[4].length - 1) ) || 0; // use data for the age column
+
+                if ( ( isNaN( rankQuery )) || //If invalid query
+                    ( rankQuery == 0 ) || //if all is selected
+                    ( rankQuery == rank ) )
+                {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        //add event listeners to the rank select and redraw table
+        selectRank.change( function() {
+            rankQuery = parseInt(selectRank.val());
+            certTable.draw();
         });
     </script>
 @endpush
