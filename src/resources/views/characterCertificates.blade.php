@@ -353,7 +353,9 @@
         //Add rank Filter
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
+                if ( settings.nTable.id !== 'skilllist' ) { return true; }
                 var rank = parseFloat( data[4].substr(data[4].length - 1) ) || 0; // use data for the age column
+
 
                 if ( ( isNaN( rankQuery )) || //If invalid query
                     ( rankQuery == 0 ) || //if all is selected
@@ -369,6 +371,7 @@
         selectRank.change( function() {
             rankQuery = parseInt(selectRank.val());
             certTable.draw();
+            populateCharacterCertificates($('#characterSpinner').val());
         });
     </script>
 @endpush
