@@ -186,7 +186,7 @@ class SkillCheckerController extends Controller
 
         $allCerts = Certificate::get();
         foreach ($allCerts as $cert){
-            $certSkills = $cert->skills()->get();
+            $certSkills = $cert->skills()->orderBy('certRank', 'asc')->get();
             $certRank = 5;
             foreach ($certSkills as $certSkill){
                 $charSkill = CharacterInfo::findOrFail($characterID)->skills()->where('skill_id',$certSkill->skillID)->first();

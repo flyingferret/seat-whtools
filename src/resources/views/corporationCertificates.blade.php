@@ -60,7 +60,7 @@
                         row ="<tr>";
                         row = row +"<td>" + result[character]['0'].character_name + "</td>";
                         for(var certificate in result[character]){
-                            row = row +"<td>" + drawStars(result[character][certificate].rank) + "</td>";
+                            row = row +"<td>" + drawStars(result[character][certificate].rank,true) + "</td>";
                             row = row + "<td>" + (result[character][certificate].rank >4? 1:0) + "</td>";
 
                             // populate header and footer only once

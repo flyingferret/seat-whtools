@@ -185,24 +185,44 @@
             });
         });
         //ensure lvl number is last character in cell used in comparitor
-        function drawStars(lvl) {
+        function drawStars(lvl,withColor=false) {
 
             var stars = '';
             lvl =  parseInt(lvl);
-            if(lvl == 0){
-                stars = stars + '<i class="fa fa-star-o"></i>';
-            }else if(lvl == 5){
-                stars = stars + '<span class="text-green">';
-                for(var i=1;i<=5;i++){
-                    stars = stars +'<i class="fa fa-star"></i>';
+            if(withColor) {
+                switch (lvl) {
+                    case 0:
+                        stars = stars + '<span style="color: Tomato">';
+                        stars = stars + '<i class="fa fa-star-o"></i>';
+                        break;
+                    case 1:
+                        stars = stars + '<span style="color: SkyBlue">';
+                        break;
+                    case 2:
+                        stars = stars + '<span style="color: SteelBlue">';
+                        break;
+                    case 3:
+                        stars = stars + '<span style="color: SteelBlue">';
+                        break;
+                    case 4:
+                        stars = stars + '<span  class="text-green">';
+                        break;
+                    case 5:
+                        stars = stars + '<span class="text-yellow">';
+                        break;
                 }
-                stars.concat('</span>');
-            }else{
-                for(var i=1;i<= lvl;i++ ){
+            }
+            else{
+                stars = stars + '<span>';
+            }
+            if(lvl > 0) {
+                for (var i = 1; i <= lvl; i++) {
                     stars = stars + '<i class="fa fa-star"></i>';
                 }
             }
+
             stars = stars + '| ' + lvl.toString();
+            stars.concat('</span>');
 
             return stars;
         }
@@ -322,7 +342,7 @@
                     for (var certificate in result) {
                         if (typeof (result[certificate]['characterCert']) !== "undefined") {
                             row = "<tr><td class='text-left'>" + result[certificate]['characterCert'].name + "</td>";
-                            row = row + "<td class='text-right'>" + drawStars(result[certificate].certRank) + "</td>";
+                            row = row + "<td class='text-right'>" + drawStars(result[certificate].certRank,true) + "</td>";
                             row = row + "<td class='no-hover pull-right'><button id='displayCert' class='btn btn-xs btn-success' type='button' data-id='"+result[certificate]['characterCert'].certID+"' data-toggle='tooltip' data-placement='top' data-original-title='View Certificate'>" +
                                 "<span class='fa fa-eye text-white'></span></button></td>";
                             row = row + "</tr>";
