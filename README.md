@@ -31,5 +31,8 @@ Also allows you to see the fit linked with the desired stocking level.
 ### Certificates
 Allows for the creation of custom corporation certficates based on a list of required skills.  Each certificate having multiple ranks to help show members progress. Note for the corporation report to populate please add ***seat-whtools:CoporationCertificates:sync*** to your seat schedule.
 
+####Screen Shot
+![Certificates](https://i.imgur.com/qxcTson.png)
+
 
 *Any donation to help keep my eve account alive, while spending valuable krabbing time coding, is very much appreciated and can be sent to* **Kaliak Utama** 
