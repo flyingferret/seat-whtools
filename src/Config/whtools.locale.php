@@ -25,11 +25,11 @@ return [
     'languages' => [
         [
             'short' => 'cn',
-            'full'  => 'Chinese',
+            'full' => 'Chinese',
         ],
         [
             'short' => 'en',
-            'full'  => 'English',
+            'full' => 'English',
         ],
     ],
 

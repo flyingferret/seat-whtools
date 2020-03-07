@@ -6,9 +6,9 @@
         <div class="box-body">
             <table id="corpCertTable" class="table table-hover" style="vertical-align: top">
                 <thead>
-                    <tr>
+                <tr>
                     <th>Character</th>
-                    </tr>
+                </tr>
                 </thead>
                 <tbody>
                 </tbody>
@@ -52,23 +52,24 @@
             }).done(function (result) {
                 if (result) {
                     $('#corpCertTable').find("tbody").empty();
-                    if(corpCertTable){
+                    if (corpCertTable) {
                         corpCertTable.destroy();
-                    };
+                    }
+                    ;
                     headerPopulated = false;
                     for (var character in result) {
-                        row ="<tr>";
-                        row = row +"<td>" + result[character]['0'].character_name + "</td>";
-                        for(var certificate in result[character]){
-                            row = row +"<td>" + drawStars(result[character][certificate].rank,true) + "</td>";
-                            row = row + "<td>" + (result[character][certificate].rank >4? 1:0) + "</td>";
+                        row = "<tr>";
+                        row = row + "<td>" + result[character]['0'].character_name + "</td>";
+                        for (var certificate in result[character]) {
+                            row = row + "<td>" + drawStars(result[character][certificate].rank, true) + "</td>";
+                            row = row + "<td>" + (result[character][certificate].rank > 4 ? 1 : 0) + "</td>";
 
                             // populate header and footer only once
-                            if (!headerPopulated){
-                                $('#corpCertTable').find("thead").find("tr").append( "<th>"+result[character][certificate].cert_name+"</th>");
-                                $('#corpCertTable').find("thead").find("tr").append( "<th></th>");
-                                $('#corpCertTable').find("tfoot").find("tr").append( "<td></td>");
-                                $('#corpCertTable').find("tfoot").find("tr").append( "<td></td>");
+                            if (!headerPopulated) {
+                                $('#corpCertTable').find("thead").find("tr").append("<th>" + result[character][certificate].cert_name + "</th>");
+                                $('#corpCertTable').find("thead").find("tr").append("<th></th>");
+                                $('#corpCertTable').find("tfoot").find("tr").append("<td></td>");
+                                $('#corpCertTable').find("tfoot").find("tr").append("<td></td>");
                             }
                         }
                         row = row + "</tr>";
@@ -78,19 +79,19 @@
                     }
                 }
 
-                corpCertTable = $('#corpCertTable').DataTable( {
+                corpCertTable = $('#corpCertTable').DataTable({
                     "scrollX": true,
-                    "footerCallback": function ( row, data, start, end, display ) {
+                    "footerCallback": function (row, data, start, end, display) {
                         var api = this.api(), data;
 
                         // Remove the formatting to get integer data for summation
-                        var intVal = function ( i ) {
+                        var intVal = function (i) {
                             return typeof i === 'string' ?
-                                i.replace(/[\$,]/g, '')*1 :
+                                i.replace(/[\$,]/g, '') * 1 :
                                 typeof i === 'number' ?
                                     i : 0;
                         };
-                        var populateFooters = function(col) {
+                        var populateFooters = function (col) {
                             // Total over all pages
                             total = api
                                 .column(col)
@@ -108,32 +109,32 @@
                                 }, 0);
 
                             // Update footer
-                            $(api.column(col -1).footer()).html(
+                            $(api.column(col - 1).footer()).html(
                                 pageTotal + ' (' + total + ' total)'
                             );
                         }
                         numCol = parseInt($('#corpCertTable thead th').length);
-                        for(i = 0; i < numCol; i++) {
+                        for (i = 0; i < numCol; i++) {
                             if (i > 0 && (i % 2 == 0)) {
                                 populateFooters(i);
                                 api.column(i).visible(false);
                             }
                         }
                     }
-                } );
+                });
             });
             ids_to_names();
         }
 
         $.get("{{ route('whtools.certCoverageChart',98560621 ) }}", function (data) {
             new Chart($('canvas#skills-coverage'), {
-                type   : 'radar',
-                data   : data,
+                type: 'radar',
+                data: data,
                 options: {
-                    scale : {
+                    scale: {
                         ticks: {
                             beginAtZero: true,
-                            max        : 100
+                            max: 100
                         }
                     },
                     legend: {

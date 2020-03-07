@@ -1,103 +1,109 @@
+<div class="col-md-8">
+    <div class="box box-primary box-solid">
+        <div class="box-header ">
+            <h3 class="box-title">Certificate Skills</h3>
+            @if (auth()->user()->has('whtools.certManager', false))
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal"
+                            data-toggle="tooltip" data-target="#addCert" data-placement="top"
+                            title="Create a new certificate">
+                        <span class="fa fa-plus-square"></span>
+                    </button>
+                </div>
+            @endif
+        </div>
+        <div class="box-body">
+            <div class="input-group">
+                <select id="certSpinner" class="form-control">
+                    <option value="0">Choose Certificate....</option>
+                    @foreach ($certificates as $cert)
+                        <option value="{{ $cert['certID'] }}">{{ $cert['name'] }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    @if ((auth()->user()->has('whtools.certManager', false)))
 
-        <div class="col-md-8">
-            <div class="box box-primary box-solid">
-                <div class="box-header ">
-                    <h3 class="box-title">Certificate Skills</h3>
-                    @if (auth()->user()->has('whtools.certManager', false))
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal" data-toggle="tooltip" data-target="#addCert" data-placement="top" title="Create a new certificate">
-                                <span class="fa fa-plus-square"></span>
-                            </button>
-                        </div>
+                        <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id=""
+                                data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top"
+                                title="Edit Cert" inactive>
+                            <span class="fa fa-pencil text-white"></span>
+                        </button>
+                        <button type="button" id="deleteCert" class="btn btn-danger" disabled="disabled" data-id=""
+                                data-toggle="tooltip" data-placement="top" title="Delete Cert">
+                            <span class="fa fa-trash text-white"></span>
+                        </button>
                     @endif
                 </div>
-                <div class="box-body">
-                    <div class="input-group">
-                        <select id="certSpinner" class="form-control">
-                            <option value="0">Choose Certificate....</option>
-                            @foreach ($certificates as $cert)
-                                <option value="{{ $cert['certID'] }}">{{ $cert['name'] }}</option>
-                            @endforeach
-                        </select>
-                        <div class="input-group-btn">
-                            @if ((auth()->user()->has('whtools.certManager', false)))
-
-                                <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id="" data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top" title="Edit Cert" inactive>
-                                    <span class="fa fa-pencil text-white"></span>
-                                </button>
-                                <button type="button" id="deleteCert" class="btn btn-danger" disabled="disabled" data-id="" data-toggle="tooltip" data-placement="top" title="Delete Cert">
-                                    <span class="fa fa-trash text-white"></span>
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="flex-row">
-                        <div class="col-md-8"></div>
-                        <div class="col-md-2">
-                        <label id="selectRankLabel" class="form-control">&nbsp;&nbsp; Show Rank</label>
-                        </div>
-                        <div class="col-md-2">
-                                    <select id="selectRank" class="form-control">
-                                        <option value="0">All</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                        </div>
-                    </div>
+            </div>
+            <br>
+            <br>
+            <div class="flex-row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2">
+                    <label id="selectRankLabel" class="form-control">&nbsp;&nbsp; Show Rank</label>
                 </div>
-                    <div class="box-body">
-
-                    <table id='skilllist' class="table table-hover" style="vertical-align: top">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>Skill</th>
-                            <th>Required Level</th>
-                            <th>Character Level</th>
-                            <th>Certificate Rank</th>
-                            <th>Status</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="col-md-2">
+                    <select id="selectRank" class="form-control">
+                        <option value="0">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
             </div>
         </div>
+        <div class="box-body">
+
+            <table id='skilllist' class="table table-hover" style="vertical-align: top">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Skill</th>
+                    <th>Required Level</th>
+                    <th>Character Level</th>
+                    <th>Certificate Rank</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
-        <div class="col-md-4" id="skills-box">
-            <div class="box box-primary box-solid">
-                <div class="box-header form-group"><h3 class="box-title" id="skill-title">My @if (auth()->user()->has('whtools.certchecker', false)) Corporation Members @endif Certificates</h3></div>
-                <div class="box-body">
-                    <div id="certificate-window">
-                        <select id="characterSpinner" class="form-control"  style="width: 100%"></select>
-                        <br>
-                        <br>
-                        <table id="certificateTable" style="width: 100%" class="table table-condensed table-striped">
-                            <thead>
-                            <tr>
-                                <th>Certificate Name</th>
-                                <th style="width: 80px">Rank</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+<div class="col-md-4" id="skills-box">
+    <div class="box box-primary box-solid">
+        <div class="box-header form-group"><h3 class="box-title" id="skill-title">
+                My @if (auth()->user()->has('whtools.certchecker', false)) Corporation Members @endif Certificates</h3>
+        </div>
+        <div class="box-body">
+            <div id="certificate-window">
+                <select id="characterSpinner" class="form-control" style="width: 100%"></select>
+                <br>
+                <br>
+                <table id="certificateTable" style="width: 100%" class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Certificate Name</th>
+                        <th style="width: 80px">Rank</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+</div>
 
 
-    @include('whtools::includes.certificate-add')
-    @include('whtools::includes.certificate-confirm-delete')
+@include('whtools::includes.certificate-add')
+@include('whtools::includes.certificate-confirm-delete')
 
 @push('javascript')
     <script type="application/javascript">
@@ -120,7 +126,7 @@
         populateCharacterCertificates({{auth()->user()->character_id}});
 
         //rest spinner to default
-        $('#certSpinner').val( 0 );
+        $('#certSpinner').val(0);
 
         $('#newCert').on('click', function () {
             $.ajax({
@@ -130,34 +136,34 @@
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 $('#listofskills').empty();
                 $('#certificateID').val(0);
-                $.each(result, function(key, value) {
+                $.each(result, function (key, value) {
                     $('#listofskills').append($("<option></option>").attr("value", value.typeID).text(value.typeName));
                 });
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
         });
         $('#listofskills').select2();
         $('#addSkills').on('click', function () {
-            $("#listofskills option:selected").each(function() {
+            $("#listofskills option:selected").each(function () {
 
                 var reqLvl = $("input[name='reqLvlList']:checked").val();
                 var certRank = $("input[name='certLvlList']:checked").val();
-                var skillCode = $(this).val()  + reqLvl + certRank;
-                $('#selectedSkills').append($("<option></option>").attr("value", skillCode).text($(this).text() + '     Lvl :'+reqLvl + '   Cert. Rank:'+certRank));
+                var skillCode = $(this).val() + reqLvl + certRank;
+                $('#selectedSkills').append($("<option></option>").attr("value", skillCode).text($(this).text() + '     Lvl :' + reqLvl + '   Cert. Rank:' + certRank));
             });
         });
 
         $('#removeSkills').on('click', function () {
-            $("#selectedSkills option:selected").each(function() {
-                $('#selectedSkills option[value="' + $(this).val()  +  '"]').remove();
+            $("#selectedSkills option:selected").each(function () {
+                $('#selectedSkills option[value="' + $(this).val() + '"]').remove();
             });
         });
 
-        $('#addCertForm').submit(function(event) {
-            $('#selectedSkills').find("option").each( function() {
+        $('#addCertForm').submit(function (event) {
+            $('#selectedSkills').find("option").each(function () {
                 $(this).prop('selected', true);
             });
         });
@@ -174,22 +180,23 @@
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/delcert/"+id,
+                url: "/whtools/delcert/" + id,
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
-                $('#certSpinner option[value='+id+']').remove();
+            }).done(function (result) {
+                $('#certSpinner option[value=' + id + ']').remove();
                 $('#skilllist').find("tbody").empty();
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
         });
+
         //ensure lvl number is last character in cell used in comparitor
-        function drawStars(lvl,withColor=false) {
+        function drawStars(lvl, withColor = false) {
 
             var stars = '';
-            lvl =  parseInt(lvl);
-            if(withColor) {
+            lvl = parseInt(lvl);
+            if (withColor) {
                 switch (lvl) {
                     case 0:
                         stars = stars + '<span style="color: Tomato">';
@@ -211,11 +218,10 @@
                         stars = stars + '<span class="text-yellow">';
                         break;
                 }
-            }
-            else{
+            } else {
                 stars = stars + '<span>';
             }
-            if(lvl > 0) {
+            if (lvl > 0) {
                 for (var i = 1; i <= lvl; i++) {
                     stars = stars + '<i class="fa fa-star"></i>';
                 }
@@ -237,18 +243,18 @@
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 $('#listofskills').empty();
-                $.each(result['allSkills'], function(key, value) {
+                $.each(result['allSkills'], function (key, value) {
                     $('#listofskills').append($("<option></option>").attr("value", value.typeID).text(value.typeName));
                 });
                 $('#selectedSkills').empty();
-                $.each(result['certSkills'], function(key, value) {
-                    $('#selectedSkills').append($("<option></option>").attr("value", value.skillID + String(value.requiredLvl) + String(value.certRank)).text(value.skillName +'     Lvl :'+ value.requiredLvl + '   Cert. Rank:'+value.certRank));
+                $.each(result['certSkills'], function (key, value) {
+                    $('#selectedSkills').append($("<option></option>").attr("value", value.skillID + String(value.requiredLvl) + String(value.certRank)).text(value.skillName + '     Lvl :' + value.requiredLvl + '   Cert. Rank:' + value.certRank));
                 });
                 $('#certificateID').val(result['cert']['certID']);
                 $('#certificateName').val(result['cert']['name']);
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
 
         });
@@ -262,21 +268,21 @@
                 $.ajax({
                     headers: function () {
                     },
-                    url: "/whtools/getcertbyid/"+id,
+                    url: "/whtools/getcertbyid/" + id,
                     type: "GET",
                     dataType: 'json',
                     timeout: 10000
-                }).done( function (result) {
+                }).done(function (result) {
                     if (result) {
                         certTable.destroy();
                         $('#skilllist').find("tbody").empty();
                         rowNum = 1;
                         for (var skill in result) {
 
-                            row = "<tr id='row"+rowNum+"'><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
+                            row = "<tr id='row" + rowNum + "'><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
                             row = row + "<td id='skillNameCell'>" + result[skill].skillName + "</td>";
                             row = row + "<td id='reqLvlCell' class='text-right'>" + drawStars(result[skill].reqLvl) + "</td>";
-                            row = row + "<td id='charSkillCell' class='charSkill"+result[skill].skillID+" text-right'>Not Injected</td>";
+                            row = row + "<td id='charSkillCell' class='charSkill" + result[skill].skillID + " text-right'>Not Injected</td>";
                             row = row + "<td id='certRankCell' class='text-right'>" + drawStars(result[skill].certRank) + "</td>";
                             row = row + "<td id='statusCell'>Status</td>";
                             row = row + "</tr>";
@@ -327,23 +333,23 @@
             });
         }
 
-        function populateCharacterCertificates(characterID){
+        function populateCharacterCertificates(characterID) {
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/getcharcert/"+characterID,
+                url: "/whtools/getcharcert/" + characterID,
                 type: "GET",
                 dataType: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 if (result) {
                     characterCertTable.destroy();
                     $('#certificateTable').find("tbody").empty();
                     for (var certificate in result) {
                         if (typeof (result[certificate]['characterCert']) !== "undefined") {
                             row = "<tr><td class='text-left'>" + result[certificate]['characterCert'].name + "</td>";
-                            row = row + "<td class='text-right'>" + drawStars(result[certificate].certRank,true) + "</td>";
-                            row = row + "<td class='no-hover pull-right'><button id='displayCert' class='btn btn-xs btn-success' type='button' data-id='"+result[certificate]['characterCert'].certID+"' data-toggle='tooltip' data-placement='top' data-original-title='View Certificate'>" +
+                            row = row + "<td class='text-right'>" + drawStars(result[certificate].certRank, true) + "</td>";
+                            row = row + "<td class='no-hover pull-right'><button id='displayCert' class='btn btn-xs btn-success' type='button' data-id='" + result[certificate]['characterCert'].certID + "' data-toggle='tooltip' data-placement='top' data-original-title='View Certificate'>" +
                                 "<span class='fa fa-eye text-white'></span></button></td>";
                             row = row + "</tr>";
                             $('#certificateTable').find("tbody").append(row);
@@ -363,28 +369,30 @@
                 });
             });
         }
-        $('#characterSpinner').change( function () {
+
+        $('#characterSpinner').change(function () {
             populateCharacterCertificates($('#characterSpinner').val());
             updateCertificateSkillList();
         });
 
         //view button click update certSkillList to display selected cert
-        $(document).on('click','#displayCert', function () {
+        $(document).on('click', '#displayCert', function () {
             $('#certSpinner').val($(this).data('id'));
             $('#characterSpinner').trigger('change');
         });
 
         //Add rank Filter
         $.fn.dataTable.ext.search.push(
-            function( settings, data, dataIndex ) {
-                if ( settings.nTable.id !== 'skilllist' ) { return true; }
-                var rank = parseFloat( data[4].substr(data[4].length - 1) ) || 0; // use data for the age column
+            function (settings, data, dataIndex) {
+                if (settings.nTable.id !== 'skilllist') {
+                    return true;
+                }
+                var rank = parseFloat(data[4].substr(data[4].length - 1)) || 0; // use data for the age column
 
 
-                if ( ( isNaN( rankQuery )) || //If invalid query
-                    ( rankQuery == 0 ) || //if all is selected
-                    ( rankQuery == rank ) )
-                {
+                if ((isNaN(rankQuery)) || //If invalid query
+                    (rankQuery == 0) || //if all is selected
+                    (rankQuery == rank)) {
                     return true;
                 }
                 return false;
@@ -392,7 +400,7 @@
         );
 
         //add event listeners to the rank select and redraw table
-        selectRank.change( function() {
+        selectRank.change(function () {
             rankQuery = parseInt(selectRank.val());
             certTable.draw();
             populateCharacterCertificates($('#characterSpinner').val());

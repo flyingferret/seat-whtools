@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-      
+
 namespace FlyingFerret\Seat\WHTools;
 
 use Seat\Services\AbstractSeatPlugin;
@@ -26,7 +26,7 @@ use Seat\Services\AbstractSeatPlugin;
 /**
  * Class WHToolsServiceProvider
  * @package FlyingFerret\Seat\WHTools
- */   
+ */
 class WHToolsServiceProvider extends AbstractSeatPlugin
 {
 
@@ -46,15 +46,15 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
 
         //add commands for WHTools
         $this->addCommands();
-        
+
         // Add the migrations for WHTools
         $this->add_migrations();
-        
+
         // Include our translations
         $this->add_translations();
 
     }
-    
+
     public function register()
     {
 
@@ -72,7 +72,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
             __DIR__ . '/Config/whtools.sidebar.php', 'package.sidebar');
 
     }
-    
+
     private function addCommands()
     {
         $this->commands([
@@ -84,7 +84,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
     {
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations/');
     }
-    
+
     /**
      * Include the routes
      */
@@ -112,26 +112,31 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
         $this->loadTranslationsFrom(__DIR__ . '/lang', 'whtools');
     }
 
-   public function getName(): string
+    public function getName(): string
     {
         return 'Seat-WHTools';
     }
+
     public function getPackageRepositoryUrl(): string
     {
         return 'https://github.com/flyingferret/seat-whtools';
     }
+
     public function getPackagistPackageName(): string
     {
         return 'seat-whtools';
     }
+
     public function getPackagistVendorName(): string
     {
         return 'flyingferret';
     }
+
     public function getVersion(): string
     {
         return config('whtools.config.version');
     }
+
     public function getChangelogUri(): ?string
     {
         return 'https://raw.githubusercontent.com/flyingferret/seat-whTools/master/CHANGELOG.md';

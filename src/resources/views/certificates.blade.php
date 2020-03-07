@@ -9,7 +9,9 @@
             <h3 class="box-title">Certificate Skills</h3>
             @if (auth()->user()->has('whtools.certManager', false))
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal" data-toggle="tooltip" data-target="#addCert" data-placement="top" title="Create a new certificate">
+                    <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal"
+                            data-toggle="tooltip" data-target="#addCert" data-placement="top"
+                            title="Create a new certificate">
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
@@ -26,10 +28,13 @@
                 <div class="input-group-btn">
                     @if ((auth()->user()->has('whtools.certManager', false)))
 
-                        <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id="" data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top" title="Edit Cert" inactive>
+                        <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id=""
+                                data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top"
+                                title="Edit Cert" inactive>
                             <span class="fa fa-pencil text-white"></span>
                         </button>
-                        <button type="button" id="deleteCert" class="btn btn-danger" disabled="disabled" data-id="" data-toggle="tooltip" data-placement="top" title="Delete Cert">
+                        <button type="button" id="deleteCert" class="btn btn-danger" disabled="disabled" data-id=""
+                                data-toggle="tooltip" data-placement="top" title="Delete Cert">
                             <span class="fa fa-trash text-white"></span>
                         </button>
                     @endif
@@ -56,7 +61,9 @@
 @endsection
 @section('right')
     <div class="box box-primary box-solid" id="skills-box">
-        <div class="box-header form-group"><h3 class="box-title" id="skill-title">My @if (auth()->user()->has('whtools.certchecker', false)) Corporation Members @endif Certificates</h3></div>
+        <div class="box-header form-group"><h3 class="box-title" id="skill-title">
+                My @if (auth()->user()->has('whtools.certchecker', false)) Corporation Members @endif Certificates</h3>
+        </div>
         <div class="box-body">
             <div id="certificate-window">
                 <select id="characterSpinner" class="form-control"></select>
@@ -87,7 +94,7 @@
         populateCharacterCertificates({{auth()->user()->character_id}});
 
         //rest spinner to default
-        $('#certSpinner').val( 0 );
+        $('#certSpinner').val(0);
 
         $('#newCert').on('click', function () {
             $.ajax({
@@ -97,34 +104,34 @@
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 $('#listofskills').empty();
                 $('#certificateID').val(0);
-                $.each(result, function(key, value) {
+                $.each(result, function (key, value) {
                     $('#listofskills').append($("<option></option>").attr("value", value.typeID).text(value.typeName));
                 });
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
         });
         $('#listofskills').select2();
         $('#addSkills').on('click', function () {
-            $("#listofskills option:selected").each(function() {
+            $("#listofskills option:selected").each(function () {
 
                 var reqLvl = $("input[name='reqLvlList']:checked").val();
                 var certRank = $("input[name='certLvlList']:checked").val();
-                var skillCode = $(this).val()  + reqLvl + certRank;
-                $('#selectedSkills').append($("<option></option>").attr("value", skillCode).text($(this).text() + '     Lvl :'+reqLvl + '   Cert. Rank:'+certRank));
+                var skillCode = $(this).val() + reqLvl + certRank;
+                $('#selectedSkills').append($("<option></option>").attr("value", skillCode).text($(this).text() + '     Lvl :' + reqLvl + '   Cert. Rank:' + certRank));
             });
         });
 
         $('#removeSkills').on('click', function () {
-            $("#selectedSkills option:selected").each(function() {
-                $('#selectedSkills option[value="' + $(this).val()  +  '"]').remove();
+            $("#selectedSkills option:selected").each(function () {
+                $('#selectedSkills option[value="' + $(this).val() + '"]').remove();
             });
         });
 
-        $('#addCertForm').submit(function(event) {
-            $('#selectedSkills').find("option").each( function() {
+        $('#addCertForm').submit(function (event) {
+            $('#selectedSkills').find("option").each(function () {
                 $(this).prop('selected', true);
             });
         });
@@ -141,31 +148,32 @@
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/delcert/"+id,
+                url: "/whtools/delcert/" + id,
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
-                $('#certSpinner option[value='+id+']').remove();
+            }).done(function (result) {
+                $('#certSpinner option[value=' + id + ']').remove();
                 $('#skilllist').find("tbody").empty();
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
         });
+
         //ensure lvl number is last character used in comparitor
         function drawStars(lvl) {
 
             var stars = '';
-            lvl =  parseInt(lvl);
-            if(lvl == 0){
+            lvl = parseInt(lvl);
+            if (lvl == 0) {
                 stars = stars + '<i class="fa fa-star-o"></i>';
-            }else if(lvl == 5){
+            } else if (lvl == 5) {
                 stars = stars + '<span class="text-green">';
-                for(var i=1;i<=5;i++){
-                    stars = stars +'<i class="fa fa-star"></i>';
+                for (var i = 1; i <= 5; i++) {
+                    stars = stars + '<i class="fa fa-star"></i>';
                 }
                 stars.concat('</span>');
-            }else{
-                for(var i=1;i<= lvl;i++ ){
+            } else {
+                for (var i = 1; i <= lvl; i++) {
                     stars = stars + '<i class="fa fa-star"></i>';
                 }
             }
@@ -184,18 +192,18 @@
                 type: "GET",
                 datatype: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 $('#listofskills').empty();
-                $.each(result['allSkills'], function(key, value) {
+                $.each(result['allSkills'], function (key, value) {
                     $('#listofskills').append($("<option></option>").attr("value", value.typeID).text(value.typeName));
                 });
                 $('#selectedSkills').empty();
-                $.each(result['certSkills'], function(key, value) {
-                    $('#selectedSkills').append($("<option></option>").attr("value", value.skillID + String(value.requiredLvl) + String(value.certRank)).text(value.skillName +'     Lvl :'+ value.requiredLvl + '   Cert. Rank:'+value.certRank));
+                $.each(result['certSkills'], function (key, value) {
+                    $('#selectedSkills').append($("<option></option>").attr("value", value.skillID + String(value.requiredLvl) + String(value.certRank)).text(value.skillName + '     Lvl :' + value.requiredLvl + '   Cert. Rank:' + value.certRank));
                 });
                 $('#certificateID').val(result['cert']['certID']);
                 $('#certificateName').val(result['cert']['name']);
-            }).fail( function(xmlHttpRequest, textStatus, errorThrown) {
+            }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             });
 
         });
@@ -209,21 +217,21 @@
                 $.ajax({
                     headers: function () {
                     },
-                    url: "/whtools/getcertbyid/"+id,
+                    url: "/whtools/getcertbyid/" + id,
                     type: "GET",
                     dataType: 'json',
                     timeout: 10000
-                }).done( function (result) {
+                }).done(function (result) {
                     if (result) {
                         certTable.destroy();
                         $('#skilllist').find("tbody").empty();
                         rowNum = 1;
                         for (var skill in result) {
 
-                            row = "<tr id='row"+rowNum+"'><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
+                            row = "<tr id='row" + rowNum + "'><td><img src='https://image.eveonline.com/Type/2403_32.png' height='24' /></td>";
                             row = row + "<td id='skillNameCell'>" + result[skill].skillName + "</td>";
                             row = row + "<td id='reqLvlCell' class='text-right'>" + drawStars(result[skill].reqLvl) + "</td>";
-                            row = row + "<td id='charSkillCell' class='charSkill"+result[skill].skillID+" text-right'>Not Injected</td>";
+                            row = row + "<td id='charSkillCell' class='charSkill" + result[skill].skillID + " text-right'>Not Injected</td>";
                             row = row + "<td id='certRankCell' class='text-right'>" + drawStars(result[skill].certRank) + "</td>";
                             row = row + "<td id='statusCell'>Status</td>";
                             row = row + "</tr>";
@@ -245,26 +253,25 @@
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/getcharskills/"+characterID,
+                url: "/whtools/getcharskills/" + characterID,
                 type: "GET",
                 dataType: 'json',
                 timeout: 10000
-            }).done( function (result) {
-                $.each(result, function(key,value){
-                    $('td.charSkill'+value.skill_id).html(drawStars(value.trained_skill_level));
+            }).done(function (result) {
+                $.each(result, function (key, value) {
+                    $('td.charSkill' + value.skill_id).html(drawStars(value.trained_skill_level));
                 })
-                $('#skilllist > tbody > tr').each(function(index,tr){
+                $('#skilllist > tbody > tr').each(function (index, tr) {
                     currentRow = $(this);
                     reqLvlText = currentRow.find('#reqLvlCell').text();
-                    reqLvl = reqLvlText.substr(reqLvlText.length-1);
+                    reqLvl = reqLvlText.substr(reqLvlText.length - 1);
                     charSkillText = currentRow.find('#charSkillCell').text();
-                    charSkill = charSkillText.substr(charSkillText.length-1);
-                    if(reqLvl <= charSkill ){
+                    charSkill = charSkillText.substr(charSkillText.length - 1);
+                    if (reqLvl <= charSkill) {
                         currentRow.find('#statusCell').html("Trained");
-                    }else{
+                    } else {
                         currentRow.find('#statusCell').html("Missing");
                     }
-
 
 
                 });
@@ -272,15 +279,15 @@
             });
         }
 
-        function populateCharacterCertificates(characterID){
+        function populateCharacterCertificates(characterID) {
             $.ajax({
                 headers: function () {
                 },
-                url: "/whtools/getcharcert/"+characterID,
+                url: "/whtools/getcharcert/" + characterID,
                 type: "GET",
                 dataType: 'json',
                 timeout: 10000
-            }).done( function (result) {
+            }).done(function (result) {
                 if (result) {
                     $('#certificateTable').find("tbody").empty();
                     for (var certificate in result) {
@@ -301,7 +308,8 @@
 
             });
         }
-        $('#characterSpinner').change( function () {
+
+        $('#characterSpinner').change(function () {
             populateCharacterCertificates($('#characterSpinner').val());
             updateCertificateSkillList();
         });

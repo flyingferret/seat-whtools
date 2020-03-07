@@ -16,11 +16,11 @@ class CreateStocklvlsTable extends Migration
         Schema::create('whtools_stocklvls', function (Blueprint $table) {
             $table->increments('id')->index();
             $table->unsignedInteger('minLvl');
-            
+
             $table->unsignedInteger('fitting_id');
             $table->foreign('fitting_id')->references('id')->on('seat_fitting')->onDelete('cascade');
             $table->timestamps();
-            
+
         });
     }
 

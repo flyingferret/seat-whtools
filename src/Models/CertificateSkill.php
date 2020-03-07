@@ -12,9 +12,10 @@ class CertificateSkill extends Model
 
     protected $table = 'whtools-certificates_skills';
 
-    protected $fillable = ['skillID','requiredLvl','certRank'];
+    protected $fillable = ['skillID', 'requiredLvl', 'certRank'];
 
-    public function certificates(){
-        return $this->hasMany('FlyingFerret\Seat\WHTools\Models\Certificate','certID','certID');
+    public function certificates()
+    {
+        return $this->hasMany('FlyingFerret\Seat\WHTools\Models\Certificate', 'certID', 'certID');
     }
 }

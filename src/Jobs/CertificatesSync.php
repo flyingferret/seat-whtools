@@ -40,27 +40,27 @@ class CertificatesSync extends WHToolsJobBase
         $characters = $this->corporation->characters()->get();
         $allCerts = Certificate::get();
 
-        foreach($characters as $character){
-            foreach($allCerts as $cert){
+        foreach ($characters as $character) {
+            foreach ($allCerts as $cert) {
 
                 $certSkills = $cert->skills()->get();
                 $certRank = 5;
-                foreach ($certSkills as $certSkill){
-                    $charSkill = $character->skills()->where('skill_id',$certSkill->skillID)->first();
-                    if((empty($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl) and $certRank >=  $certSkill->requiredLvl){
+                foreach ($certSkills as $certSkill) {
+                    $charSkill = $character->skills()->where('skill_id', $certSkill->skillID)->first();
+                    if ((empty($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl) and $certRank >= $certSkill->requiredLvl) {
                         $certRank = $certSkill->certRank - 1;
                     }
                 }
 
                 CharacterCertificate::updateOrCreate(
-                    ['id'=>intval($character->character_id.$cert->certID)],
+                    ['id' => intval($character->character_id . $cert->certID)],
                     [
-                        'id'=>intval($character->character_id.$cert->certID),
-                        'character_id'=>$character->character_id,
-                        'character_name'=>$character->name,
-                        'certID'=>$cert->certID,
-                        'cert_name'=>$cert->name,
-                        'rank'=>$certRank]
+                        'id' => intval($character->character_id . $cert->certID),
+                        'character_id' => $character->character_id,
+                        'character_name' => $character->name,
+                        'certID' => $cert->certID,
+                        'cert_name' => $cert->name,
+                        'rank' => $certRank]
                 );
             }
         }

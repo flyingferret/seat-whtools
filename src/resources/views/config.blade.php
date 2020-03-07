@@ -22,22 +22,28 @@
                         <div class="col-md-7">
                             <div class="input-group input-group-sm">
 
-                                <input type="number"  min='1'  max='100' class="form-control " id="whtools-tax-percentage" name="whtools-tax-percentage" value="{{ setting('whtools.bluetax.percentage', true) }}"/>                             
+                                <input type="number" min='1' max='100' class="form-control " id="whtools-tax-percentage"
+                                       name="whtools-tax-percentage"
+                                       value="{{ setting('whtools.bluetax.percentage', true) }}"/>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="whtools-configuration-bluetax-tax-collector" class="col-md-4">Collecting Corporation</label>
+                        <label for="whtools-configuration-bluetax-tax-collector" class="col-md-4">Collecting
+                            Corporation</label>
                         <div class="col-md-7">
                             <div class="input-group input-group-sm">
-                            <select class="form-control " id="whtools-tax-collector" name="whtools-tax-collector" required>
-                                @foreach($corps as $corp)
-                                @if(setting('whtools.bluetax.collector', true) == $corp['id'])
-                                <option id="{{$corp['id']}}" value="{{$corp['id']}}" selected='true'>{{$corp['name']}}</option>
-                                @else
-                                <option id="{{$corp['id']}}" value="{{$corp['id']}}">{{$corp['name']}}</option>
-                                @endif
-                                @endforeach
+                                <select class="form-control " id="whtools-tax-collector" name="whtools-tax-collector"
+                                        required>
+                                    @foreach($corps as $corp)
+                                        @if(setting('whtools.bluetax.collector', true) == $corp['id'])
+                                            <option id="{{$corp['id']}}" value="{{$corp['id']}}"
+                                                    selected='true'>{{$corp['name']}}</option>
+                                        @else
+                                            <option id="{{$corp['id']}}"
+                                                    value="{{$corp['id']}}">{{$corp['name']}}</option>
+                                        @endif
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -71,8 +77,9 @@
                 <div class="col-md-6">
                     Latest version:
                     <a href="https://packagist.org/packages/flyingferret/seat-whtools">
-                        <img src="https://poser.pugx.org/flyingferret/seat-whtools/v/stable" alt="Discord Connector Version" />
-                        
+                        <img src="https://poser.pugx.org/flyingferret/seat-whtools/v/stable"
+                             alt="Discord Connector Version"/>
+
                     </a>
                 </div>
             </div>

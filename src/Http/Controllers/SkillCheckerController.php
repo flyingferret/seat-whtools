@@ -48,23 +48,26 @@ class SkillCheckerController extends Controller
     {
         return view('whtools::whtools');
     }
+
     public function getSkillCheckerView()
     {
         $allSkills = $this->getAllSkills();
-        return view('whtools::skillchecker',compact('allSkills'));
+        return view('whtools::skillchecker', compact('allSkills'));
     }
+
     public function getCertificatesView()
     {
         $certificates = Certificate::all();
-        return view('whtools::index',compact('certificates'));
+        return view('whtools::index', compact('certificates'));
     }
+
     public function saveCertificate(CertificateValidation $request)
     {
         $cert = new Certificate();
 
         if ($request->certificateID > 0) {
             $cert = Certificate::findorfail($request->certificateID);
-            CertificateSkill::where('certID',$request->certificateID )->delete();
+            CertificateSkill::where('certID', $request->certificateID)->delete();
         }
 
         $cert->name = $request->certificateName;
@@ -74,12 +77,12 @@ class SkillCheckerController extends Controller
         foreach ($request->selectedSkills as $skillCode) {
             $skill = new CertificateSkill();
             $skillCode = (string)$skillCode;
-            $skillID = substr ($skillCode,0,strlen($skillCode)-2);
-            $reqLvl = substr ($skillCode,strlen($skillCode)-2,1);
-            $certLvl = substr ($skillCode,strlen($skillCode)-1,1);
-            $skill->skillID  = $skillID;
-            $skill->requiredLvl  = $reqLvl;
-            $skill->certRank  = $certLvl;
+            $skillID = substr($skillCode, 0, strlen($skillCode) - 2);
+            $reqLvl = substr($skillCode, strlen($skillCode) - 2, 1);
+            $certLvl = substr($skillCode, strlen($skillCode) - 1, 1);
+            $skill->skillID = $skillID;
+            $skill->requiredLvl = $reqLvl;
+            $skill->certRank = $certLvl;
             $cert->skills()->save($skill);
         }
 
@@ -111,19 +114,19 @@ class SkillCheckerController extends Controller
         $allSkills = $this->getAllSkills();
         $certSkills = [];
 
-        foreach ($cert->skills()->get() as $certSkill){
-            array_push($certSkills,[
-                'skillID'=> $certSkill->skillID,
-                'skillName'=> $this->getSkillName($certSkill->skillID),
-                'requiredLvl'=> $certSkill->requiredLvl,
-                'certRank'=> $certSkill->certRank
-                ]);
+        foreach ($cert->skills()->get() as $certSkill) {
+            array_push($certSkills, [
+                'skillID' => $certSkill->skillID,
+                'skillName' => $this->getSkillName($certSkill->skillID),
+                'requiredLvl' => $certSkill->requiredLvl,
+                'certRank' => $certSkill->certRank
+            ]);
         }
 
-        return[
-            'cert'=>$cert,
-            'allSkills'=>$allSkills,
-            'certSkills'=>$certSkills
+        return [
+            'cert' => $cert,
+            'allSkills' => $allSkills,
+            'certSkills' => $certSkills
         ];
     }
 
@@ -131,7 +134,7 @@ class SkillCheckerController extends Controller
     {
         $cert = Certificate::findOrFail($id);
         $skills = $cert->skills()->delete();
-        CharacterCertificate::where('certID',$cert->certID)->delete();
+        CharacterCertificate::where('certID', $cert->certID)->delete();
         $cert->delete();
 
         return "Success";
@@ -139,11 +142,11 @@ class SkillCheckerController extends Controller
 
     public function getAllSkills()
     {
-        $skillIDs = DgmTypeAttributes::where('attributeID','275')->get();
+        $skillIDs = DgmTypeAttributes::where('attributeID', '275')->get();
         $skills = [];
         foreach ($skillIDs as $skillID) {
             $res1 = InvType::where('typeID', $skillID['typeID'])->first();
-            $res2 =  InvGroups::where('groupID',$res1['groupID'])->first();
+            $res2 = InvGroups::where('groupID', $res1['groupID'])->first();
 
             array_push($skills, [
                 'typeID' => $skillID['typeID'],
@@ -157,22 +160,25 @@ class SkillCheckerController extends Controller
 
         return $skills;
     }
+
     public function getSkillName($id)
     {
         $res1 = InvType::where('typeID', $id)->firstOrFail();
-        return  $res1->typeName;
+        return $res1->typeName;
     }
 
     public function getCharacterSkills($characterID)
     {
         return CharacterInfo::findOrFail($characterID)->skills()->get();
     }
-    public  function getCharacterCerts($characterID){
+
+    public function getCharacterCerts($characterID)
+    {
         $charCerts = [];
-        $characters =[];
-        if (auth()->user()->has('whtools.certchecker', false)){
-            $characters =  CharacterInfo::where('corporation_id',auth()->user()->character->corporation_id)->get();
-        }else {
+        $characters = [];
+        if (auth()->user()->has('whtools.certchecker', false)) {
+            $characters = CharacterInfo::where('corporation_id', auth()->user()->character->corporation_id)->get();
+        } else {
             $characterIds = auth()->user()->associatedCharacterIds();
             foreach ($characterIds as $characterId) {
                 $character = CharacterInfo::where('character_id', $characterId)->first();
@@ -185,38 +191,41 @@ class SkillCheckerController extends Controller
         }
 
         $allCerts = Certificate::get();
-        foreach ($allCerts as $cert){
+        foreach ($allCerts as $cert) {
             $certSkills = $cert->skills()->orderBy('certRank', 'asc')->get();
             $certRank = 5;
-            foreach ($certSkills as $certSkill){
-                $charSkill = CharacterInfo::findOrFail($characterID)->skills()->where('skill_id',$certSkill->skillID)->first();
-                if((empty($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl) and $certRank >=  $certSkill->requiredLvl){
+            foreach ($certSkills as $certSkill) {
+                $charSkill = CharacterInfo::findOrFail($characterID)->skills()->where('skill_id', $certSkill->skillID)->first();
+                if ((empty($charSkill) or $charSkill->trained_skill_level < $certSkill->requiredLvl) and $certRank >= $certSkill->requiredLvl) {
                     $certRank = $certSkill->certRank - 1;
                 }
             }
-            array_push($charCerts,['characterCert'=>$cert,'certRank'=>$certRank]);
+            array_push($charCerts, ['characterCert' => $cert, 'certRank' => $certRank]);
         }
-        array_push($charCerts,['characters'=>$characters]);
+        array_push($charCerts, ['characters' => $characters]);
         return $charCerts;
     }
+
 // Returns corporation certificates in character batches
-    public function getCorporationCertificates($corporationID){
+    public function getCorporationCertificates($corporationID)
+    {
         $corp = CorporationInfo::findOrFail($corporationID);
         $corpCerts = collect();
-        foreach($corp->characters()->get() as $character){
+        foreach ($corp->characters()->get() as $character) {
             //filter out null records
-            if(CharacterCertificate::where('character_id',$character->character_id)->first()) {
-                $corpCerts->push(CharacterCertificate::where('character_id',$character->character_id)->get());
+            if (CharacterCertificate::where('character_id', $character->character_id)->first()) {
+                $corpCerts->push(CharacterCertificate::where('character_id', $character->character_id)->get());
             }
         }
         return $corpCerts;
     }
+
     public function getCorporationCertificateCoverageChartData($corp_id)
     {
         $corp = CorporationInfo::findOrFail($corp_id);
         $corpCerts = collect();
         $characters = $corp->characters()->get();
-        foreach($characters as $character) {
+        foreach ($characters as $character) {
             //filter out null records
             if (CharacterCertificate::where('character_id', $character->character_id)->first()) {
                 foreach (CharacterCertificate::where('character_id', $character->character_id)->get() as $cert) {
@@ -230,28 +239,28 @@ class SkillCheckerController extends Controller
 
         $certificates = Certificate::all();
         foreach ($certificates as $certificate) {
-            array_push($labels,$certificate->name);
+            array_push($labels, $certificate->name);
             $passCount = 0;
-            foreach($corpCerts as $corpCert){
-                if($corpCert->rank == 5 and $corpCert->certID == $certificate->certID){
+            foreach ($corpCerts as $corpCert) {
+                if ($corpCert->rank == 5 and $corpCert->certID == $certificate->certID) {
                     $passCount = $passCount + 1;
                 }
             }
-            array_push($data,($passCount/$characters->count()*100));
+            array_push($data, ($passCount / $characters->count() * 100));
         }
 
 
         return response()->json([
-            'labels'   => $labels, // certNames
+            'labels' => $labels, // certNames
             'datasets' => [
                 [
-                    'label'                => 'Certificates',
-                    'data'                 => $data,
-                    'fill'                 => true,
-                    'backgroundColor'      => 'rgba(60,141,188,0.3)',
-                    'borderColor'          => '#3c8dbc',
+                    'label' => 'Certificates',
+                    'data' => $data,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(60,141,188,0.3)',
+                    'borderColor' => '#3c8dbc',
                     'pointBackgroundColor' => '#3c8dbc',
-                    'pointBorderColor'     => '#fff',
+                    'pointBorderColor' => '#fff',
                 ],
             ],
         ]);
