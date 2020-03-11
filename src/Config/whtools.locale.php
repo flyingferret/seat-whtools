@@ -24,8 +24,12 @@ return [
 
     'languages' => [
         [
+            'short' => 'cn',
+            'full' => 'Chinese',
+        ],
+        [
             'short' => 'en',
-            'full'  => 'English',
+            'full' => 'English',
         ],
     ],
 

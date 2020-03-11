@@ -7,3 +7,4 @@ _ide_helper.php
 .git
 
 .idea
+/composer.lock

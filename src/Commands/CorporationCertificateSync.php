@@ -22,7 +22,7 @@ class CorporationCertificateSync extends Command
     public function handle()
     {
 
-        if(! is_null($this->option('corporation_ids'))) {
+        if (!is_null($this->option('corporation_ids'))) {
             // transform the argument list in an array
             $ids = explode(',', $this->option('corporation_ids'));
             $corporation_ids = collect();

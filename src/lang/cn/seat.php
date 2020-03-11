@@ -21,6 +21,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 return [
 
-    'version' => '0.1.9',
+    // Language strings for your app go here
+    'name' => '虫洞工具集',
+    'stocking' => '战备',
+    'bluetax' => '蓝牌子税',
 
 ];
+

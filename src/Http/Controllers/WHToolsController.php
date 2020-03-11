@@ -46,6 +46,7 @@ use Parsedown;
 use Seat\Eveapi\Models\Corporation\CorporationInfo;
 use Seat\Eveapi\Models\Wallet\CorporationWalletJournal;
 use Seat\Eveapi\Models\Universe\UniverseName;
+
 /**
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
@@ -61,107 +62,112 @@ class WHtoolsController extends FittingController
 
         return view('whtools::whtools');
     }
+
     public function getStockingView()
     {
         $stock = $this->getStockList();
-          
+
         $fitlist = $this->getFittingList();
-        
+
         return view('whtools::stocking', compact('fitlist', 'stock'));
     }
-        
-    
-    public function getStockList(){
+
+
+    public function getStockList()
+    {
         $stocklvllist = Stocklvl::all();
         $stock = [];
-        
-        if($stocklvllist->isEmpty())
+
+        if ($stocklvllist->isEmpty())
             return $stock;
-        
+
         $corporation_id = auth()->user()->character->corporation_id;
-        
-        foreach($stocklvllist as $stocklvl){
+
+        foreach ($stocklvllist as $stocklvl) {
             $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
-           
+
             //Contracts made to the corp but by corp members not on behalf of the corp
-            $member_stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
-                ->where('title', 'LIKE', '%'.($stocklvl->fitting->shiptype).' '.trim($stocklvl->fitting->fitname).'%')
+            $member_stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
+                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
                 ->where('for_corporation', '=', '0')
-                ->where('status','LIKE','outstanding')
+                ->where('status', 'LIKE', 'outstanding')
                 ->get();
             //Contracts made to the corp by corp members on behalf of the corp
-            $stock_contracts = ContractDetail::where('issuer_corporation_id','=',$corporation_id)
-                ->where('title', 'LIKE', '%'.($stocklvl->fitting->shiptype).' '.trim($stocklvl->fitting->fitname).'%')
+            $stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
+                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
                 ->where('for_corporation', '=', '1')
-                ->where('status','LIKE','outstanding')
+                ->where('status', 'LIKE', 'outstanding')
                 ->get();
-            
+
             $totalContractsValue = 0;
-            
-            foreach($stock_contracts as $contract){
+
+            foreach ($stock_contracts as $contract) {
                 $totalContractsValue += $contract->price;
             }
-            
+
             array_push($stock, [
-                'id' =>  $stocklvl->id,
-                'minlvl' =>  $stocklvl->minLvl,
-                'stock' =>  $stock_contracts->count(),
-		'members_stock' =>  $member_stock_contracts->count(),
-                'fitting_id' =>  $stocklvl ->fitting_id,
+                'id' => $stocklvl->id,
+                'minlvl' => $stocklvl->minLvl,
+                'stock' => $stock_contracts->count(),
+                'members_stock' => $member_stock_contracts->count(),
+                'fitting_id' => $stocklvl->fitting_id,
                 'fitname' => $stocklvl->fitting->fitname,
-                'shiptype' =>$stocklvl->fitting->shiptype,
+                'shiptype' => $stocklvl->fitting->shiptype,
                 'typeID' => $ship->typeID,
-                'totalContractsValue' =>$totalContractsValue 
+                'totalContractsValue' => $totalContractsValue
             ]);
         }
         return $stock;
-        
-        
+
+
     }
-    
-    public function saveStocking(StocklvlValidation $request){
-        $stocklvl = Stocklvl::firstOrNew(['fitting_id'=>$request->selectedfit]);
+
+    public function saveStocking(StocklvlValidation $request)
+    {
+        $stocklvl = Stocklvl::firstOrNew(['fitting_id' => $request->selectedfit]);
 
         $stocklvl->minLvl = $request->minlvl;
         $stocklvl->fitting_id = $request->selectedfit;
         $stocklvl->save();
-        
+
         $stock = $this->getStockList();
         $fitlist = $this->getFittingList();
-        
+
         return view('whtools::stocking', compact('fitlist', 'stock'));
     }
-    
+
     public function deleteStockingById($id)
     {
         Stocklvl::destroy($id);
-        
+
         return "Success";
     }
+
     public function getBlueSalesView($startdate = null, $enddate = null)
     {
-        if($startdate != null and $enddate != null){
-            
-            $daterange = ['start'=>$startdate,'end'=>$enddate];
-            
-        }else{
-            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        if ($startdate != null and $enddate != null) {
+
+            $daterange = ['start' => $startdate, 'end' => $enddate];
+
+        } else {
+            $daterange = ['start' => '2018-10-01T00:00:00.000Z', 'end' => '2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluesales', compact('daterange'));
-    }    
+    }
+
     public function getBlueSalesData($startdate = null, $enddate = null)
-    {        
+    {
         $transactions = $this->getBlueLootTransactions();
-        if($startdate != null and $enddate != null){
+        if ($startdate != null and $enddate != null) {
             $startdate = new DateTime($startdate);
             $enddate = new DateTime($enddate);
-            
-            $transactions = $transactions->whereBetween('date',array($startdate,$enddate));
+
+            $transactions = $transactions->whereBetween('date', array($startdate, $enddate));
         }
 
         return DataTables::of($transactions)->editColumn('is_buy', function ($row) {
-                return view('web::partials.transactionbuysell', compact('row'));
-            })
+            return view('web::partials.transactionbuysell', compact('row'));
+        })
             ->editColumn('unit_price', function ($row) {
                 return number($row->unit_price);
             })
@@ -184,14 +190,14 @@ class WHtoolsController extends FittingController
                 $character = User::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
             })
-            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view'])
+            ->rawColumns(['is_buy', 'client_view', 'item_view', 'seller_view'])
             ->make(true);
-        
+
     }
 
-     public function getBlueLootTransactions() : Builder
+    public function getBlueLootTransactions(): Builder
     {
-         $bluelootIDs = [30747,30744,30745,30746,21572,30378,30377,30376,30375,21585,20110,30373,30370,30374,21570,21721,21722,21720,21723,21073,21584,30371,21586,34431];
+        $bluelootIDs = [30747, 30744, 30745, 30746, 21572, 30378, 30377, 30376, 30375, 21585, 20110, 30373, 30370, 30374, 21570, 21721, 21722, 21720, 21723, 21073, 21584, 30371, 21586, 34431];
         return CharacterWalletTransaction::with('client', 'type')
             ->select(DB::raw('
             *, CASE
@@ -223,28 +229,28 @@ class WHtoolsController extends FittingController
                     WHERE m.itemID=character_wallet_transactions.location_id) end
                 AS locationName'
             ))
-            ->select('id','character_id', 'transaction_id', 'date', 'type_id', 'location_id', 'unit_price', 'quantity', 'client_id', 'is_buy', 'is_personal', 'journal_ref_id')
-            ->whereIn('type_id',$bluelootIDs)
-            ->where('is_buy',False)
-            ->join('users','users.id','character_id')
+            ->select('id', 'character_id', 'transaction_id', 'date', 'type_id', 'location_id', 'unit_price', 'quantity', 'client_id', 'is_buy', 'is_personal', 'journal_ref_id')
+            ->whereIn('type_id', $bluelootIDs)
+            ->where('is_buy', False)
+            ->join('users', 'users.id', 'character_id')
             ->selectRaw('unit_price*quantity as sum');
-            
+
     }
 
     public function getBlueSaleTotalsData($startdate = null, $enddate = null)
     {
 
         $transactions = $this->getBlueLootTransactions()
-        ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
-        ->groupBy('users.group_id');
-            
-        if($startdate != null and $enddate != null){
+            ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
+            ->groupBy('users.group_id');
+
+        if ($startdate != null and $enddate != null) {
             $startdate = new DateTime($startdate);
             $enddate = new DateTime($enddate);
 
-            $transactions = $transactions->whereBetween('date',array($startdate,$enddate));
+            $transactions = $transactions->whereBetween('date', array($startdate, $enddate));
         }
-        
+
 
         return DataTables::of($transactions)
             ->editColumn('is_buy', function ($row) {
@@ -269,42 +275,45 @@ class WHtoolsController extends FittingController
                 $character = CharacterInfo::find($row->character_id) ?: $row->character_id;
                 return view('web::partials.character', compact('character', 'character_id'));
             })
-           ->addColumn('main_view',function($row){
+            ->addColumn('main_view', function ($row) {
                 $character = User::find($row->character_id);
                 $character = User::find($character->group->main_character_id);
-                $character_id = $character->id;                
+                $character_id = $character->id;
                 return view('web::partials.character', compact('character', 'character_id'));
-           })
-            ->rawColumns(['is_buy', 'client_view', 'item_view','seller_view','main_view'])
-            ->make(true); 
+            })
+            ->rawColumns(['is_buy', 'client_view', 'item_view', 'seller_view', 'main_view'])
+            ->make(true);
     }
+
     public function getBlueSaleTotalsView($startdate = null, $enddate = null)
     {
-        if($startdate != null and $enddate != null){
-            
-            $daterange = ['start'=>$startdate,'end'=>$enddate];
-            
-        }else{
-            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        if ($startdate != null and $enddate != null) {
+
+            $daterange = ['start' => $startdate, 'end' => $enddate];
+
+        } else {
+            $daterange = ['start' => '2018-10-01T00:00:00.000Z', 'end' => '2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluesaletotals', compact('daterange'));
     }
-    public function getConfigView(){
+
+    public function getConfigView()
+    {
         $changelog = $this->getChangelog();
         $corporationsInfo = CorporationInfo::all();
         $corps = [];
-        
-        foreach($corporationsInfo as $c){
-            array_push($corps,[
-                'name'=>  $c->name,
-                'id'=> $c->corporation_id
+
+        foreach ($corporationsInfo as $c) {
+            array_push($corps, [
+                'name' => $c->name,
+                'id' => $c->corporation_id
             ]);
         }
-        
-        return view('whtools::config', compact('changelog','corps'));
+
+        return view('whtools::config', compact('changelog', 'corps'));
     }
-    
-    private function getChangelog() : string
+
+    private function getChangelog(): string
     {
         try {
             $response = (new Client())
@@ -318,34 +327,38 @@ class WHtoolsController extends FittingController
             return 'Error while fetching changelog';
         }
     }
+
     /*add validation*/
-    public function postConfig(){
-        setting(['whtools.bluetax.percentage',request('whtools-tax-percentage')],true);
-        setting(['whtools.bluetax.collector',request('whtools-tax-collector')],true);
-        
+    public function postConfig()
+    {
+        setting(['whtools.bluetax.percentage', request('whtools-tax-percentage')], true);
+        setting(['whtools.bluetax.collector', request('whtools-tax-collector')], true);
+
         return redirect()->route('whtools.config');
     }
-    
+
     public function getTaxPayments()
     {
         return CorporationWalletJournal::
         with('first_party', 'second_party')
-        ->where('ref_type','=','player_donation')
-        ->where('reason','like','%tax%')
-        ->select('corporation_id', 'division', 'date', 'ref_type', 'first_party_id', 'second_party_id', 'amount', 'balance', 'reason')
-        ->leftjoin('users', 'users.id','first_party_id')
-        ->leftjoin('user_settings','user_settings.group_id','users.group_id');
-        
-        
+            ->where('ref_type', '=', 'player_donation')
+            ->where('reason', 'like', '%tax%')
+            ->select('corporation_id', 'division', 'date', 'ref_type', 'first_party_id', 'second_party_id', 'amount', 'balance', 'reason')
+            ->leftjoin('users', 'users.id', 'first_party_id')
+            ->leftjoin('user_settings', 'user_settings.group_id', 'users.group_id');
+
+
     }
-    public function getTaxPaymentsData($startdate = null, $enddate = null){
+
+    public function getTaxPaymentsData($startdate = null, $enddate = null)
+    {
         $taxPayments = $this->getTaxPayments()
             ->groupBy('users.group_id');
-        if($startdate != null and $enddate != null){
+        if ($startdate != null and $enddate != null) {
             $startdate = new DateTime($startdate);
             $enddate = new DateTime($enddate);
-            
-            $taxPayments = $taxPayments->whereBetween('date',array($startdate,$enddate));
+
+            $taxPayments = $taxPayments->whereBetween('date', array($startdate, $enddate));
         }
 
         return DataTables::of($taxPayments)
@@ -355,7 +368,7 @@ class WHtoolsController extends FittingController
                     $character = CharacterInfo::find($row->first_party_id) ?: $row->first_party_id;
                     return view('web::partials.character', compact('character', 'character_id'));
                 }
-                if (optional($row->first_party)->category === 'corporation'){
+                if (optional($row->first_party)->category === 'corporation') {
                     $corporation = CorporationInfo::find($row->first_party_id) ?: $row->first_party_id;
                     return view('web::partials.corporation', compact('corporation', 'character_id'));
                 }
@@ -364,62 +377,63 @@ class WHtoolsController extends FittingController
                     'character_id' => $character_id,
                 ]);
             })
-            ->addColumn('main_character',function($row){
+            ->addColumn('main_character', function ($row) {
                 $character = User::find($row->character_id);
-                if(! is_null($character)){
+                if (!is_null($character)) {
                     return $character->group->main_character_id;
-                }else{
+                } else {
                     return 0;
                 }
             })
             ->addColumn('main_view', function ($row) {
                 $character_id = $row->main_character;
-                if($row->main_character == 0){
+                if ($row->main_character == 0) {
                     return view('web::partials.unknown', [
                         'unknown_id' => $row->first_party_id,
                         'character_id' => $character_id,
-                    ]);                    
+                    ]);
                 }
                 $character = CharacterInfo::find($character_id());
                 return view('web::partials.character', compact('character', 'character_id'));
 
-            })            
+            })
             ->editColumn('amount', function ($row) {
                 return number($row->amount);
             })
-            ->rawColumns(['first_party_id','main_view'])
+            ->rawColumns(['first_party_id', 'main_view'])
             ->make(true);
     }
-    
+
     public function getTaxPaymentsView($startdate = null, $enddate = null)
     {
-        if($startdate != null and $enddate != null){
-            
-            $daterange = ['start'=>$startdate,'end'=>$enddate];
-            
-        }else{
-            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        if ($startdate != null and $enddate != null) {
+
+            $daterange = ['start' => $startdate, 'end' => $enddate];
+
+        } else {
+            $daterange = ['start' => '2018-10-01T00:00:00.000Z', 'end' => '2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluetaxpayments', compact('daterange'));
-    } 
+    }
 
 
-    public function getTaxPaymentTotalsData($startdate = null, $enddate = null){
+    public function getTaxPaymentTotalsData($startdate = null, $enddate = null)
+    {
         $taxPayments = $this->getTaxPayments()
-        ->groupBy('users.group_id')
-        ->selectRaw('sum(amount) as total_payments , users.group_id');
-        
-        $transactions = $this->getBlueLootTransactions()
-        ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
-        ->groupBy('users.group_id');
-        
-        $combined = $transactions->leftjoin($taxPayments,'users.group_id');
+            ->groupBy('users.group_id')
+            ->selectRaw('sum(amount) as total_payments , users.group_id');
 
-        if($startdate != null and $enddate != null){
+        $transactions = $this->getBlueLootTransactions()
+            ->selectRaw('sum(quantity*unit_price) as total , users.group_id')
+            ->groupBy('users.group_id');
+
+        $combined = $transactions->leftjoin($taxPayments, 'users.group_id');
+
+        if ($startdate != null and $enddate != null) {
             $startdate = new DateTime($startdate);
             $enddate = new DateTime($enddate);
-            
-            $taxPayments = $taxPayments->whereBetween('date',array($startdate,$enddate));
+
+            $taxPayments = $taxPayments->whereBetween('date', array($startdate, $enddate));
         }
 
         return DataTables::of($taxPayments)
@@ -429,7 +443,7 @@ class WHtoolsController extends FittingController
                     $character = CharacterInfo::find($row->first_party_id) ?: $row->first_party_id;
                     return view('web::partials.character', compact('character', 'character_id'));
                 }
-                if (optional($row->first_party)->category === 'corporation'){
+                if (optional($row->first_party)->category === 'corporation') {
                     $corporation = CorporationInfo::find($row->first_party_id) ?: $row->first_party_id;
                     return view('web::partials.corporation', compact('corporation', 'character_id'));
                 }
@@ -438,20 +452,20 @@ class WHtoolsController extends FittingController
                     'character_id' => $character_id,
                 ]);
             })
-            ->addColumn('main_view',function($row){
+            ->addColumn('main_view', function ($row) {
                 $character = User::find($row->first_party_id);
-                if($character){
-                $character = User::find($character->group->main_character_id);
-                $character_id = $character->group->getMainCharacterIdAttribute();
-                return view('web::partials.character', compact('character', 'character_id'));
-                }else{
-                    return 'Not on SeAT';    
+                if ($character) {
+                    $character = User::find($character->group->main_character_id);
+                    $character_id = $character->group->getMainCharacterIdAttribute();
+                    return view('web::partials.character', compact('character', 'character_id'));
+                } else {
+                    return 'Not on SeAT';
                 }
-                
+
             })
-            ->addColumn('main_character_name',function($row){
+            ->addColumn('main_character_name', function ($row) {
                 $user = User::find($row->first_party_id);
-                if(! is_null($user)){
+                if (!is_null($user)) {
                     return CharacterInfo::find(User::find($row->first_party_id)->group->main_character_id)->name;
                 }
                 return "Not on seat";
@@ -459,21 +473,19 @@ class WHtoolsController extends FittingController
             ->editColumn('total_payments', function ($row) {
                 return number($row->total_payments);
             })
-            
-
-            
-            ->rawColumns(['first_party_id','main_view','character','total_payments','sum'])
+            ->rawColumns(['first_party_id', 'main_view', 'character', 'total_payments', 'sum'])
             ->make(true);
     }
-        public function getTaxPaymentTotalsView($startdate = null, $enddate = null)
+
+    public function getTaxPaymentTotalsView($startdate = null, $enddate = null)
     {
-        if($startdate != null and $enddate != null){
-            
-            $daterange = ['start'=>$startdate,'end'=>$enddate];
-            
-        }else{
-            $daterange = ['start'=>'2018-10-01T00:00:00.000Z','end'=>'2035-02-01T00:00:00.000Z'];
+        if ($startdate != null and $enddate != null) {
+
+            $daterange = ['start' => $startdate, 'end' => $enddate];
+
+        } else {
+            $daterange = ['start' => '2018-10-01T00:00:00.000Z', 'end' => '2035-02-01T00:00:00.000Z'];
         }
         return view('whtools::bluetaxpaymenttotals', compact('daterange'));
-    } 
+    }
 }

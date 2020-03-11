@@ -1,4 +1,5 @@
 <?php
+
 namespace FlyingFerret\Seat\WHTools\Jobs;
 
 use Illuminate\Bus\Queueable;
