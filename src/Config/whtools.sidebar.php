@@ -49,6 +49,12 @@ return [
                 'icon' => 'fa fa-book',
                 'route' => 'whtools.certificates',
                 'permission' => 'whtools.certview'
+            ],
+            [
+                'name' => 'Loot Calculator',
+                'icon' => 'fa fa-money',
+                'route' => 'whtools.lootcalc',
+                'permission' => 'whtools.certview'
             ]
 
         ]
