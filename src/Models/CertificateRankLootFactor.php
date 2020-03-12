@@ -9,15 +9,13 @@ class CertificateRankLootFactor extends Model
 {
     public $timestamps = true;
 
-    protected $primaryKey = 'id';
-
     protected $table = 'whtools-certificates_rank_loot_factor';
 
-    protected $fillable = ['id', 'certID', 'rank', 'factor'];
+    protected $fillable = ['rank', 'factor'];
 
     public function certificate()
     {
-        return $this->hasOne('FlyingFerret\Seat\WHTools\Models\Certificate', 'certID', 'certID');
+        return $this->hasMany('FlyingFerret\Seat\WHTools\Models\Certificate', 'certID', 'certID');
     }
 
 }

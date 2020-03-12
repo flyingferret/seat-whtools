@@ -15,9 +15,8 @@ class CreateCertificatesRankLootFactor extends Migration
     public function up()
     {
         Schema::create('whtools-certificates_rank_loot_factor', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
-            $table->integer('certID');
-            $table->smallInteger('rank');
+            $table->unsignedInteger('certID')->index();
+            $table->integer('certRank');
             $table->double('factor');
             $table->timestamps();
         });
