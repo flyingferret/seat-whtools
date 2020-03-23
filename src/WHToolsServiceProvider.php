@@ -21,7 +21,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 namespace FlyingFerret\Seat\WHTools;
 
+use Illuminate\Routing\Router;
 use Seat\Services\AbstractSeatPlugin;
+use Seat\Web\Http\Middleware\Locale;
 
 /**
  * Class WHToolsServiceProvider
@@ -35,7 +37,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
      *
      * @param \Illuminate\Routing\Router $router
      */
-    public function boot()
+    public function boot(Router $router)
     {
 
         // Include the Routes
@@ -53,6 +55,8 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
         // Include our translations
         $this->add_translations();
 
+        // Add middleware
+        $this->add_middleware($router);
     }
 
     public function register()
@@ -110,6 +114,17 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
     public function add_translations()
     {
         $this->loadTranslationsFrom(__DIR__ . '/lang', 'whtools');
+    }
+
+    /**
+     * Include the middleware needed.
+     *
+     * @param $router
+     */
+    public function add_middleware($router)
+    {
+        // Localization support
+        $router->aliasMiddleware('locale', Locale::class);
     }
 
     public function getName(): string
