@@ -27,13 +27,13 @@ return [
         'permission' => ['whtools.stockview', 'whtools.taxview', 'whtools.certview'],
         'entries' => [
             [
-                'name' => 'stocking',
+                'name' => 'whtools::seat.stocking',
                 'icon' => 'fa fa-suitcase',
                 'route' => 'whtools.stocking',
                 'permission' => 'whtools.stockview'
             ],
             [
-                'name' => 'blue tax',
+                'name' => 'whtools::seat.bluetax',
                 'icon' => 'fa fa-truck',
                 'route' => 'whtools.bluesales',
                 'permission' => 'whtools.bluetaxview'
@@ -45,7 +45,7 @@ return [
                 'permission' => 'whtools.bluetaxview'
             ],
             [
-                'name' => 'Certificates',
+                'name' => 'whtools::seat.certificates',
                 'icon' => 'fa fa-book',
                 'route' => 'whtools.certificates',
                 'permission' => 'whtools.certview'
