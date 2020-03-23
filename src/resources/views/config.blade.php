@@ -1,12 +1,13 @@
 @extends('web::layouts.grids.4-4-4')
 
 @section('title', trans('web::seat.configuration'))
-@section('page_header', trans('web::seat.configuration'))
+@section('page_header', trans('whtools::seat.name'))
+@section('page_description',trans('web::seat.configuration'))
 
 @section('left')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Whtools</h3>
+            <h3 class="panel-title">{{trans('whtools::seat.name')}}</h3>
         </div>
         <div class="panel-body">
             <!--add post route-->
@@ -15,7 +16,7 @@
 
                 <div class="box-body">
 
-                    <legend>Settings</legend>
+                    <legend>{{trans('web::seat.configuration')}}</legend>
 
                     <div class="form-group">
                         <label for="whtools-tax-percentage" class="col-md-4">Blue Loot Tax %</label>
@@ -52,7 +53,7 @@
                 </div>
 
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary pull-right">Update</button>
+                    <button type="submit" class="btn btn-primary pull-right">{{trans('web::seat.update')}}</button>
                 </div>
 
             </form>

@@ -1,13 +1,13 @@
 <div class="col-md-8">
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Corporation Certificates</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.corporationcertificates')}}</h3>
         </div>
         <div class="box-body">
             <table id="corpCertTable" class="table table-hover" style="vertical-align: top">
                 <thead>
                 <tr>
-                    <th>Character</th>
+                    <th>{{trans('web::seat.character')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,7 +24,7 @@
 <div class="col-md-4">
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Certificates Coverage %</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.certificatescoverage')}}</h3>
         </div>
         <div class="box-body">
             <div class="chart">

@@ -1,17 +1,18 @@
 @extends('web::layouts.grids.8-4')
 
-@section('title', trans('whtools::whtools.certificates'))
-@section('page_header', trans('whtools::whtools.certificates'))
+@section('title', trans('whtools::seat.certificates'))
+@section('page_header', trans('whtools::seat.name'))
+@section('page_description',trans('whtools::seat.certificates'))
 
 @section('left')
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Certificate Skills</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.certificateskills')}}</h3>
             @if (auth()->user()->has('whtools.certManager', false))
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal"
                             data-toggle="tooltip" data-target="#addCert" data-placement="top"
-                            title="Create a new certificate">
+                            title="{{trans('whtools::whtools.createanewcertificate')}}">
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
@@ -20,7 +21,7 @@
         <div class="box-body">
             <div class="input-group">
                 <select id="certSpinner" class="form-control">
-                    <option value="0">Choose Certificate....</option>
+                    <option value="0">{{trans('whtools::whtools.choosecertificate')}}</option>
                     @foreach ($certificates as $cert)
                         <option value="{{ $cert['certID'] }}">{{ $cert['name'] }}</option>
                     @endforeach
@@ -45,11 +46,11 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Skill</th>
-                    <th>Required Level</th>
-                    <th>Character Level</th>
-                    <th>Certificate Rank</th>
-                    <th>Status</th>
+                    <th>{{trans('web::seat.skill')}}</th>
+                    <th>{{trans('whtools::whtools.requiredlevel')}}</th>
+                    <th>{{trans('whtools::whtools.characterlevel')}}</th>
+                    <th>{{trans('whtools::whtools.certificaterank')}}</th>
+                    <th>{{trans('web::seat.status')}}</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -70,8 +71,8 @@
                 <table id="certificateTable" style="width: 100%" class="table table-condensed table-striped">
                     <thead>
                     <tr>
-                        <th>Certificate Name</th>
-                        <th style="width: 80px">Rank</th>
+                        <th>{{trans('whtools::whtools.certificatename')}}</th>
+                        <th style="width: 80px">{{trans('whtools::whtools.rank')}}</th>
                     </tr>
                     </thead>
                     <tbody>

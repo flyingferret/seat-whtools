@@ -1,19 +1,19 @@
 @extends('web::layouts.grids.8-4')
 
-@section('title', trans('whtools::seat.name'))
+@section('title', trans('whtools::seat.stocking'))
 @section('page_header', trans('whtools::seat.name'))
 @section('page_description', trans('whtools::seat.stocking'))
 
 @section('left')
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Stock Levels for </h3>
+            <h3 class="box-title">{{trans('whtools::whtools.stocklevelsfor')}}</h3>
             <p class="text text-center"><span class="id-to-name"
                                               data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unknown') }}</span>
             @if (auth()->user()->has('whtools.stockedit', false))
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-xs btn-box-tool" id="addStocklvl" data-toggle="tooltip"
-                            data-placement="top" title="Add a new stocking">
+                            data-placement="top" title="{{trans('whtools::whtools.addstocking')}}">
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
@@ -24,14 +24,14 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Ship</th>
-                    <th>Fit Name</th>
-                    <th>Min</th>
-                    <th>Corp Stock</th>
-                    <th>Members Stock</th>
-                    <th>Contract Title</th>
-                    <th>Value</th>
-                    <th class="pull-right">Option</th>
+                    <th>{{trans('whtools::whtools.ship')}}</th>
+                    <th>{{trans('whtools::whtools.fitname')}}</th>
+                    <th>{{trans('whtools::whtools.min')}}</th>
+                    <th>{{trans('whtools::whtools.corpstock')}}</th>
+                    <th>{{trans('whtools::whtools.membersstock')}}</th>
+                    <th>{{trans('whtools::whtools.contracttitle')}}</th>
+                    <th>{{ trans('web::seat.value') }}</th>
+                    <th class="pull-right">{{trans('whtools::whtools.option')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@
                             <td>{{ $item['fitname'] }}
                                 <button type="button" id="viewfit" class="btn btn-xs btn-success no-hover pull-right"
                                         data-id="{{$item['fitting_id']}}" data-toggle="tooltip" data-placement="top"
-                                        title="View Fitting">
+                                        title="{{trans('whtools::whtools.viewfitting')}}">
                                     <span class="fa fa-eye text-white"></span>
                                 </button>
                             </td>
@@ -58,12 +58,12 @@
                                 @if (auth()->user()->has('whtools.stockedit', false))
                                     <button type="button" id="editStock" class="btn btn-xs btn-warning"
                                             data-id="{{$item['fitting_id']}}" data-toggle="tooltip" data-placement="top"
-                                            title="Edit Stocking">
+                                            title="{{trans('whtools::whtools.editstocking')}}">
                                         <span class="fa fa-pencil text-white"></span>
                                     </button>
                                     <button type="button" id="deletestock" class="btn btn-xs btn-danger"
                                             data-id="{{$item['id']}}" data-toggle="tooltip" data-placement="top"
-                                            title="Delete Stocking">
+                                            title="{{trans('whtools::whtools.deletestocking')}}">
                                         <span class="fa fa-trash text-white"></span>
                                     </button>
                                 @endif
@@ -75,7 +75,7 @@
                 <tfoot>
                 <th></th>
                 <th></th>
-                <th>Total (All)</th>
+                <th>{{trans('whtools::whtools.total')}}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -94,14 +94,13 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Which Fit to add to Stock List</h4>
+                    <h4 class="modal-title">{{trans('whtools::whtools.selectfit')}}</h4>
                 </div>
                 <form role="form" action="{{ route('whtools.saveStocking') }}" method="post">
 
                     <input type="hidden" id="stockSelection" name="stockSelection">
                     <div class="modal-body">
-                        <p id="pedittext">Select the fitting to add a stocking level for and enter the minimum stock
-                            level.</p>
+                        <p id="pedittext">{{trans('whtools::whtools.pedittext')}}</p>
                         {{ csrf_field() }}
                         <div class="" id='selectfitbox'>
                             <select name="selectedfit" id="selectedfit" style="width: 60%">
@@ -117,8 +116,9 @@
                     </div>
                     <div class="modal-footer">
                         <div class="btn-group pull-right" role="group">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <input type="submit" class="btn btn-primary" id="addstock" value="Submit Stock"/>
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">{{trans('web::seat.close')}}</button>
+                            <input type="submit" class="btn btn-primary" id="addstock" value="{{trans('whtools::whtools.submitstock')}}"/>
                         </div>
                     </div>
                 </form>
@@ -132,16 +132,16 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Are you sure?</h4>
+                    <h4 class="modal-title">{{trans('whtools::whtools.confirm')}}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this stocking?</p>
+                    <p>{{trans('whtools::whtools.confirmdeletestocking')}}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="deleteConfirm" data-dismiss="modal">Delete
-                        Stockiing
-                    </button>
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">{{trans('web::seat.close')}}</button>
+                    <button type="button" class="btn btn-primary" id="deleteConfirm"
+                            data-dismiss="modal">{{trans('whtools::whtools.deletestocking')}}</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -149,7 +149,7 @@
 
     <div class="box box-primary box-solid" id='eftexport'>
         <div class="box-header">
-            <h3 class="box-title">EFT Fitting</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.eftfitting')}}</h3>
         </div>
         <div class="box-body">
             <textarea name="showeft" id="showeft" rows="15" style="width: 100%" onclick="this.focus();this.select()"
@@ -168,7 +168,7 @@
                 <table class="table table-condensed table-striped" id="lowSlots">
                     <thead>
                     <tr>
-                        <th>Low Slot Module</th>
+                        <th>{{trans('whtools::whtools.lowslotmodule')}}</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -176,7 +176,7 @@
                 <table class="table table-condensed table-striped" id="midSlots">
                     <thead>
                     <tr>
-                        <th>Mid Slot Module</th>
+                        <th>{{trans('whtools::whtools.midslotmodule')}}</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -184,7 +184,7 @@
                 <table class="table table-condensed table-striped" id="highSlots">
                     <thead>
                     <tr>
-                        <th>High Slot Module</th>
+                        <th>{{trans('whtools::whtools.highslotmodule')}}</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
@@ -192,14 +192,14 @@
                 <table class="table table-condensed table-striped" id="rigs">
                     <thead>
                     <tr>
-                        <th>Rigs</th>
+                        <th>{{trans('whtools::whtools.rigs')}}</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
                     <table class="table table-condensed table-striped" id="subSlots">
                         <thead>
                         <tr>
-                            <th>Subsystems</th>
+                            <th>{{trans('whtools::whtools.subsystems')}}</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -208,8 +208,8 @@
                 <table id="drones" class="table table-condensed table-striped">
                     <thead>
                     <tr>
-                        <th class="col-md-10">Drone Bay</th>
-                        <th class="col-md-2">Number</th>
+                        <th class="col-md-10">{{trans('whtools::whtools.dronebay')}}</th>
+                        <th class="col-md-2">{{trans('whtools::whtools.number')}}</th>
                     </tr>
                     </thead>
                     <tbody></tbody>

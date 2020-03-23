@@ -1,6 +1,6 @@
-@section('title', 'Certificates')
-@section('page_header', 'Certificates')
-@section('page_description','Certificates')
+@section('title', trans('whtools::seat.certificates'))
+@section('page_header', trans('whtools::seat.name'))
+@section('page_description',trans('whtools::seat.certificates'))
 {{--TOD Add trans for Description and titles --}}
 
 @extends('web::layouts.grids.8-4')
@@ -8,17 +8,19 @@
 @section('content')
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#characterCertificats" data-toggle="tab">Character Certificates</a></li>
+            <li class="active"><a href="#characterCertificats"
+                                  data-toggle="tab">{{trans('whtools::whtools.charactercertificates')}}</a></li>
             @if (auth()->user()->has('whtools.certchecker', false))
-                <li><a href="#corporationCertificates" data-toggle="tab">Corporation Certificates</a></li>
+                <li><a href="#corporationCertificates"
+                       data-toggle="tab">{{trans('whtools::whtools.corporationcertificates')}}</a></li>
             @endif
         </ul>
         <div class="tab-content ">
             <div class="tab-pane active" id="characterCertificats">
                 <div class="row">
                     <div class="col-md-12">
-                        <h3>Character Certificates</h3>
-                        <p>Character Certificates Description</p>
+                        <h3>{{trans('whtools::whtools.charactercertificates')}}</h3>
+                        <p>{{trans('whtools::whtools.charactercertificatesdescription')}}</p>
                     </div>
                 </div>
 
@@ -32,8 +34,8 @@
                     <div class="row">
 
                         <div class="col-md-12">
-                            <h3>Corporation Certificates</h3>
-                            <p>Corporation Certificates Description</p>
+                            <h3>{{trans('whtools::whtools.corporationcertificates')}}</h3>
+                            <p>{{trans('whtools::whtools.corporationcertificatesdescription')}}</p>
                         </div>
 
                     </div>

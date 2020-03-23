@@ -21,10 +21,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 return [
 
-    // Language strings for your app go here
+    // 元数据
     'name' => '虫洞工具集',
     'stocking' => '战备',
     'bluetax' => '蓝牌子税',
+    'certificates' => '证书',
 
 ];
 
