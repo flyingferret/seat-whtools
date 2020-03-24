@@ -1,12 +1,12 @@
 <div class="col-md-8">
     <div class="box box-primary box-solid">
         <div class="box-header ">
-            <h3 class="box-title">Certificate Skills</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.certificateskills')}}</h3>
             @if (auth()->user()->has('whtools.certManager', false))
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal"
                             data-toggle="tooltip" data-target="#addCert" data-placement="top"
-                            title="Create a new certificate">
+                            title="{{trans('whtools::whtools.createcertificate')}}">
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
@@ -15,7 +15,7 @@
         <div class="box-body">
             <div class="input-group">
                 <select id="certSpinner" class="form-control">
-                    <option value="0">Choose Certificate....</option>
+                    <option value="0">{{trans('whtools::whtools.choosecertificate')}}</option>
                     @foreach ($certificates as $cert)
                         <option value="{{ $cert['certID'] }}">{{ $cert['name'] }}</option>
                     @endforeach
@@ -25,11 +25,11 @@
 
                         <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id=""
                                 data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top"
-                                title="Edit Cert" inactive>
+                                title="{{trans('whtools::whtools.editcert')}}" inactive>
                             <span class="fa fa-pencil text-white"></span>
                         </button>
                         <button type="button" id="deleteCert" class="btn btn-danger" disabled="disabled" data-id=""
-                                data-toggle="tooltip" data-placement="top" title="Delete Cert">
+                                data-toggle="tooltip" data-placement="top" title="{{trans('whtools::whtools.deletecert')}}">
                             <span class="fa fa-trash text-white"></span>
                         </button>
                     @endif
@@ -40,11 +40,11 @@
             <div class="flex-row">
                 <div class="col-md-8"></div>
                 <div class="col-md-2">
-                    <label id="selectRankLabel" class="form-control">&nbsp;&nbsp; Show Rank</label>
+                    <label id="selectRankLabel" class="form-control">&nbsp;&nbsp; {{trans('whtools::whtools.showrank')}}</label>
                 </div>
                 <div class="col-md-2">
                     <select id="selectRank" class="form-control">
-                        <option value="0">All</option>
+                        <option value="0">{{trans('web::seat.all')}}</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -60,11 +60,11 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Skill</th>
-                    <th>Required Level</th>
-                    <th>Character Level</th>
-                    <th>Certificate Rank</th>
-                    <th>Status</th>
+                    <th>{{trans('web::seat.skill')}}</th>
+                    <th>{{trans('whtools::whtools.requiredlevel')}}</th>
+                    <th>{{trans('whtools::whtools.characterlevel')}}</th>
+                    <th>{{trans('whtools::whtools.certificaterank')}}</th>
+                    <th>{{trans('web::seat.status')}}</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -87,8 +87,8 @@
                 <table id="certificateTable" style="width: 100%" class="table table-condensed table-striped">
                     <thead>
                     <tr>
-                        <th>Certificate Name</th>
-                        <th style="width: 80px">Rank</th>
+                        <th>{{trans('whtools::whtools.certificatename')}}</th>
+                        <th style="width: 80px">{{trans('whtools::whtools.rank')}}</th>
                         <th></th>
                     </tr>
                     </thead>

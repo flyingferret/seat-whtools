@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 Route::group([
     'namespace' => 'FlyingFerret\Seat\WHTools\Http\Controllers',
     'prefix' => 'whtools',
-    'middleware' => ['web', 'auth']
+    'middleware' => ['web', 'auth', 'locale']
 ], function () {
     // Your route definitions go here.
     Route::get('/', [

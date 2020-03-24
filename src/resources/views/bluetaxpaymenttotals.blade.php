@@ -1,5 +1,5 @@
 @extends('web::layouts.grids.12')
-@section('title', trans('whtools::seat.name'))
+@section('title', trans('whtools::seat.bluetax'))
 @section('page_header', trans('whtools::seat.name'))
 @section('page_description', trans('whtools::seat.bluetax'))
 
@@ -20,16 +20,16 @@
                 <ul class="nav nav-tabs">
                     <li class="" id='sales'><a
                                 href="{{route('whtools.bluesalesbydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"
-                                id='sales'>Blue Loot Sales </a></li>
+                                id='sales'>{{trans('whtools::whtools.bluesalesbydate')}}  </a></li>
                     <li class="" id='salestotals'><a
                                 href="{{route('whtools.bluetotals',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"
-                                id='salestotals'>Blue Loot Sales Totals </a></li>
+                                id='salestotals'>{{trans('whtools::whtools.bluetotals')}} </a></li>
                     <li class="" id='payments'><a
                                 href="{{route('whtools.bluetaxpayments.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"
-                                id='payments'>Blue tax payments </a></li>
+                                id='payments'>{{trans('whtools::whtools.bluetaxpayments')}} </a></li>
                     <li class="active" id='paymentstotals'><a
                                 href="{{route('whtools.bluetaxpayment.totals.bydate',['start'=>$daterange['start'],'end'=>$daterange['end']])}}"
-                                id='paymentstotals'>Blue tax payment Totals </a></li>
+                                id='paymentstotals'>{{trans('whtools::whtools.bluetaxpaymentstotals')}} </a></li>
 
 
                 </ul>

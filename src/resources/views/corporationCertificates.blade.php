@@ -1,13 +1,13 @@
 <div class="col-md-8">
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Corporation Certificates</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.corporationcertificates')}}</h3>
         </div>
         <div class="box-body">
             <table id="corpCertTable" class="table table-hover" style="vertical-align: top">
                 <thead>
                 <tr>
-                    <th>Character</th>
+                    <th>{{trans('web::seat.character')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,7 +24,7 @@
 <div class="col-md-4">
     <div class="box box-primary box-solid">
         <div class="box-header">
-            <h3 class="box-title">Certificates Coverage %</h3>
+            <h3 class="box-title">{{trans('whtools::whtools.certificatescoverage')}}</h3>
         </div>
         <div class="box-body">
             <div class="chart">
@@ -50,12 +50,13 @@
                 dataType: 'json',
                 timeout: 10000
             }).done(function (result) {
+                let headerPopulated;
                 if (result) {
                     $('#corpCertTable').find("tbody").empty();
                     if (corpCertTable) {
                         corpCertTable.destroy();
                     }
-                    ;
+
                     headerPopulated = false;
                     for (var character in result) {
                         row = "<tr>";
@@ -126,7 +127,7 @@
             ids_to_names();
         }
 
-        $.get("{{ route('whtools.certCoverageChart',98560621 ) }}", function (data) {
+        $.get("{{ route('whtools.certCoverageChart',auth()->user()->character->corporation_id ) }}", function (data) {
             new Chart($('canvas#skills-coverage'), {
                 type: 'radar',
                 data: data,
