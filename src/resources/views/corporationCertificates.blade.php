@@ -126,7 +126,7 @@
             ids_to_names();
         }
 
-        $.get("{{ route('whtools.certCoverageChart',98560621 ) }}", function (data) {
+        $.get("{{ route('whtools.certCoverageChart',auth()->user()->character->corporation_id ) }}", function (data) {
             new Chart($('canvas#skills-coverage'), {
                 type: 'radar',
                 data: data,
