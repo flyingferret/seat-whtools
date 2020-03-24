@@ -22,18 +22,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 return [
     'whtools' => [
         'name' => 'WHTools',
+        'label' => 'whtools::seat.name',
         'icon' => 'fa fa-sun-o',
         'route_segment' => 'whtool',
         'permission' => ['whtools.stockview', 'whtools.taxview', 'whtools.certview'],
         'entries' => [
             [
-                'name' => 'whtools::seat.stocking',
+                'name' => 'Stocking',
+                'label' => 'whtools::seat.stocking',
                 'icon' => 'fa fa-suitcase',
                 'route' => 'whtools.stocking',
                 'permission' => 'whtools.stockview'
             ],
             [
-                'name' => 'whtools::seat.bluetax',
+                'name' => 'Blue Sales',
+                'label' => 'whtools::seat.bluetax',
                 'icon' => 'fa fa-truck',
                 'route' => 'whtools.bluesales',
                 'permission' => 'whtools.bluetaxview'
@@ -45,7 +48,8 @@ return [
                 'permission' => 'whtools.bluetaxview'
             ],
             [
-                'name' => 'whtools::seat.certificates',
+                'name' => 'Certificates',
+                'label' => 'whtools::seat.certificates',
                 'icon' => 'fa fa-book',
                 'route' => 'whtools.certificates',
                 'permission' => 'whtools.certview'
