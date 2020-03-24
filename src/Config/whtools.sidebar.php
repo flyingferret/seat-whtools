@@ -43,6 +43,7 @@ return [
             ],
             [
                 'name' => 'config',
+                'label' => 'web::seat.configuration',
                 'icon' => 'fa fa-cog',
                 'route' => 'whtools.config',
                 'permission' => 'whtools.bluetaxview'
