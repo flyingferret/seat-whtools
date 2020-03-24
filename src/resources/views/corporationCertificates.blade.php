@@ -50,12 +50,13 @@
                 dataType: 'json',
                 timeout: 10000
             }).done(function (result) {
+                let headerPopulated;
                 if (result) {
                     $('#corpCertTable').find("tbody").empty();
                     if (corpCertTable) {
                         corpCertTable.destroy();
                     }
-                    ;
+
                     headerPopulated = false;
                     for (var character in result) {
                         row = "<tr>";
