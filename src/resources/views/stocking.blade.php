@@ -51,7 +51,7 @@
                             <td>{{ $item['minlvl'] }}</td>
                             <td>{{ $item['stock'] }}</td>
                             <td>{{ $item['members_stock'] }}</td>
-                            <td>{{ $item['shiptype'] }} {{ $item['fitname'] }}</td>
+                            <td>{{ $item['fitname'] }}</td>
                             <td>{{ number_format($item['totalContractsValue']) }}</td>
                             <td class="no-hover pull-right">
 
@@ -107,7 +107,7 @@
                                 @if (count($fitlist) > 0)
                                     @foreach($fitlist as $fit)
                                         <option id="selectfit{{$fit['id']}}"
-                                                value="{{$fit['id']}}">{{$fit['fitname']}} {{$fit['shiptype']}}</option>
+                                                value="{{$fit['id']}}">{{$fit['fitname']}}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -389,7 +389,7 @@
         function fillFittingWindow(result) {
             if (result) {
                 $('#fitting-window').show();
-                $('#middle-header').text(result.shipname + ', ' + result.fitname);
+                $('#middle-header').text(result.fitname);
                 $('#showeft').val(result.eft);
                 $('#eftexport').show();
                 for (slot in result) {
