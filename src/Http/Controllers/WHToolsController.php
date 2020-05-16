@@ -88,13 +88,13 @@ class WHtoolsController extends FittingController
 
             //Contracts made to the corp but by corp members not on behalf of the corp
             $member_stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
-                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
+                ->where('title', 'LIKE', '%' . trim($stocklvl->fitting->fitname) . '%')
                 ->where('for_corporation', '=', '0')
                 ->where('status', 'LIKE', 'outstanding')
                 ->get();
             //Contracts made to the corp by corp members on behalf of the corp
             $stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
-                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
+                ->where('title', 'LIKE', '%' . trim($stocklvl->fitting->fitname) . '%')
                 ->where('for_corporation', '=', '1')
                 ->where('status', 'LIKE', 'outstanding')
                 ->get();
