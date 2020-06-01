@@ -35,4 +35,4 @@ Allows for the creation of custom corporation certficates based on a list of req
 ![Certificates](https://i.imgur.com/qxcTson.png)
 
 
-*Any donation to help keep my eve account alive, while spending valuable krabbing time coding, is very much appreciated and can be sent to* **Kaliak Utama** 
+*Any donation to help keep my eve account alive, while spending valuable krabbing time coding, is very much appreciated and can be sent to* **Kalaik Utama** 
