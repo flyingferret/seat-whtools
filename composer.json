@@ -28,6 +28,6 @@
         "eveseat/services": "^4.0",
         "eveseat/eveapi": "^4.0",
         "eveseat/web": "^4.0",
-        "Crypta-Eve/seat-fitting": "dev-master" 
+        "crypta-eve/seat-fitting": "dev-master" 
     }
 }
