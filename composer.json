@@ -1,33 +1,33 @@
 {
-  "name": "flyingferret/seat-whtools",
-  "description": "Wormhole corporation tools for SeAT",
-  "type": "seat-plugin",
-  "license": "GPL-2.0-only",
-  "authors": [
-    {
-      "name": "flyingferret",
-      "email": "flyingferret88@googlemail.com"
+    "name": "flyingferret/seat-whtools",
+    "description": "Wh corporation tools for SeAT",
+    "type": "seat-plugin",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "flyingferret",
+            "email": "flyingferret88@googlemail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "FlyingFerret\\Seat\\WHTools\\": "src/"
+        }
+    },
+    
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
+
+            ]
+        }
+    },
+    "require": {
+        "eveseat/services": "^4.0",
+        "eveseat/eveapi": "^4.0",
+        "eveseat/web": "^4.0"
+        "Crypta-Eve/seat-fitting": "dev-master" 
     }
-  ],
-  "minimum-stability": "alpha",
-  "autoload": {
-    "psr-4": {
-      "FlyingFerret\\Seat\\WHTools\\": "src/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "FlyingFerret\\Seat\\WHTools\\WHToolsServiceProvider"
-      ]
-    }
-  },
-  "require": {
-    "php": ">=7.1",
-    "laravel/framework": "5.5.*",
-    "eveseat/services": "^3.0",
-    "eveseat/eveapi": "^3.0",
-    "eveseat/web": "^3.0",
-    "denngarr/seat-fitting": "^3.0.12"
-  }
 }
