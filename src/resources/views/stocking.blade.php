@@ -59,12 +59,12 @@
                                     <button type="button" id="editStock" class="btn btn-xs btn-warning"
                                             data-id="{{$item['fitting_id']}}" data-toggle="tooltip" data-placement="top"
                                             title="{{trans('whtools::whtools.editstocking')}}">
-                                        <span class="fa fa-pencil text-white"></span>
+                                        <span class="fa fa-pen"></span>
                                     </button>
                                     <button type="button" id="deletestock" class="btn btn-xs btn-danger"
                                             data-id="{{$item['id']}}" data-toggle="tooltip" data-placement="top"
                                             title="{{trans('whtools::whtools.deletestocking')}}">
-                                        <span class="fa fa-trash text-white"></span>
+                                        <span class="fa fa-trash"></span>
                                     </button>
                                 @endcan
                             </td>
