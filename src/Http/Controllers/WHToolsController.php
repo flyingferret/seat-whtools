@@ -22,15 +22,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 namespace FlyingFerret\Seat\WHTools\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
-use Denngarr\Seat\Fitting\Http\Controllers\FittingController;
-
-
-use Denngarr\Seat\Fitting\Models\Fitting;
-use Denngarr\Seat\Fitting\Models\Sde\InvType;
-
-use Seat\Eveapi\Models\Contracts\ContractDetail;
-use FlyingFerret\Seat\WHTools\Models\Stocklvl;
-use FlyingFerret\Seat\WHTools\Validation\StocklvlValidation;
 
 use Seat\Eveapi\Models\Wallet\CharacterWalletTransaction;
 use Seat\Web\Models\User;
@@ -45,13 +36,13 @@ use GuzzleHttp\Client;
 use Parsedown;
 use Seat\Eveapi\Models\Corporation\CorporationInfo;
 use Seat\Eveapi\Models\Wallet\CorporationWalletJournal;
-use Seat\Eveapi\Models\Universe\UniverseName;
+
 
 /**
  * Class HomeController
  * @package Author\Seat\YourPackage\Http\Controllers
  */
-class WHtoolsController extends FittingController
+class WHtoolsController extends Controller
 {
 
     /**
@@ -63,86 +54,48 @@ class WHtoolsController extends FittingController
         return view('whtools::whtools');
     }
 
-    public function getStockingView()
+    #TODO enbale the use of user configurations
+    public function getConfigView()
     {
-        $stock = $this->getStockList();
+        $changelog = $this->getChangelog();
+        $corporationsInfo = CorporationInfo::all();
+        $corps = [];
 
-        $fitlist = $this->getFittingList();
-
-        return view('whtools::stocking', compact('fitlist', 'stock'));
-    }
-
-
-    public function getStockList()
-    {
-        $stocklvllist = Stocklvl::all();
-        $stock = [];
-
-        if ($stocklvllist->isEmpty())
-            return $stock;
-
-        $corporation_id = auth()->user()->character->corporation_id;
-
-        foreach ($stocklvllist as $stocklvl) {
-            $ship = InvType::where('typeName', $stocklvl->fitting->shiptype)->first();
-
-            //Contracts made to the corp but by corp members not on behalf of the corp
-            $member_stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
-                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
-                ->where('for_corporation', '=', '0')
-                ->where('status', 'LIKE', 'outstanding')
-                ->get();
-            //Contracts made to the corp by corp members on behalf of the corp
-            $stock_contracts = ContractDetail::where('issuer_corporation_id', '=', $corporation_id)
-                ->where('title', 'LIKE', '%' . ($stocklvl->fitting->shiptype) . ' ' . trim($stocklvl->fitting->fitname) . '%')
-                ->where('for_corporation', '=', '1')
-                ->where('status', 'LIKE', 'outstanding')
-                ->get();
-
-            $totalContractsValue = 0;
-
-            foreach ($stock_contracts as $contract) {
-                $totalContractsValue += $contract->price;
-            }
-
-            array_push($stock, [
-                'id' => $stocklvl->id,
-                'minlvl' => $stocklvl->minLvl,
-                'stock' => $stock_contracts->count(),
-                'members_stock' => $member_stock_contracts->count(),
-                'fitting_id' => $stocklvl->fitting_id,
-                'fitname' => $stocklvl->fitting->fitname,
-                'shiptype' => $stocklvl->fitting->shiptype,
-                'typeID' => $ship->typeID,
-                'totalContractsValue' => $totalContractsValue
+        foreach ($corporationsInfo as $c) {
+            array_push($corps, [
+                'name' => $c->name,
+                'id' => $c->corporation_id
             ]);
         }
-        return $stock;
 
-
+        return view('whtools::config', compact('changelog', 'corps'));
     }
 
-    public function saveStocking(StocklvlValidation $request)
+    private function getChangelog(): string
     {
-        $stocklvl = Stocklvl::firstOrNew(['fitting_id' => $request->selectedfit]);
-
-        $stocklvl->minLvl = $request->minlvl;
-        $stocklvl->fitting_id = $request->selectedfit;
-        $stocklvl->save();
-
-        $stock = $this->getStockList();
-        $fitlist = $this->getFittingList();
-
-        return view('whtools::stocking', compact('fitlist', 'stock'));
+        try {
+            $response = (new Client())
+                ->request('GET', "https://raw.githubusercontent.com/flyingferret/seat-whtools/master/CHANGELOG.md");
+            if ($response->getStatusCode() != 200) {
+                return 'Error while fetching changelog';
+            }
+            $parser = new Parsedown();
+            return $parser->parse($response->getBody());
+        } catch (RequestException $e) {
+            return 'Error while fetching changelog';
+        }
     }
 
-    public function deleteStockingById($id)
+    /*add validation*/
+    public function postConfig()
     {
-        Stocklvl::destroy($id);
+        setting(['whtools.bluetax.percentage', request('whtools-tax-percentage')], true);
+        setting(['whtools.bluetax.collector', request('whtools-tax-collector')], true);
 
-        return "Success";
+        return redirect()->route('whtools.config');
     }
 
+    #TODO Move to own controller
     public function getBlueSalesView($startdate = null, $enddate = null)
     {
         if ($startdate != null and $enddate != null) {
@@ -155,6 +108,7 @@ class WHtoolsController extends FittingController
         return view('whtools::bluesales', compact('daterange'));
     }
 
+    #TODO Move to own controller
     public function getBlueSalesData($startdate = null, $enddate = null)
     {
         $transactions = $this->getBlueLootTransactions();
@@ -195,6 +149,7 @@ class WHtoolsController extends FittingController
 
     }
 
+    #TODO Move to own controller
     public function getBlueLootTransactions(): Builder
     {
         $bluelootIDs = [30747, 30744, 30745, 30746, 21572, 30378, 30377, 30376, 30375, 21585, 20110, 30373, 30370, 30374, 21570, 21721, 21722, 21720, 21723, 21073, 21584, 30371, 21586, 34431];
@@ -237,6 +192,7 @@ class WHtoolsController extends FittingController
 
     }
 
+    #TODO Move to own controller
     public function getBlueSaleTotalsData($startdate = null, $enddate = null)
     {
 
@@ -285,6 +241,7 @@ class WHtoolsController extends FittingController
             ->make(true);
     }
 
+    #TODO Move to own controller
     public function getBlueSaleTotalsView($startdate = null, $enddate = null)
     {
         if ($startdate != null and $enddate != null) {
@@ -297,46 +254,7 @@ class WHtoolsController extends FittingController
         return view('whtools::bluesaletotals', compact('daterange'));
     }
 
-    public function getConfigView()
-    {
-        $changelog = $this->getChangelog();
-        $corporationsInfo = CorporationInfo::all();
-        $corps = [];
-
-        foreach ($corporationsInfo as $c) {
-            array_push($corps, [
-                'name' => $c->name,
-                'id' => $c->corporation_id
-            ]);
-        }
-
-        return view('whtools::config', compact('changelog', 'corps'));
-    }
-
-    private function getChangelog(): string
-    {
-        try {
-            $response = (new Client())
-                ->request('GET', "https://raw.githubusercontent.com/flyingferret/seat-whtools/master/CHANGELOG.md");
-            if ($response->getStatusCode() != 200) {
-                return 'Error while fetching changelog';
-            }
-            $parser = new Parsedown();
-            return $parser->parse($response->getBody());
-        } catch (RequestException $e) {
-            return 'Error while fetching changelog';
-        }
-    }
-
-    /*add validation*/
-    public function postConfig()
-    {
-        setting(['whtools.bluetax.percentage', request('whtools-tax-percentage')], true);
-        setting(['whtools.bluetax.collector', request('whtools-tax-collector')], true);
-
-        return redirect()->route('whtools.config');
-    }
-
+    #TODO Move to own controller
     public function getTaxPayments()
     {
         return CorporationWalletJournal::
@@ -350,6 +268,7 @@ class WHtoolsController extends FittingController
 
     }
 
+    #TODO Move to own controller
     public function getTaxPaymentsData($startdate = null, $enddate = null)
     {
         $taxPayments = $this->getTaxPayments()
@@ -404,6 +323,7 @@ class WHtoolsController extends FittingController
             ->make(true);
     }
 
+    #TODO Move to own controller
     public function getTaxPaymentsView($startdate = null, $enddate = null)
     {
         if ($startdate != null and $enddate != null) {
@@ -416,7 +336,7 @@ class WHtoolsController extends FittingController
         return view('whtools::bluetaxpayments', compact('daterange'));
     }
 
-
+    #TODO Move to own controller
     public function getTaxPaymentTotalsData($startdate = null, $enddate = null)
     {
         $taxPayments = $this->getTaxPayments()
@@ -477,6 +397,7 @@ class WHtoolsController extends FittingController
             ->make(true);
     }
 
+    #TODO Move to own controller
     public function getTaxPaymentTotalsView($startdate = null, $enddate = null)
     {
         if ($startdate != null and $enddate != null) {

@@ -1,8 +1,8 @@
 <div class="col-md-8">
     <div class="box box-primary box-solid">
         <div class="box-header ">
-            <h3 class="box-title">{{trans('whtools::whtools.certificateskills')}}</h3>
-            @if (auth()->user()->has('whtools.certManager', false))
+            <h3 class="box-title">{{trans('whtools::whtools.certificateskills')}} </h3>
+            @can('whtools.certManager')
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-xs btn-box-tool" id="newCert" data-toggle="modal"
                             data-toggle="tooltip" data-target="#addCert" data-placement="top"
@@ -10,7 +10,7 @@
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
-            @endif
+            @endcan
         </div>
         <div class="box-body">
             <div class="input-group">
@@ -21,7 +21,7 @@
                     @endforeach
                 </select>
                 <div class="input-group-btn">
-                    @if ((auth()->user()->has('whtools.certManager', false)))
+                    @can('whtools.certManager')
 
                         <button type="button" id="editCert" class="btn btn-warning" disabled="disabled" data-id=""
                                 data-toggle="modal" data-target="#addCert" data-toggle="tooltip" data-placement="top"
@@ -32,7 +32,7 @@
                                 data-toggle="tooltip" data-placement="top" title="{{trans('whtools::whtools.deletecert')}}">
                             <span class="fa fa-trash text-white"></span>
                         </button>
-                    @endif
+                    @endcan
                 </div>
             </div>
             <br>
@@ -77,7 +77,7 @@
 <div class="col-md-4" id="skills-box">
     <div class="box box-primary box-solid">
         <div class="box-header form-group"><h3 class="box-title" id="skill-title">
-                My @if (auth()->user()->has('whtools.certchecker', false)) Corporation Members @endif Certificates</h3>
+                My @can('whtools.certchecker') Corporation Members @endcan Certificates</h3>
         </div>
         <div class="box-body">
             <div id="certificate-window">
@@ -123,7 +123,7 @@
 
         var characterCertTable = $('#certificateTable').DataTable();
 
-        populateCharacterCertificates({{auth()->user()->character_id}});
+        populateCharacterCertificates({{auth()->user()->main_character->character_id}});
 
         //rest spinner to default
         $('#certSpinner').val(0);
@@ -310,7 +310,7 @@
                 timeout: 10000
             }).done(function (result) {
                 $.each(result, function (key, value) {
-                    $('td.charSkill' + value.skill_id).html(drawStars(value.trained_skill_level));
+                    $('td.charSkill' + value.type.typeID).html(drawStars(value.trained_skill_level));
                 })
                 $('#skilllist > tbody > tr').each(function (index, tr) {
                     currentRow = $(this);

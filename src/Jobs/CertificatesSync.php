@@ -37,7 +37,7 @@ class CertificatesSync extends WHToolsJobBase
 
     public function handle()
     {
-        $characters = $this->corporation->characters()->get();
+        $characters = $this->corporation->characters;
         $allCerts = Certificate::get();
 
         foreach ($characters as $character) {

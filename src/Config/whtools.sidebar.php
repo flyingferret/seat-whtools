@@ -23,7 +23,7 @@ return [
     'whtools' => [
         'name' => 'WHTools',
         'label' => 'whtools::seat.name',
-        'icon' => 'fa fa-sun-o',
+        'icon' => 'fa fa-circle',
         'route_segment' => 'whtool',
         'permission' => ['whtools.stockview', 'whtools.taxview', 'whtools.certview'],
         'entries' => [
@@ -34,13 +34,13 @@ return [
                 'route' => 'whtools.stocking',
                 'permission' => 'whtools.stockview'
             ],
-            [
-                'name' => 'Blue Sales',
-                'label' => 'whtools::seat.bluetax',
-                'icon' => 'fa fa-truck',
-                'route' => 'whtools.bluesales',
-                'permission' => 'whtools.bluetaxview'
-            ],
+//            [
+//                'name' => 'Blue Sales',
+//                'label' => 'whtools::seat.bluetax',
+//                'icon' => 'fa fa-truck',
+//                'route' => 'whtools.bluesales',
+//                'permission' => 'whtools.bluetaxview'
+//            ],
             [
                 'name' => 'config',
                 'label' => 'web::seat.configuration',
@@ -54,13 +54,7 @@ return [
                 'icon' => 'fa fa-book',
                 'route' => 'whtools.certificates',
                 'permission' => 'whtools.certview'
-            ]/*,
-            [
-                'name' => 'Loot Calculator',
-                'icon' => 'fa fa-money',
-                'route' => 'whtools.lootcalc',
-                'permission' => 'whtools.certview'
-            ]*/
+            ]
 
         ]
     ]

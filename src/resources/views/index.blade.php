@@ -10,10 +10,10 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#characterCertificats"
                                   data-toggle="tab">{{trans('whtools::whtools.charactercertificates')}}</a></li>
-            @if (auth()->user()->has('whtools.certchecker', false))
+            @can ('whtools.certchecker')
                 <li><a href="#corporationCertificates"
                        data-toggle="tab">{{trans('whtools::whtools.corporationcertificates')}}</a></li>
-            @endif
+            @endcan
         </ul>
         <div class="tab-content ">
             <div class="tab-pane active" id="characterCertificats">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <!-- /.tab-pane -->
-            @if (auth()->user()->has('whtools.certchecker', false))
+            @can('whtools.certchecker')
                 <div class="tab-pane" id="corporationCertificates">
                     <div class="row">
 
@@ -43,7 +43,7 @@
                         @include('whtools::corporationCertificates')
                     </div>
                 </div>
-        @endif
+            @endcan
         <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->

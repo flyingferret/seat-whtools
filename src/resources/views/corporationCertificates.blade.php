@@ -38,7 +38,7 @@
 
         var corpCertTable = $('#corpCertTable').DataTable();
         $(function () {
-            populateCorporationCertificates('{{auth()->user()->character->corporation_id}}');
+            populateCorporationCertificates('{{auth()->user()->main_character->affiliation->corporation->entity_id}}');
         });
 
         function populateCorporationCertificates(corpID) {
@@ -127,7 +127,7 @@
             ids_to_names();
         }
 
-        $.get("{{ route('whtools.certCoverageChart',auth()->user()->character->corporation_id ) }}", function (data) {
+        $.get("{{ route('whtools.certCoverageChart', auth()->user()->main_character->affiliation->corporation->entity_id) }}", function (data) {
             new Chart($('canvas#skills-coverage'), {
                 type: 'radar',
                 data: data,

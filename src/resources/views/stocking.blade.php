@@ -9,15 +9,15 @@
         <div class="box-header">
             <h3 class="box-title">{{trans('whtools::whtools.stocklevelsfor')}}</h3>
             <p class="text text-center"><span class="id-to-name"
-                                              data-id="{{auth()->user()->character->corporation_id}}">{{ trans('web::seat.unknown') }}</span>
-            @if (auth()->user()->has('whtools.stockedit', false))
+                                              data-id="{{auth()->user()->main_character->affiliation->corporation->entity_id}}"></span>
+            @can('whtools.stockedit')
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-xs btn-box-tool" id="addStocklvl" data-toggle="tooltip"
                             data-placement="top" title="{{trans('whtools::whtools.addstocking')}}">
                         <span class="fa fa-plus-square"></span>
                     </button>
                 </div>
-            @endif
+            @endcan
         </div>
         <div class="box-body">
             <table id='stocklist' class="table table-hover" style="vertical-align: top" data-page-length='100'>
@@ -55,7 +55,7 @@
                             <td>{{ number_format($item['totalContractsValue']) }}</td>
                             <td class="no-hover pull-right">
 
-                                @if (auth()->user()->has('whtools.stockedit', false))
+                                @can('whtools.stockedit')
                                     <button type="button" id="editStock" class="btn btn-xs btn-warning"
                                             data-id="{{$item['fitting_id']}}" data-toggle="tooltip" data-placement="top"
                                             title="{{trans('whtools::whtools.editstocking')}}">
@@ -66,7 +66,7 @@
                                             title="{{trans('whtools::whtools.deletestocking')}}">
                                         <span class="fa fa-trash text-white"></span>
                                     </button>
-                                @endif
+                                @endcan
                             </td>
                         </tr>
                     @endforeach

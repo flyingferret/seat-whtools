@@ -66,8 +66,11 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
         // Web package configurations
         $this->mergeConfigFrom(
             __DIR__ . '/Config/whtools.config.php', 'whtools.config');
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/whtools.permissions.php', 'web.permissions');
+
+        //$this->mergeConfigFrom(
+        //    __DIR__ . '/Config/whtools.permissions.php', 'web.permissions');
+        $this->registerPermissions(
+            __DIR__ . '/Config/whtools.permissions.php', 'whtools');
         $this->mergeConfigFrom(
             __DIR__ . '/Config/whtools.locale.php', 'web.locale');
 
@@ -76,6 +79,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
             __DIR__ . '/Config/whtools.sidebar.php', 'package.sidebar');
 
     }
+
 
     private function addCommands()
     {
@@ -152,7 +156,7 @@ class WHToolsServiceProvider extends AbstractSeatPlugin
         return config('whtools.config.version');
     }
 
-    public function getChangelogUri(): ?string
+    public function getChangelogUri(): string
     {
         return 'https://raw.githubusercontent.com/flyingferret/seat-whTools/master/CHANGELOG.md';
     }
