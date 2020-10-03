@@ -46,7 +46,7 @@ return [
                 'label' => 'web::seat.configuration',
                 'icon' => 'fa fa-cog',
                 'route' => 'whtools.config',
-                'permission' => 'whtools.bluetaxview'
+                'permission' => 'whtools.configuration'
             ],
             [
                 'name' => 'Certificates',

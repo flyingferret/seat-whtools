@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 return [
 
     'whtools' => [
-        'stockview', 'stockedit', 'bluetaxview', 'certview', 'certchecker', 'certManager'
+        'stockview', 'stockedit', 'bluetaxview', 'certview', 'certchecker', 'certManager', 'configuration'
     ],
 
 ];
